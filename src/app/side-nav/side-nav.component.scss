@@ -1,0 +1,22 @@
+ion-menu ion-content {
+  --background: var(--ion-item-background, var(--ion-background-color, #fff));
+}
+
+.black-circle {
+  background: black;
+  margin-left: calc(50% - 50px);
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
+  margin-bottom: 4rem;
+}
+.menu-items {
+  margin-left: 2rem;
+}
+.power-icon {
+  margin-top: 5rem;
+  margin-left: calc(50% - 20px);
+}
+.yoobic-title {
+  margin-left: 4rem;
+}

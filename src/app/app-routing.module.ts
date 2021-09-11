@@ -1,22 +1,53 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { AppComponent } from './app.component';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'folder/Inbox',
-    pathMatch: 'full'
+    redirectTo: 'dashboard',
+    pathMatch: 'full',
   },
   {
-    path: 'folder/:id',
-    loadChildren: () => import('./folder/folder.module').then( m => m.FolderPageModule)
-  }
+    path: 'auth',
+    loadChildren: () =>
+      import('./auth/auth.module').then((m) => m.AuthPageModule),
+  },
+  {
+    path: 'dashboard',
+    loadChildren: () =>
+      import('./dashboard/dashboard.module').then((m) => m.DashboardPageModule),
+  },
+  {
+    path: 'photos',
+    loadChildren: () =>
+      import('./photos/photos.module').then((m) => m.PhotosPageModule),
+  },
+  {
+    path: 'available-missions',
+    loadChildren: () =>
+      import('./available-missions/available-missions.module').then(
+        (m) => m.AvailableMissionsPageModule
+      ),
+  },
+  {
+    path: 'chat',
+    loadChildren: () =>
+      import('./chat/chat.module').then((m) => m.ChatPageModule),
+  },
+  {
+    path: 'my-missions',
+    loadChildren: () =>
+      import('./my-missions/my-missions.module').then(
+        (m) => m.MyMissionsPageModule
+      ),
+  },
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules }),
   ],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class AppRoutingModule {}
