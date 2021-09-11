@@ -25,11 +25,11 @@ export class AvailableMissionsPage implements OnInit, OnDestroy {
 
         this.productsSub = this.service.fetchProducts().subscribe(
           (items) => {
-            console.log(items);
             this.loadedProducts = items;
             loadingEl.dismiss();
           },
           (errorResponse) => {
+            alert('sorry there was an error retrieving the products');
             console.log(errorResponse);
             loadingEl.dismiss();
           }
