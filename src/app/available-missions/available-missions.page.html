@@ -3,10 +3,14 @@
     <ion-buttons slot="start">
       <ion-menu-button autoHide="false"></ion-menu-button>
     </ion-buttons>
-    <ion-title>available-missions</ion-title>
+    <ion-title>Products Listing</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <h2>Available missions</h2>
+  <ion-list>
+    <ion-item-sliding *ngFor="let item of loadedProducts">
+      <app-product-item [item]="item"></app-product-item>
+    </ion-item-sliding>
+  </ion-list>
 </ion-content>

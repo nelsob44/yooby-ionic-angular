@@ -7,14 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { AvailableMissionsPageRoutingModule } from './available-missions-routing.module';
 
 import { AvailableMissionsPage } from './available-missions.page';
+import { ProductItemComponent } from '../product-item/product-item.component';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    AvailableMissionsPageRoutingModule
+    AvailableMissionsPageRoutingModule,
   ],
-  declarations: [AvailableMissionsPage]
+  declarations: [AvailableMissionsPage, ProductItemComponent],
 })
 export class AvailableMissionsPageModule {}

@@ -42,6 +42,13 @@ const routes: Routes = [
         (m) => m.MyMissionsPageModule
       ),
   },
+  {
+    path: 'product-detail/:id',
+    loadChildren: () =>
+      import('./product-detail/product-detail.module').then(
+        (m) => m.ProductDetailPageModule
+      ),
+  },
 ];
 
 @NgModule({

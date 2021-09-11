@@ -1,0 +1,12 @@
+<ion-card (click)="viewDetail(item.id)">
+  <ion-item>
+    <ion-avatar slot="start">
+      <img [src]="item.image" />
+    </ion-avatar>
+    <ion-label>
+      <h2>{{ item.title }}</h2>
+      <h3>{{ item.category }}</h3>
+      <p>£{{ item.price }}</p>
+    </ion-label>
+  </ion-item>
+</ion-card>

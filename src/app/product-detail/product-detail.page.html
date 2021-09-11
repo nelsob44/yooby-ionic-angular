@@ -1,0 +1,19 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/available-missions"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Product Details</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content fullscreen>
+  <ion-card>
+    <img [src]="productDetail.image" />
+    <ion-card-header>
+      <ion-card-subtitle>{{productDetail.category}}</ion-card-subtitle>
+      <ion-card-subtitle>£{{productDetail.price}}</ion-card-subtitle>
+      <ion-card-title>{{productDetail.title}}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content> {{productDetail.description}} </ion-card-content>
+  </ion-card>
+</ion-content>
