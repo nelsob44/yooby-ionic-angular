@@ -18,18 +18,22 @@ export class StarWarsService {
   constructor(private http: HttpClient) {}
 
   fetchProducts() {
-    return this.http.get<Product[]>(this.url).pipe(
-      map((data) => {
-        const products = [];
-        for (const key in data) {
-          if (data.hasOwnProperty(key)) {
-            products.push(data[key]);
+    try {
+      return this.http.get<Product[]>(this.url).pipe(
+        map((data) => {
+          const products = [];
+          for (const key in data) {
+            if (data.hasOwnProperty(key)) {
+              products.push(data[key]);
+            }
           }
-        }
-        this.productsRetrieved.next(products);
-        return products;
-      })
-    );
+          this.productsRetrieved.next(products);
+          return products;
+        })
+      );
+    } catch (error) {
+      return error;
+    }
   }
   getProduct(id: number) {
     return this.productsArray.pipe(
