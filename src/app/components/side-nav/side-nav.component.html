@@ -1,0 +1,53 @@
+<ion-menu contentId="main-content" type="overlay">
+  <ion-header>
+    <ion-toolbar translucent>
+      <ion-title>Naija mart</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list>
+      <div class="black-circle"></div>
+      <div class="menu-items">
+        <ion-menu-toggle>
+          <ion-item lines="none" button (click)="menuClick('dashboard')">
+            <ion-icon name="apps-outline" slot="start"></ion-icon>
+            <ion-label>Dashboard</ion-label>
+          </ion-item>
+          <ion-item lines="none" button (click)="menuClick('photos')">
+            <ion-icon name="image-outline" slot="start"></ion-icon>
+            <ion-label>Photos</ion-label>
+          </ion-item>
+          <ion-item
+            lines="none"
+            button
+            (click)="menuClick('available-products')"
+          >
+            <ion-icon name="briefcase-outline" slot="start"></ion-icon>
+            <ion-label>Available Products</ion-label>
+          </ion-item>
+          <ion-item lines="none" button (click)="menuClick('my-products')">
+            <ion-icon name="bicycle-outline" slot="start"></ion-icon>
+            <ion-label>My Products</ion-label>
+          </ion-item>
+          <ion-item lines="none" button (click)="menuClick('auth')">
+            <ion-icon name="log-in-outline" slot="start"></ion-icon>
+            <ion-label>Sign in</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+      </div>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+<div class="ion-page" id="main-content">
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+
+      <ion-title class="yoobic-title">Naija mart</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="ion-padding"> </ion-content>
+</div>
+<ion-router-outlet id="main-content"></ion-router-outlet>

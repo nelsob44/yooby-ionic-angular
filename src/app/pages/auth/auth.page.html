@@ -1,0 +1,147 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Naija mart</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="black-circle"></div>
+  <form [formGroup]="form">
+    <div class="title">
+      <ion-card-title>{{isLogin ? 'Sign in' : 'Sign up' }}</ion-card-title>
+    </div>
+    <div>
+      <ion-item *ngIf="!isLogin">
+        <ion-icon name="person-outline" item-right></ion-icon>
+        <ion-label>First Name</ion-label>
+        <ion-input
+          class="form-elements"
+          formControlName="firstName"
+          clear-input
+        >
+        </ion-input>
+      </ion-item>
+      <ion-item *ngIf="!isLogin">
+        <ion-icon name="person-outline" item-right></ion-icon>
+        <ion-label>Last Name</ion-label>
+        <ion-input class="form-elements" formControlName="lastName" clear-input>
+        </ion-input>
+        <div
+          *ngIf="form.get('lastName').invalid && 
+        form.get('lastName').errors && 
+        (form.get('lastName').dirty || form.get('lastName').touched)"
+        >
+          <small *ngIf="form.get('lastName').hasError('required')">
+            This field is required.
+          </small>
+          <small *ngIf="form.get('lastName').hasError('minlength')">
+            The minimum length for this field is
+            {{form.get('lastName').errors.minlength.requiredLength}} characters.
+          </small>
+        </div>
+      </ion-item>
+      <ion-item>
+        <ion-icon name="mail-outline" item-right></ion-icon>
+        <ion-label>E-mail</ion-label>
+        <ion-input
+          type="email"
+          class="form-elements"
+          formControlName="email"
+          clear-input
+        >
+        </ion-input>
+      </ion-item>
+      <ion-item *ngIf="!isLogin">
+        <ion-icon name="flag-outline" item-right></ion-icon>
+        <ion-label>Country</ion-label>
+        <ion-input class="form-elements" formControlName="country" clear-input>
+        </ion-input>
+      </ion-item>
+      <ion-item *ngIf="!isLogin">
+        <ion-icon name="subway-outline" item-right></ion-icon>
+        <ion-label>City</ion-label>
+        <ion-input class="form-elements" formControlName="city" clear-input>
+        </ion-input>
+      </ion-item>
+      <ion-item *ngIf="!isLogin">
+        <ion-icon name="subway-outline" item-right></ion-icon>
+        <ion-label>Address</ion-label>
+        <ion-input class="form-elements" formControlName="address" clear-input>
+        </ion-input>
+      </ion-item>
+      <ion-item *ngIf="!isLogin">
+        <ion-icon name="call-outline" item-right></ion-icon>
+        <ion-label>Phone Number</ion-label>
+        <ion-input
+          class="form-elements"
+          formControlName="phoneNumber"
+          clear-input
+        >
+        </ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-icon name="lock-closed-outline"></ion-icon>
+        <ion-label>Password</ion-label>
+        <ion-input
+          type="password"
+          formControlName="password"
+          clear-input
+        ></ion-input>
+      </ion-item>
+      <ion-item *ngIf="!isLogin">
+        <ion-icon name="lock-closed-outline"></ion-icon>
+        <ion-label>Confirm Password</ion-label>
+        <ion-input
+          type="password"
+          formControlName="confirmPassword"
+          clear-input
+        ></ion-input>
+      </ion-item>
+    </div>
+    <div class="forgot-password">
+      <ion-card-subtitle><small>forgot password?</small></ion-card-subtitle>
+    </div>
+    <div class="sign-in-with">
+      <ion-card-subtitle>Sign in with</ion-card-subtitle>
+    </div>
+    <div class="facebook-icon">
+      <ion-card-title
+        ><ion-icon name="logo-facebook"></ion-icon
+      ></ion-card-title>
+    </div>
+    <div class="buttons">
+      <ion-button
+        *ngIf="!isLogin"
+        class="sign-in-button"
+        shape="round"
+        color="primary"
+        (click)="onClickSubmit()"
+        >Sign Up</ion-button
+      >
+      <ion-button
+        *ngIf="isLogin"
+        class="sign-in-button"
+        shape="round"
+        color="tertiary"
+        slot="end"
+        (click)="onClickSubmit()"
+        >Sign In</ion-button
+      >
+    </div>
+    <div>
+      <ion-button (click)="toggleLogin()"
+        ><small
+          >{{isLogin ? 'Click here to Register' : 'Click here to Sign
+          in'}}</small
+        ></ion-button
+      >
+    </div>
+  </form>
+  <div class="terms-and-conditions">
+    <a
+      ><ion-card-subtitle
+        ><small>Terms and conditions</small></ion-card-subtitle
+      ></a
+    >
+  </div>
+</ion-content>

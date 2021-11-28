@@ -1,0 +1,24 @@
+<ion-list>
+  <ion-row>
+    <ion-col size="8">
+      <ion-card-subtitle>{{
+        basketItem.title.length > 75
+          ? (basketItem.title | slice: 0:75) + "..."
+          : basketItem.title
+      }}</ion-card-subtitle>
+      <p class="success">Unit Price: £{{ basketItem.unitCost }}</p>
+      <p>Quantity: {{ basketItem.quantity }}</p>
+      <p>Sub-total: £{{ basketItem.subTotal }}</p>
+      <p>
+        <ion-button
+          aria-label="Remove entire item from cart"
+          (click)="deleteItem(basketItem.id)"
+          ><ion-icon name="trash-outline"></ion-icon>
+        </ion-button>
+      </p>
+    </ion-col>
+    <ion-col size="4">
+      <img class="image-div" [src]="basketItem.image" alt="basketItem.title" />
+    </ion-col>
+  </ion-row>
+</ion-list>

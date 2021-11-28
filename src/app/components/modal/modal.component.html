@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Your basket</ion-title>
+    <ion-title slot="end"
+      ><ion-button (click)="closeModal()"
+        ><ion-icon name="close-circle-outline"></ion-icon></ion-button
+    ></ion-title>
+  </ion-toolbar> </ion-header
+><ion-content>
+  <ion-list>
+    <ion-item-sliding *ngFor="let item of basket">
+      <ion-item>
+        <app-basket-item
+          [basketItem]="item"
+          (sendDeleteItem)="onDeleteItem($event)"
+        ></app-basket-item>
+      </ion-item>
+    </ion-item-sliding>
+    <ion-card-title class="total"
+      ><i>Total: £{{ totalCost }}</i></ion-card-title
+    >
+    <ion-button expand="block" color="primary">Pay Now</ion-button>
+  </ion-list>
+</ion-content>

@@ -1,0 +1,42 @@
+.black-circle {
+  background: rgb(241, 236, 236);
+  margin-left: calc(50% - 50px);
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
+  margin-bottom: 2rem;
+}
+
+.title,
+.sign-in-with,
+.facebook-icon {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+.forgot-password {
+  float: right;
+  margin-top: 0.6rem;
+}
+.sign-in-with {
+  margin-top: 4rem;
+}
+.sign-in-button {
+  float: right;
+}
+.terms-and-conditions {
+  text-align: center;
+  margin-top: 2rem;
+}
+ion-label {
+  padding-left: 0.7rem;
+  font-size: x-small;
+}
+ion-card-subtitle,
+ion-card-title {
+  color: aliceblue;
+}
+
+ion-item {
+  border-radius: 10px;
+  margin-bottom: 10px;
+}

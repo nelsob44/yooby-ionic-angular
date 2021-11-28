@@ -11,41 +11,43 @@ const routes: Routes = [
   {
     path: 'auth',
     loadChildren: () =>
-      import('./auth/auth.module').then((m) => m.AuthPageModule),
+      import('./pages/auth/auth.module').then((m) => m.AuthPageModule),
   },
   {
     path: 'dashboard',
     loadChildren: () =>
-      import('./dashboard/dashboard.module').then((m) => m.DashboardPageModule),
+      import('./pages/dashboard/dashboard.module').then(
+        (m) => m.DashboardPageModule
+      ),
   },
   {
     path: 'photos',
     loadChildren: () =>
-      import('./photos/photos.module').then((m) => m.PhotosPageModule),
+      import('./pages/photos/photos.module').then((m) => m.PhotosPageModule),
   },
   {
-    path: 'available-missions',
+    path: 'available-products',
     loadChildren: () =>
-      import('./available-missions/available-missions.module').then(
-        (m) => m.AvailableMissionsPageModule
+      import('./pages/available-products/available-products.module').then(
+        (m) => m.AvailableProductsPageModule
       ),
   },
   {
     path: 'chat',
     loadChildren: () =>
-      import('./chat/chat.module').then((m) => m.ChatPageModule),
+      import('./pages/chat/chat.module').then((m) => m.ChatPageModule),
   },
   {
-    path: 'my-missions',
+    path: 'my-products',
     loadChildren: () =>
-      import('./my-missions/my-missions.module').then(
-        (m) => m.MyMissionsPageModule
+      import('./pages/my-products/my-products.module').then(
+        (m) => m.MyProductsPageModule
       ),
   },
   {
     path: 'product-detail/:id',
     loadChildren: () =>
-      import('./product-detail/product-detail.module').then(
+      import('./pages/product-detail/product-detail.module').then(
         (m) => m.ProductDetailPageModule
       ),
   },
