@@ -36,7 +36,7 @@ import { BasketItemComponent } from './components/basket-item/basket-item.compon
       useFactory: (httpLink: HttpLink) => ({
         cache: new InMemoryCache(),
         link: httpLink.create({
-          uri: 'http://localhost:4000/graphql',
+          uri: 'https://malamino-backend.herokuapp.com/graphql',
         }),
       }),
       deps: [HttpLink],
