@@ -1,12 +1,13 @@
 {
-  "name": "Yooby",
+  "name": "Malamino",
   "version": "0.0.1",
-  "author": "Ionic Framework",
+  "author": "Nelson Oba",
   "homepage": "https://ionicframework.com/",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "node server.js",
     "build": "ng build",
+    "heroku-postbuild": "ng build — prod",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -27,7 +28,9 @@
     "@capacitor/status-bar": "1.0.3",
     "@ionic/angular": "^5.5.2",
     "apollo-angular": "^2.4.0",
+    "express": "^4.17.1",
     "graphql": "^15.0.0",
+    "path": "^0.12.7",
     "rxjs": "~6.6.0",
     "subscriptions-transport-ws": "^0.11.0",
     "tslib": "^2.2.0",
@@ -67,5 +70,9 @@
     "ts-node": "~8.3.0",
     "typescript": "~4.2.4"
   },
-  "description": "An Ionic project"
+  "description": "An Ionic project",
+  "engines": {
+    "node": "14.17.6",
+    "npm": "6.14.15"
+  }
 }
