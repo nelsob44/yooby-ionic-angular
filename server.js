@@ -1,8 +1,17 @@
 const express = require('express');
+const sslRedirect = require('heroku-ssl-redirect');
 const path = require('path');
 const app = express();
-app.use(express.static(__dirname + '/dist/Malamino'));
+
+app.use(sslRedirect());
+
+// Serve static files....
+app.use(express.static(__dirname + '/dist'));
+
+// Send all requests to index.html
 app.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname + '/dist/Malamino/index.html'));
+  res.sendFile(path.join(__dirname + '/dist/index.html'));
 });
-app.listen(process.env.PORT || 8080);
+
+// default Heroku PORT
+app.listen(process.env.PORT || 3000);
