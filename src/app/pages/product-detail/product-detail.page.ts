@@ -18,7 +18,7 @@ export class ProductDetailPage implements OnInit, OnDestroy {
   productQuantity;
   basketLength: number;
   modalBasket: BasketItem[] = [];
-  private productDetail: Product;
+  productDetail: Product;
   private productSub: Subscription;
   private basketSub: Subscription;
 
@@ -69,7 +69,7 @@ export class ProductDetailPage implements OnInit, OnDestroy {
     });
   }
 
-  updateQuantity(quantity: number, updateStatus: string) {
+  updateQuantity(quantity: number | string, updateStatus: string) {
     if (updateStatus === null) {
       this.productQuantity = quantity;
     } else if (updateStatus === 'add') {

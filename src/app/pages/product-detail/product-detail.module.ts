@@ -7,7 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { ProductDetailPageRoutingModule } from './product-detail-routing.module';
 
 import { ProductDetailPage } from './product-detail.page';
-import { ShoppingCartBadgeComponent } from '../../components/shopping-cart-badge/shopping-cart-badge.component';
+import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({
   imports: [
@@ -15,7 +15,8 @@ import { ShoppingCartBadgeComponent } from '../../components/shopping-cart-badge
     FormsModule,
     IonicModule,
     ProductDetailPageRoutingModule,
+    SharedModule,
   ],
-  declarations: [ProductDetailPage, ShoppingCartBadgeComponent],
+  declarations: [ProductDetailPage],
 })
 export class ProductDetailPageModule {}

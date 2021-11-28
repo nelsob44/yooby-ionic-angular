@@ -9,7 +9,7 @@ import { AvailableProductsPageRoutingModule } from './available-products-routing
 import { AvailableProductsPage } from './available-products.page';
 import { TruncateWordsPipe } from '../../pipes/truncate-words.pipe';
 import { ProductItemComponent } from '../../components/product-item/product-item.component';
-import { ShoppingCartBadgeComponent } from '../../components/shopping-cart-badge/shopping-cart-badge.component';
+import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({
   imports: [
@@ -17,12 +17,13 @@ import { ShoppingCartBadgeComponent } from '../../components/shopping-cart-badge
     FormsModule,
     IonicModule,
     AvailableProductsPageRoutingModule,
+    SharedModule,
   ],
   declarations: [
     AvailableProductsPage,
     ProductItemComponent,
     TruncateWordsPipe,
-    ShoppingCartBadgeComponent,
+    // ShoppingCartBadgeComponent,
   ],
 })
 export class AvailableProductsPageModule {}

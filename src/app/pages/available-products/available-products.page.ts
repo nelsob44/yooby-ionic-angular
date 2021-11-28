@@ -13,8 +13,8 @@ import { ProductsService } from '../../services/products.service';
 })
 export class AvailableProductsPage implements OnInit, OnDestroy {
   basketLength: number;
+  loadedProducts: Product[];
   private productsSub: Subscription;
-  private loadedProducts: Product[];
   private basketSub: Subscription;
   constructor(
     private service: ProductsService,

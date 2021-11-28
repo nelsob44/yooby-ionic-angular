@@ -10,6 +10,7 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+
 import { SideNavComponent } from './components/side-nav/side-nav.component';
 import { ModalComponent } from './components/modal/modal.component';
 import { BasketItemComponent } from './components/basket-item/basket-item.component';
