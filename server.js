@@ -1,5 +1,5 @@
-const express = require('express');
-const sslRedirect = require('heroku-ssl-redirect');
+import express from 'express';
+import sslRedirect from 'heroku-ssl-redirect';
 const path = require('path');
 const app = express();
 
