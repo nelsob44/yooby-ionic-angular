@@ -17,8 +17,8 @@ import { SideNavComponent } from './components/side-nav/side-nav.component';
 import { ModalComponent } from './components/modal/modal.component';
 import { BasketItemComponent } from './components/basket-item/basket-item.component';
 
-const uri = 'http://localhost:4000/graphql';
-//const uri = 'https://malamino-backend.herokuapp.com/graphql',
+//const uri = 'http://localhost:4000/graphql';
+const uri = 'https://malamino-backend.herokuapp.com/graphql';
 
 const createApollo: any = (httpLink: HttpLink) => {
   const basic = setContext((operation, context) => ({
