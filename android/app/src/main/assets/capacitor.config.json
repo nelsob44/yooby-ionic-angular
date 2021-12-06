@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "Malamino",
+	"webDir": "www",
+	"bundledWebRuntime": false
+}

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { AppComponent } from './app.component';
+import { AuthGuard } from './auth.guard';
 
 const routes: Routes = [
   {
@@ -24,6 +24,7 @@ const routes: Routes = [
     path: 'photos',
     loadChildren: () =>
       import('./pages/photos/photos.module').then((m) => m.PhotosPageModule),
+    canLoad: [AuthGuard],
   },
   {
     path: 'available-products',
@@ -31,11 +32,13 @@ const routes: Routes = [
       import('./pages/available-products/available-products.module').then(
         (m) => m.AvailableProductsPageModule
       ),
+    canLoad: [AuthGuard],
   },
   {
     path: 'chat',
     loadChildren: () =>
       import('./pages/chat/chat.module').then((m) => m.ChatPageModule),
+    canActivate: [AuthGuard],
   },
   {
     path: 'my-products',
@@ -43,6 +46,7 @@ const routes: Routes = [
       import('./pages/my-products/my-products.module').then(
         (m) => m.MyProductsPageModule
       ),
+    canLoad: [AuthGuard],
   },
   {
     path: 'product-detail/:id',
@@ -50,6 +54,7 @@ const routes: Routes = [
       import('./pages/product-detail/product-detail.module').then(
         (m) => m.ProductDetailPageModule
       ),
+    canActivate: [AuthGuard],
   },
 ];
 

@@ -1,15 +1,122 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
-import { of } from 'rxjs';
-import { catchError, mapTo, tap } from 'rxjs/operators';
-import { User } from '../interfaces/user';
+import { asapScheduler, BehaviorSubject, from, of, scheduled } from 'rxjs';
+import { catchError, map, mapTo, tap } from 'rxjs/operators';
+import { User, AuthResponseData } from '../interfaces/user';
 import { SAVE_USER, LOGIN_USER } from '../graphql/user';
+import { Storage } from '@capacitor/storage';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  private userData = new BehaviorSubject<AuthResponseData>(null);
+  private activeLogoutTimer: any;
+
+  get userAuthenticated() {
+    return this.userData.asObservable().pipe(
+      map((user) => {
+        if (user) {
+          return !!user.accessToken;
+        } else {
+          return false;
+        }
+      })
+    );
+  }
+
+  get userId() {
+    return this.userData.asObservable().pipe(
+      map((user) => {
+        if (user) {
+          return user.userId;
+        } else {
+          return null;
+        }
+      })
+    );
+  }
+
+  get firstName() {
+    return this.userData.asObservable().pipe(
+      map((user) => {
+        if (user) {
+          return user.firstName;
+        } else {
+          return null;
+        }
+      })
+    );
+  }
+
+  get email() {
+    return this.userData.asObservable().pipe(
+      map((user) => {
+        if (user) {
+          return user.email;
+        } else {
+          return null;
+        }
+      })
+    );
+  }
+
+  get token() {
+    return this.userData.asObservable().pipe(
+      map((user) => {
+        if (user) {
+          return user.accessToken;
+        } else {
+          return null;
+        }
+      })
+    );
+  }
+
   constructor(private apollo: Apollo) {}
+
+  async autoLogin() {
+    const { value } = await Storage.get({
+      key: 'authDataMalamino',
+    });
+    console.log(value);
+    return from(value).pipe(
+      map((storedData) => {
+        console.log(storedData);
+        if (!storedData) {
+          return null;
+        }
+        const parsedData = JSON.parse(storedData) as {
+          accessToken: string;
+          email: string;
+          firstName: string;
+          userId: string;
+          expirationTime: number;
+        };
+        const currentTime = new Date().getTime() * 1000;
+        const expirationTime = parsedData.expirationTime;
+        if (expirationTime <= currentTime) {
+          return null;
+        }
+        const userData = {
+          accessToken: parsedData.accessToken,
+          email: parsedData.email,
+          firstName: parsedData.firstName,
+          userId: parsedData.userId,
+          expirationTime: parsedData.expirationTime,
+        };
+        return userData;
+      }),
+      mapTo((user) => {
+        console.log('autologgin in 2', user);
+        if (user) {
+          this.userData.next(user);
+          this.autoLogout(user.expirationTime);
+        }
+      }),
+      map((user) => !!user)
+    );
+  }
 
   signup(userData: User) {
     return this.apollo
@@ -30,13 +137,15 @@ export class AuthService {
         tap((data) => console.log(data)),
         mapTo(true),
         catchError((error) => {
-          alert(error.error);
+          console.log(error);
+          alert(error);
           return of(false);
         })
       );
   }
 
   login(userData: User) {
+    console.log('login hit');
     return this.apollo
       .mutate({
         mutation: LOGIN_USER,
@@ -46,12 +155,56 @@ export class AuthService {
         },
       })
       .pipe(
-        tap((data) => console.log(data)),
+        tap((data) => {
+          console.log('data hit', data);
+          this.setUserData(data.data);
+        }),
         mapTo(true),
         catchError((error) => {
           alert(error.error);
           return of(false);
         })
       );
+  }
+
+  logout() {
+    if (this.activeLogoutTimer) {
+      clearTimeout(this.activeLogoutTimer);
+    }
+    this.userData.next(null);
+    localStorage.removeItem('authDataMalamino');
+  }
+
+  private setUserData(data: any) {
+    const expirationTime = new Date().getTime() + 60 * 60 * 0.5 * 1000;
+    const user = {
+      accessToken: data.authenticateUser.accessToken,
+      email: data.authenticateUser.email,
+      firstName: data.authenticateUser.firstName,
+      userId: data.authenticateUser.userId,
+      expirationTime,
+    };
+    console.log('user ', user);
+    console.log('expirationTime ', expirationTime);
+    this.userData.next(user);
+    this.autoLogout(expirationTime);
+    const setName = async () => {
+      await Storage.set({
+        key: 'authDataMalamino',
+        value: JSON.stringify(user),
+      });
+    };
+    setName();
+  }
+
+  private autoLogout(duration: number) {
+    const currentTime = new Date().getTime();
+    const timeDuration = duration - currentTime;
+    if (this.activeLogoutTimer) {
+      clearTimeout(this.activeLogoutTimer);
+    }
+    this.activeLogoutTimer = setTimeout(() => {
+      this.logout();
+    }, timeDuration);
   }
 }

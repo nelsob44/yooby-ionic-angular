@@ -2,7 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoadingController, AlertController } from '@ionic/angular';
+import {
+  LoadingController,
+  AlertController,
+  IonicSafeString,
+  ToastController,
+} from '@ionic/angular';
 import { AuthService } from '../../services/auth.service';
 import { Observable } from 'rxjs';
 
@@ -20,7 +25,8 @@ export class AuthPage implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private loadingCtrl: LoadingController,
-    private alertCtrl: AlertController
+    private alertController: AlertController,
+    private toastController: ToastController
   ) {}
 
   ngOnInit() {
@@ -96,7 +102,7 @@ export class AuthPage implements OnInit {
     console.log('Form values ', authData);
     this.isLoading = true;
     this.loadingCtrl
-      .create({ keyboardClose: true, message: 'Creating your account...' })
+      .create({ keyboardClose: true, message: 'please wait...' })
       .then((loadingEl) => {
         loadingEl.present();
         let authObs: Observable<any>;
@@ -108,10 +114,15 @@ export class AuthPage implements OnInit {
         authObs.subscribe(
           (resData) => {
             console.log(resData);
-            if (this.isLogin) {
+            if (this.isLogin && resData) {
               this.router.navigate(['available-products']);
-            } else {
+            }
+            if (!this.isLogin && resData) {
               this.isLogin = true;
+              this.presentAlert(
+                '<p style=color:white;>Sign up successful. Please log in now</p>',
+                'Success'
+              );
             }
             this.isLoading = false;
             loadingEl.dismiss();
@@ -119,6 +130,7 @@ export class AuthPage implements OnInit {
           (errorResponse) => {
             loadingEl.dismiss();
             const code = errorResponse.error.error.message;
+            this.presentAlert(errorResponse, 'Error');
           }
         );
       });
@@ -126,5 +138,29 @@ export class AuthPage implements OnInit {
 
   toggleLogin() {
     this.isLogin = !this.isLogin;
+  }
+
+  async presentAlert(alertMessage: string, head: string) {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: head,
+      message: new IonicSafeString(alertMessage),
+      translucent: true,
+      buttons: ['OK'],
+    });
+
+    await alert.present();
+
+    const { role } = await alert.onDidDismiss();
+    console.log('onDidDismiss resolved with role', role);
+  }
+  async presentToast() {
+    const toast = await this.toastController.create({
+      message: new IonicSafeString('<ion-button>Hello!</ion-button>'),
+      cssClass: 'my-custom-class',
+      duration: 12000,
+      translucent: true,
+    });
+    toast.present();
   }
 }

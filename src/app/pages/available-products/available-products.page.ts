@@ -5,6 +5,7 @@ import BasketItem from '../../interfaces/basketItem';
 import { Product } from '../../interfaces/product';
 import { ModalComponent } from '../../components/modal/modal.component';
 import { ProductsService } from '../../services/products.service';
+import { HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-available-products',
@@ -63,7 +64,7 @@ export class AvailableProductsPage implements OnInit, OnDestroy {
     });
   }
 
-  onCartModalOpen($event) {
+  onCartModalOpen($event): Subscription {
     return this.service.getShoppingBasket().subscribe((basket) => {
       this.presentModal(basket);
     });
