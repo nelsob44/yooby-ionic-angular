@@ -28,7 +28,7 @@ export class AuthGuard implements CanActivate, CanLoad {
     | UrlTree {
     return this.authService.userAuthenticated.pipe(
       take(1),
-      tap((isAuthenticated) => {
+      switchMap((isAuthenticated) => {
         if (!isAuthenticated) {
           return this.authService.autoLogin();
         } else {
@@ -51,10 +51,8 @@ export class AuthGuard implements CanActivate, CanLoad {
   ): Observable<boolean> | Promise<boolean> | boolean {
     return this.authService.userAuthenticated.pipe(
       take(1),
-      tap((isAuthenticated) => {
-        console.log('route guard 1', isAuthenticated);
+      switchMap((isAuthenticated) => {
         if (!isAuthenticated) {
-          console.log('route guard 2', isAuthenticated);
           return this.authService.autoLogin();
         } else {
           return of(isAuthenticated);

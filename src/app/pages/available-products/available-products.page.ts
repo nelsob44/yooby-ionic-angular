@@ -24,7 +24,6 @@ export class AvailableProductsPage implements OnInit, OnDestroy {
   ) {}
 
   async presentModal(basket: BasketItem[]) {
-    console.log({ basket });
     const modal = await this.modalController.create({
       component: ModalComponent,
       cssClass: 'my-custom-class',

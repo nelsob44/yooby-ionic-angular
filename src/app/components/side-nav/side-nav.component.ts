@@ -11,7 +11,9 @@ import { Subscription } from 'rxjs';
 })
 export class SideNavComponent implements OnInit, OnDestroy {
   nameSub: Subscription;
+  authSub: Subscription;
   firstName;
+  isLoggedIn = false;
   constructor(
     private menu: MenuController,
     private router: Router,
@@ -22,10 +24,22 @@ export class SideNavComponent implements OnInit, OnDestroy {
     this.nameSub = this.authService.firstName.subscribe((data) => {
       this.firstName = data;
     });
+    this.authSub = this.authService.userAuthenticated.subscribe((data) => {
+      this.isLoggedIn = data;
+    });
   }
 
   menuClick(menuItem: string) {
-    this.router.navigate([`/${menuItem}`]);
+    if (menuItem !== 'auth') {
+      this.router.navigate([`/${menuItem}`]);
+    } else {
+      if (!this.isLoggedIn) {
+        this.router.navigate([`/${menuItem}`]);
+      } else {
+        this.isLoggedIn = false;
+        this.authService.logout();
+      }
+    }
   }
   powerClick() {
     console.log('clicked power button');

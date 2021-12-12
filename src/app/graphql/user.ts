@@ -37,6 +37,7 @@ export const LOGIN_USER = gql`
       email
       firstName
       userId
+      privilege
     }
   }
 `;

@@ -9,6 +9,7 @@ import {
   ToastController,
 } from '@ionic/angular';
 import { AuthService } from '../../services/auth.service';
+import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -20,6 +21,7 @@ export class AuthPage implements OnInit {
   form: FormGroup;
   isLogin = true;
   isLoading = false;
+  title = environment.title;
   constructor(
     private authService: AuthService,
     private activatedRoute: ActivatedRoute,

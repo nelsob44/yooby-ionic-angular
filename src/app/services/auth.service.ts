@@ -5,6 +5,7 @@ import { catchError, map, mapTo, tap } from 'rxjs/operators';
 import { User, AuthResponseData } from '../interfaces/user';
 import { SAVE_USER, LOGIN_USER } from '../graphql/user';
 import { Storage } from '@capacitor/storage';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -73,27 +74,27 @@ export class AuthService {
     );
   }
 
-  constructor(private apollo: Apollo) {}
+  constructor(private apollo: Apollo, private router: Router) {}
 
-  async autoLogin() {
-    const { value } = await Storage.get({
-      key: 'authDataMalamino',
-    });
-    console.log(value);
-    return from(value).pipe(
+  autoLogin() {
+    return from(
+      Storage.get({
+        key: 'authDataMalamino',
+      })
+    ).pipe(
       map((storedData) => {
-        console.log(storedData);
-        if (!storedData) {
+        if (!storedData || !storedData.value) {
           return null;
         }
-        const parsedData = JSON.parse(storedData) as {
+        const parsedData = JSON.parse(storedData.value) as {
           accessToken: string;
           email: string;
           firstName: string;
           userId: string;
+          privilege: string;
           expirationTime: number;
         };
-        const currentTime = new Date().getTime() * 1000;
+        const currentTime = new Date().getTime();
         const expirationTime = parsedData.expirationTime;
         if (expirationTime <= currentTime) {
           return null;
@@ -103,12 +104,12 @@ export class AuthService {
           email: parsedData.email,
           firstName: parsedData.firstName,
           userId: parsedData.userId,
+          privilege: parsedData.privilege,
           expirationTime: parsedData.expirationTime,
         };
         return userData;
       }),
-      mapTo((user) => {
-        console.log('autologgin in 2', user);
+      tap((user) => {
         if (user) {
           this.userData.next(user);
           this.autoLogout(user.expirationTime);
@@ -172,7 +173,11 @@ export class AuthService {
       clearTimeout(this.activeLogoutTimer);
     }
     this.userData.next(null);
-    localStorage.removeItem('authDataMalamino');
+    const removeName = async () => {
+      await Storage.remove({ key: 'authDataMalamino' });
+      this.router.navigateByUrl('/auth');
+    };
+    removeName();
   }
 
   private setUserData(data: any) {
@@ -182,6 +187,7 @@ export class AuthService {
       email: data.authenticateUser.email,
       firstName: data.authenticateUser.firstName,
       userId: data.authenticateUser.userId,
+      privilege: data.authenticateUser.privilege,
       expirationTime,
     };
     console.log('user ', user);

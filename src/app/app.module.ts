@@ -6,6 +6,8 @@ import { Apollo, APOLLO_OPTIONS } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 import { InMemoryCache, ApolloLink } from '@apollo/client/core';
 import { setContext } from '@apollo/client/link/context';
+import { Storage } from '@capacitor/storage';
+import { Camera } from '@awesome-cordova-plugins/camera/ngx';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { IonicStorageModule } from '@ionic/storage-angular';
@@ -16,6 +18,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { SideNavComponent } from './components/side-nav/side-nav.component';
 import { ModalComponent } from './components/modal/modal.component';
 import { BasketItemComponent } from './components/basket-item/basket-item.component';
+import { AuthService } from './services/auth.service';
 
 //const uri = 'http://localhost:4000/graphql';
 const uri = 'https://malamino-backend.herokuapp.com/graphql';
@@ -27,15 +30,24 @@ const createApollo: any = (httpLink: HttpLink) => {
     },
   }));
 
-  const auth = setContext((operation, context) => {
-    const token = JSON.parse(localStorage.getItem('authDataMalamino'));
-    console.log(token);
-    if (token === null) {
+  const auth = setContext(async (operation, context) => {
+    const { value } = await Storage.get({ key: 'authDataMalamino' });
+    const parsedData = JSON.parse(value) as {
+      accessToken: string;
+      email: string;
+      firstName: string;
+      userId: string;
+      privilege: string;
+      expirationTime: number;
+    };
+    console.log('parsedData is ', parsedData);
+    if (parsedData === null) {
+      console.log('parsedData is ', null);
       return {};
     } else {
       return {
         headers: {
-          authorization: `Bearer ${token.accessToken}`,
+          authorization: `Bearer ${parsedData.accessToken}`,
         },
       };
     }
@@ -76,6 +88,7 @@ const createApollo: any = (httpLink: HttpLink) => {
       useFactory: createApollo,
       deps: [HttpLink],
     },
+    Camera,
   ],
   bootstrap: [AppComponent],
 })

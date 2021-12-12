@@ -1,0 +1,27 @@
+.picker {
+  width: 30rem;
+  max-width: 80%;
+  height: 20rem;
+  max-height: 30vh;
+  border: 1px solid var(--ion-color-primary);
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+@media screen and (max-width: 600px) {
+  .picker-class {
+    max-width: 240px;
+  }
+}
