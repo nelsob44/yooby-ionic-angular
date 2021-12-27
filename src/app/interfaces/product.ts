@@ -1,16 +1,19 @@
 export interface Product {
-  id: number;
+  id?: string | number;
   category: string;
   description: string;
-  image: string;
   price: number;
   title: string;
   minOrder?: number;
   sellerLocation?: string;
+  sellerEmail?: string;
   verifiedSeller?: boolean;
-  furtherDetails?: ProductAndSellerDescription;
+  furtherDetails?: string;
+  availableQuantity?: number;
   discount?: number;
-  promoEndDate?: Date;
+  promoStartDate?: string;
+  promoEndDate?: string;
+  images?: string;
 }
 
 export interface ProductAndSellerDescription {
@@ -24,3 +27,8 @@ export interface Transactions {
   totalBuyers: number;
   totalTransactions: number;
 }
+
+export type ImagePath = {
+  url: string;
+  key: string;
+};

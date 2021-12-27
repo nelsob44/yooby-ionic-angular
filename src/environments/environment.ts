@@ -6,6 +6,7 @@ export const environment = {
   production: false,
   baseUrl: 'https://fakestoreapi.com/products',
   title: 'Malamino',
+  httpEndPoint: 'http://localhost:4000',
 };
 
 /*

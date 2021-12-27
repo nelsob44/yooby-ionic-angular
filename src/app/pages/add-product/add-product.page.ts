@@ -7,7 +7,9 @@ import {
   LoadingController,
   ToastController,
 } from '@ionic/angular';
+import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
+import { ProductsService } from 'src/app/services/products.service';
 
 const base64toBlob = (base64Data, contentType) => {
   contentType = contentType || '';
@@ -43,6 +45,7 @@ export class AddProductPage implements OnInit {
   filesToUpload: any = [];
   constructor(
     private authService: AuthService,
+    private productService: ProductsService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private loadingCtrl: LoadingController,
@@ -84,6 +87,10 @@ export class AddProductPage implements OnInit {
         updateOn: 'blur',
         validators: [],
       }),
+      availableQuantity: new FormControl(null, {
+        updateOn: 'blur',
+        validators: [Validators.min(1)],
+      }),
       discount: new FormControl(null, {
         updateOn: 'blur',
         validators: [],
@@ -123,10 +130,70 @@ export class AddProductPage implements OnInit {
   }
 
   onAddProduct() {
-    this.presentAlert(
-      'We are still working on this functionality!',
-      'Work in progress'
-    );
+    // this.presentAlert(
+    //   'We are still working on this functionality!',
+    //   'Work in progress'
+    // );
+    console.log(this.form.status);
+    console.log(this.form);
+    if (this.form.status === 'INVALID') {
+      return;
+    }
+    const productData = {
+      category: this.form.value.category.replace(/(<([^>]+)>)/gi, ''),
+      description: this.form.value.description.replace(/(<([^>]+)>)/gi, ''),
+      price: this.form.value.price,
+      title:
+        this.form.value.title &&
+        this.form.value.title.replace(/(<([^>]+)>)/gi, ''),
+      minOrder: this.form.value.minOrder,
+      sellerLocation:
+        this.form.value.sellerLocation &&
+        this.form.value.sellerLocation.replace(/(<([^>]+)>)/gi, ''),
+      furtherDetails:
+        this.form.value.furtherDetails &&
+        this.form.value.furtherDetails.replace(/(<([^>]+)>)/gi, ''),
+      availableQuantity: this.form.value.availableQuantity,
+      discount: this.form.value.discount,
+      promoStartDate:
+        this.form.value.promoStartDate &&
+        this.form.value.promoStartDate.toString().replace(/(<([^>]+)>)/gi, ''),
+      promoEndDate:
+        this.form.value.promoEndDate &&
+        this.form.value.promoEndDate.toString().replace(/(<([^>]+)>)/gi, ''),
+    };
+    console.log('Form values ', productData);
+    this.isLoading = true;
+    this.loadingCtrl
+      .create({ keyboardClose: true, message: 'please wait...' })
+      .then((loadingEl) => {
+        loadingEl.present();
+        //let productObs: Observable<any>;
+        this.productService
+          .addProduct(productData, this.filesToUpload)
+          .subscribe(
+            (resData) => {
+              console.log(resData);
+              if (resData) {
+                this.presentAlert(
+                  '<p style=color:white;>Product was successfully added</p>',
+                  'Success'
+                );
+                this.router.navigate(['my-products']);
+              }
+              this.isLoading = false;
+              loadingEl.dismiss();
+            },
+            (errorResponse) => {
+              console.log('An error occurred');
+              loadingEl.dismiss();
+              this.presentAlert(
+                '<p style=color:white;>' + errorResponse + '</p>',
+                'Error'
+              );
+            }
+          );
+      });
   }
 
   async presentAlert(alertMessage: string, head: string) {

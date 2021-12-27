@@ -9,7 +9,7 @@
     <div>
       <ion-item>
         <ion-label>Category</ion-label>
-        <ion-select value="category" interface="popover">
+        <ion-select formControlName="category" interface="popover">
           <ion-select-option value="electronics" color="medium"
             >Electronics</ion-select-option
           >
@@ -61,6 +61,16 @@
         <ion-input
           class="form-elements"
           formControlName="sellerLocation"
+          color="medium"
+        >
+        </ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Available Quantity</ion-label>
+        <ion-input
+          type="number"
+          class="form-elements"
+          formControlName="availableQuantity"
           color="medium"
         >
         </ion-input>

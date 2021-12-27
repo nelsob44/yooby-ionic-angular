@@ -6,6 +6,11 @@ import { User, AuthResponseData } from '../interfaces/user';
 import { SAVE_USER, LOGIN_USER } from '../graphql/user';
 import { Storage } from '@capacitor/storage';
 import { Router } from '@angular/router';
+import {
+  AlertController,
+  IonicSafeString,
+  LoadingController,
+} from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root',
@@ -74,7 +79,12 @@ export class AuthService {
     );
   }
 
-  constructor(private apollo: Apollo, private router: Router) {}
+  constructor(
+    private loadingCtrl: LoadingController,
+    private alertController: AlertController,
+    private apollo: Apollo,
+    private router: Router
+  ) {}
 
   autoLogin() {
     return from(
@@ -139,7 +149,7 @@ export class AuthService {
         mapTo(true),
         catchError((error) => {
           console.log(error);
-          alert(error);
+          this.presentAlert('<p style=color:white;>' + error + '</p>', 'Error');
           return of(false);
         })
       );
@@ -162,7 +172,7 @@ export class AuthService {
         }),
         mapTo(true),
         catchError((error) => {
-          alert(error.error);
+          this.presentAlert('<p style=color:white;>' + error + '</p>', 'Error');
           return of(false);
         })
       );
@@ -212,5 +222,20 @@ export class AuthService {
     this.activeLogoutTimer = setTimeout(() => {
       this.logout();
     }, timeDuration);
+  }
+
+  private async presentAlert(alertMessage: string, head: string) {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: head,
+      message: new IonicSafeString(alertMessage),
+      translucent: true,
+      buttons: ['OK'],
+    });
+
+    await alert.present();
+
+    const { role } = await alert.onDidDismiss();
+    console.log('onDidDismiss resolved with role', role);
   }
 }

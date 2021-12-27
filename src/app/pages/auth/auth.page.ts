@@ -131,7 +131,6 @@ export class AuthPage implements OnInit {
           },
           (errorResponse) => {
             loadingEl.dismiss();
-            const code = errorResponse.error.error.message;
             this.presentAlert(errorResponse, 'Error');
           }
         );

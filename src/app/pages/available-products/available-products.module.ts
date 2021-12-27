@@ -7,7 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { AvailableProductsPageRoutingModule } from './available-products-routing.module';
 
 import { AvailableProductsPage } from './available-products.page';
-import { TruncateWordsPipe } from '../../pipes/truncate-words.pipe';
+//import { TruncateWordsPipe } from '../../shared/pipes/truncate-words.pipe';
 import { ProductItemComponent } from '../../components/product-item/product-item.component';
 import { SharedModule } from '../../shared/shared.module';
 
@@ -22,7 +22,7 @@ import { SharedModule } from '../../shared/shared.module';
   declarations: [
     AvailableProductsPage,
     ProductItemComponent,
-    TruncateWordsPipe,
+    //TruncateWordsPipe,
     // ShoppingCartBadgeComponent,
   ],
 })

@@ -92,7 +92,7 @@ export class ProductDetailPage implements OnInit, OnDestroy {
       id: this.productDetail.id || '1zx',
       unitCost: this.productDetail.price,
       title: this.productDetail.title,
-      image: this.productDetail.image,
+      image: this.productDetail.images,
       quantity: parseInt(this.productQuantity, 10) || 1,
       subTotal:
         parseInt(this.productQuantity, 10) * this.productDetail.price ||

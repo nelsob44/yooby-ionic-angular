@@ -13,7 +13,7 @@ export class ProductItemComponent implements OnInit {
 
   ngOnInit() {}
 
-  viewDetail(id: number) {
+  viewDetail(id: number | string) {
     this.router.navigate(['/product-detail', id]);
   }
 }

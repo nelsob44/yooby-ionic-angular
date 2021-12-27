@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { map, take } from 'rxjs/operators';
+import { Apollo } from 'apollo-angular';
+import { map, take, catchError, mapTo, tap, switchMap } from 'rxjs/operators';
 import { Product } from '../interfaces/product';
+import { SAVE_PRODUCT, GET_MY_PRODUCTS } from '../graphql/product';
 import BasketItem from 'src/app/interfaces/basketItem';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of, Subscription } from 'rxjs';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +27,11 @@ export class ProductsService {
   get numberOfItemsInBasket() {
     return this.basketItems.asObservable();
   }
-  constructor(private http: HttpClient) {}
+  constructor(
+    private authService: AuthService,
+    private apollo: Apollo,
+    private http: HttpClient
+  ) {}
 
   fetchProducts() {
     try {
@@ -74,5 +81,82 @@ export class ProductsService {
 
   updateShoppingBasket(basket) {
     this.shoppingBasket.next(basket);
+  }
+
+  addProduct(productData: any, filesToUpload: [File]) {
+    return this.uploadImage(filesToUpload).pipe(
+      take(1),
+      switchMap((paths) => {
+        const imageArray = [];
+        paths.imagePath.map((img) => {
+          let newImg = '';
+          newImg = img.key + ',' + img.url;
+          imageArray.push(newImg);
+        });
+        console.log(imageArray);
+        return this.apollo
+          .mutate({
+            mutation: SAVE_PRODUCT,
+            variables: {
+              category: productData.category,
+              description: productData.description,
+              price: productData.price,
+              title: productData.title,
+              minOrder: productData.minOrder,
+              sellerLocation: productData.sellerLocation,
+              furtherDetails: productData.furtherDetails,
+              availableQuantity: productData.availableQuantity,
+              discount: productData.discount,
+              promoStartDate: productData.promoStartDate,
+              promoEndDate: productData.promoEndDate,
+              images: imageArray,
+            },
+            refetchQueries: [
+              {
+                query: GET_MY_PRODUCTS,
+              },
+            ],
+          })
+          .pipe(
+            tap((data) => {
+              console.log(data);
+              return data;
+            })
+          );
+      })
+    );
+  }
+
+  uploadImage(filesToUpload: [File]) {
+    const URL = environment.httpEndPoint + '/images';
+    const uploadData = new FormData();
+    const filesLength = filesToUpload.length;
+    for (let i = 0; i < filesLength; i++) {
+      uploadData.append('files[]', filesToUpload[i]);
+    }
+    //uploadData.append('files', filesToUpload[0]);
+
+    return this.authService.token.pipe(
+      take(1),
+      switchMap((token) => {
+        console.log(token);
+        return this.http
+          .post<any>(URL, uploadData, {
+            headers: { authorization: 'Bearer ' + token },
+          })
+          .pipe(
+            map((data) => {
+              console.log(data);
+              return data;
+            })
+          );
+      })
+    );
+  }
+
+  fetchMyProducts() {
+    return this.apollo.watchQuery<any>({
+      query: GET_MY_PRODUCTS,
+    });
   }
 }
