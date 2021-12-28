@@ -1,7 +1,48 @@
+ion-avatar {
+  --border-radius: 5px;
+  max-height: 100px;
+  max-width: 100px;
+  height: 5rem;
+  width: 5rem;
+}
+
 ion-card {
   cursor: pointer;
-  height: 25rem;
   img {
-    height: 150px;
+    object-fit: fill;
+  }
+}
+
+.seller {
+  font-size: 0.8rem;
+}
+
+@media (max-width: 600px) {
+  .small-screen {
+    display: block;
+  }
+  .large-screen {
+    display: none;
+  }
+}
+
+@media (min-width: 601px) {
+  .large-screen {
+    display: block;
+    img {
+      object-fit: fill;
+      height: 150px;
+    }
+  }
+  .small-screen {
+    display: none;
+  }
+  ion-card {
+    height: 25rem;
+    img {
+      width: inherit;
+      object-fit: contain;
+    }
+    overflow-y: auto;
   }
 }

@@ -49,9 +49,6 @@
   <ion-card-header>
     <ion-card-subtitle>{{ item.category }}</ion-card-subtitle>
     <ion-item-divider>
-      <ion-card-subtitle slot="start" color="success"
-        >£{{ item.price }}</ion-card-subtitle
-      >
       <span slot="end"
         ><i
           ><small>Seller: {{ item.sellerEmail }}</small></i
@@ -59,6 +56,25 @@
       >
     </ion-item-divider>
     <ion-card-title>{{ item.title | truncateWords }}</ion-card-title>
+    <ion-row>
+      <ion-col
+        ><ion-card-subtitle color="success"
+          >£{{ item.price }}</ion-card-subtitle
+        ></ion-col
+      >
+      <ion-col
+        ><ion-badge color="danger" *ngIf="item.availableQuantity < 10"
+          ><small>Low stock!</small></ion-badge
+        ></ion-col
+      >
+    </ion-row>
   </ion-card-header>
+  <ion-card-content
+    >Available in stock:
+    <ion-badge
+      color="{{ item.availableQuantity < 10 ? 'danger' : 'success' }}"
+      >{{ item.availableQuantity }}</ion-badge
+    ></ion-card-content
+  >
   <ion-card-content>{{ item.description | truncateWords }}</ion-card-content>
 </ion-card>
