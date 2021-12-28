@@ -56,4 +56,24 @@
       </ion-row>
     </ion-grid>
   </ion-card>
+  <ion-row>
+    <ion-col size="12">
+      <swiper
+        [effect]="'cube'"
+        [grabCursor]="true"
+        [cubeEffect]="{
+              shadow: true,
+              slideShadows: true,
+              shadowOffset: 20,
+              shadowScale: 0.94
+            }"
+        [pagination]="pagination"
+        class="mySwiper"
+      >
+        <ng-template swiperSlide *ngFor="let item of imagesCarousel"
+          ><img src="{{item.url}}"
+        /></ng-template>
+      </swiper>
+    </ion-col>
+  </ion-row>
 </ion-content>

@@ -79,6 +79,18 @@ export class AuthService {
     );
   }
 
+  get privilege() {
+    return this.userData.asObservable().pipe(
+      map((user) => {
+        if (user) {
+          return user.privilege;
+        } else {
+          return null;
+        }
+      })
+    );
+  }
+
   constructor(
     private loadingCtrl: LoadingController,
     private alertController: AlertController,

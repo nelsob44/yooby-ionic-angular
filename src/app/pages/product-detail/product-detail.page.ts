@@ -1,7 +1,9 @@
 import { BoundText } from '@angular/compiler/src/render3/r3_ast';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
+import SwiperCore, { EffectCube, Pagination } from 'swiper';
+import { SwiperComponent } from 'swiper/angular';
 import { Subscription } from 'rxjs';
 import { ImagePath, Product } from '../../interfaces/product';
 import { ProductsService } from '../../services/products.service';
@@ -9,10 +11,13 @@ import { ModalController } from '@ionic/angular';
 import { ModalComponent } from '../../components/modal/modal.component';
 import BasketItem from 'src/app/interfaces/basketItem';
 
+SwiperCore.use([EffectCube, Pagination]);
+
 @Component({
   selector: 'app-product-detail',
   templateUrl: './product-detail.page.html',
   styleUrls: ['./product-detail.page.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class ProductDetailPage implements OnInit, OnDestroy {
   productQuantity;
@@ -28,6 +33,14 @@ export class ProductDetailPage implements OnInit, OnDestroy {
     url: '',
     key: '',
   };
+  imagesArray = [];
+  imagesCarousel: ImagePath[] = [];
+  pagination = {
+    clickable: true,
+    renderBullet: (index, className) =>
+      '<span class="' + className + '">' + (index + 1) + '</span>',
+  };
+
   private productSub: Subscription;
   private basketSub: Subscription;
 
@@ -40,7 +53,6 @@ export class ProductDetailPage implements OnInit, OnDestroy {
   ) {}
 
   async presentModal(basket: BasketItem[]) {
-    console.log({ basket });
     const modal = await this.modalController.create({
       component: ModalComponent,
       cssClass: 'my-custom-class',
@@ -70,6 +82,7 @@ export class ProductDetailPage implements OnInit, OnDestroy {
               return this.navCtrl.navigateBack('/available-products');
             }
             this.productDetail = product;
+            this.imagesArray = [product.images];
             this.transformImagePath();
           });
       } else if (type === 'my-products') {
@@ -80,6 +93,7 @@ export class ProductDetailPage implements OnInit, OnDestroy {
               return this.navCtrl.navigateBack('/my-products');
             }
             this.productDetail = product;
+            this.imagesArray = [product.images];
             this.transformImagePath();
           });
       }
@@ -116,7 +130,7 @@ export class ProductDetailPage implements OnInit, OnDestroy {
   addToBasket() {
     const basketArray: BasketItem[] = [];
     const basketItem: BasketItem = {
-      id: this.productDetail.id || '1zx',
+      id: this.productDetail.id,
       unitCost: this.productDetail.price,
       title: this.productDetail.title,
       image: this.productDetail.images,
@@ -182,5 +196,18 @@ export class ProductDetailPage implements OnInit, OnDestroy {
       url: imgs[1],
       key: imgs[0],
     };
+
+    this.imagesArray[0].map((img) => {
+      let carouselObj = {
+        url: '',
+        key: '',
+      };
+      const newImg = img.split(',');
+      carouselObj = {
+        url: newImg[1],
+        key: newImg[0],
+      };
+      this.imagesCarousel.push(carouselObj);
+    });
   }
 }

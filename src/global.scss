@@ -39,7 +39,6 @@ ion-toolbar {
     rgba(9, 9, 121, 1) 0%,
     rgba(0, 212, 255, 1) 100%
   );
-  // --background: #d3d3d3;
   font-family: Arial, Helvetica, sans-serif;
 }
 ion-title {
@@ -47,5 +46,16 @@ ion-title {
 }
 
 .my-custom-class {
-  --background: #2a46e7;
+  --backdrop-opacity: 0.2;
+  --background: linear-gradient(
+    90deg,
+    rgb(13, 156, 125) 0%,
+    rgb(226, 166, 211) 100%
+  );
+}
+
+@media (max-width: 600px) {
+  ion-title {
+    font-size: 0.8rem;
+  }
 }

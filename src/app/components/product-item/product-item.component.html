@@ -1,12 +1,12 @@
-<ion-card (click)="viewDetail(item.id)" class="small-screen">
+<ion-card class="small-screen">
   <ion-item>
-    <ion-avatar slot="start">
+    <ion-avatar slot="start" (click)="viewDetail(item.id)">
       <img src="{{ imagePath.url }}" />
     </ion-avatar>
     <ion-label>
       <ion-row>
         <ion-col
-          ><h2>
+          ><h2 (click)="viewDetail(item.id)" class="clickable">
             <b>{{ item.title }}</b>
           </h2></ion-col
         >
@@ -20,8 +20,16 @@
       </ion-row>
       <ion-row>
         <ion-col
-          ><ion-text>Category: {{ item.category }}</ion-text></ion-col
+          ><ion-text class="clickable"
+            >Category: {{ item.category }}</ion-text
+          ></ion-col
         >
+        <ion-button
+          *ngIf="isAdmin"
+          aria-label="Delete product"
+          (click)="presentAlertConfirm(item.id)"
+          ><ion-icon name="trash-outline"></ion-icon>
+        </ion-button>
       </ion-row>
       <ion-row>
         <ion-col
@@ -29,52 +37,72 @@
             >£{{ item.price }}</ion-card-subtitle
           ></ion-col
         >
-        <ion-col
-          ><ion-badge color="danger" *ngIf="item.availableQuantity < 10"
-            ><small>Low stock!</small></ion-badge
-          ></ion-col
+        <ion-badge color="danger" *ngIf="item.availableQuantity < 10"
+          ><small>Low stock!</small></ion-badge
         >
       </ion-row>
       <ion-row>
         <ion-col
-          ><p>{{ item.description }}</p></ion-col
+          ><p (click)="viewDetail(item.id)" class="clickable">
+            {{ item.description }}
+          </p></ion-col
         >
       </ion-row>
     </ion-label>
   </ion-item>
 </ion-card>
 
-<ion-card (click)="viewDetail(item.id)" class="large-screen">
-  <img src="{{ imagePath.url }}" />
-  <ion-card-header>
-    <ion-card-subtitle>{{ item.category }}</ion-card-subtitle>
-    <ion-item-divider>
-      <span slot="end"
-        ><i
-          ><small>Seller: {{ item.sellerEmail }}</small></i
-        ></span
+<ion-card class="large-screen">
+  <ion-row>
+    <img src="{{ imagePath.url }}" (click)="viewDetail(item.id)" />
+  </ion-row>
+  <ion-row>
+    <ion-col
+      ><ion-card-subtitle class="clickable">{{
+        item.category
+      }}</ion-card-subtitle></ion-col
+    >
+
+    <ion-button
+      *ngIf="isAdmin"
+      aria-label="Delete product"
+      (click)="presentAlertConfirm(item.id)"
+      ><ion-icon name="trash-outline"></ion-icon>
+    </ion-button>
+  </ion-row>
+  <ion-row>
+    <ion-col
+      ><ion-card-title (click)="viewDetail(item.id)" class="clickable">{{
+        item.title | truncateWords
+      }}</ion-card-title></ion-col
+    >
+    <ion-badge aria-label="Price" color="success">£{{ item.price }} </ion-badge>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      <ion-card-subtitle
+        >Available in stock:
+        <ion-badge
+          color="{{ item.availableQuantity < 10 ? 'danger' : 'success' }}"
+          class="badge"
+          >{{ item.availableQuantity }}</ion-badge
+        ></ion-card-subtitle
       >
-    </ion-item-divider>
-    <ion-card-title>{{ item.title | truncateWords }}</ion-card-title>
-    <ion-row>
-      <ion-col
-        ><ion-card-subtitle color="success"
-          >£{{ item.price }}</ion-card-subtitle
-        ></ion-col
-      >
-      <ion-col
-        ><ion-badge color="danger" *ngIf="item.availableQuantity < 10"
-          ><small>Low stock!</small></ion-badge
-        ></ion-col
-      >
-    </ion-row>
-  </ion-card-header>
-  <ion-card-content
-    >Available in stock:
+    </ion-col>
+
     <ion-badge
-      color="{{ item.availableQuantity < 10 ? 'danger' : 'success' }}"
-      >{{ item.availableQuantity }}</ion-badge
-    ></ion-card-content
-  >
-  <ion-card-content>{{ item.description | truncateWords }}</ion-card-content>
+      aria-label="Low stock"
+      color="danger"
+      *ngIf="item.availableQuantity < 10"
+      ><small>Low stock!</small>
+    </ion-badge>
+  </ion-row>
+
+  <ion-row>
+    <ion-col>
+      <ion-card-subtitle (click)="viewDetail(item.id)" class="clickable">{{
+        item.description | truncateWords
+      }}</ion-card-subtitle>
+    </ion-col>
+  </ion-row>
 </ion-card>

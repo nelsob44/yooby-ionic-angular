@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
+import { SwiperModule } from 'swiper/angular';
 
 import { ProductDetailPageRoutingModule } from './product-detail-routing.module';
 
@@ -16,6 +17,7 @@ import { SharedModule } from '../../shared/shared.module';
     IonicModule,
     ProductDetailPageRoutingModule,
     SharedModule,
+    SwiperModule,
   ],
   declarations: [ProductDetailPage],
 })

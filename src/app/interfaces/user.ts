@@ -15,4 +15,5 @@ export interface AuthResponseData {
   firstName: string;
   userId: string;
   expirationTime: number;
+  privilege?: string;
 }

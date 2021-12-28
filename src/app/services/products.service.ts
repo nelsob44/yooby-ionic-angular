@@ -8,6 +8,7 @@ import {
   SAVE_PRODUCT,
   GET_MY_PRODUCTS,
   GET_AVAILABLE_PRODUCTS,
+  DELETE_MY_PRODUCT,
 } from '../graphql/product';
 import BasketItem from 'src/app/interfaces/basketItem';
 import { BehaviorSubject, of, Subscription } from 'rxjs';
@@ -157,21 +158,22 @@ export class ProductsService {
     return this.apollo.watchQuery<any>({
       query: GET_AVAILABLE_PRODUCTS,
     });
-    // try {
-    //   return this.http.get<Product[]>(this.url).pipe(
-    //     map((data) => {
-    //       const products = [];
-    //       for (const key in data) {
-    //         if (data.hasOwnProperty(key)) {
-    //           products.push(data[key]);
-    //         }
-    //       }
-    //       this.productsRetrieved.next(products);
-    //       return products;
-    //     })
-    //   );
-    // } catch (error) {
-    //   return error;
-    // }
+  }
+
+  deleteProduct(id) {
+    return this.apollo.mutate<any>({
+      mutation: DELETE_MY_PRODUCT,
+      variables: {
+        id,
+      },
+      refetchQueries: [
+        {
+          query: GET_MY_PRODUCTS,
+        },
+        {
+          query: GET_AVAILABLE_PRODUCTS,
+        },
+      ],
+    });
   }
 }

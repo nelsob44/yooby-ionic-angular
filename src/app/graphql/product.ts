@@ -98,3 +98,9 @@ export const GET_AVAILABLE_PRODUCTS = gql`
     }
   }
 `;
+
+export const DELETE_MY_PRODUCT = gql`
+  mutation deleteProduct($id: ID) {
+    deleteProduct(id: $id)
+  }
+`;

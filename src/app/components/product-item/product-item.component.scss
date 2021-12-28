@@ -7,14 +7,22 @@ ion-avatar {
 }
 
 ion-card {
-  cursor: pointer;
+  padding: 0 0.5rem 0 0.5rem;
   img {
     object-fit: fill;
+    cursor: pointer;
+  }
+  .clickable {
+    cursor: pointer;
   }
 }
 
 .seller {
   font-size: 0.8rem;
+}
+ion-badge {
+  max-height: 20px;
+  margin-top: 0.5rem;
 }
 
 @media (max-width: 600px) {
