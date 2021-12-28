@@ -1,5 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { LoadingController, ModalController } from '@ionic/angular';
+import {
+  AlertController,
+  IonicSafeString,
+  LoadingController,
+  ModalController,
+} from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import BasketItem from '../../interfaces/basketItem';
 import { Product } from '../../interfaces/product';
@@ -19,7 +24,8 @@ export class AvailableProductsPage implements OnInit, OnDestroy {
   constructor(
     private service: ProductsService,
     private loadingCtrl: LoadingController,
-    public modalController: ModalController
+    public modalController: ModalController,
+    private alertController: AlertController
   ) {}
 
   async presentModal(basket: BasketItem[]) {
@@ -43,17 +49,28 @@ export class AvailableProductsPage implements OnInit, OnDestroy {
       .then((loadingEl) => {
         loadingEl.present();
 
-        this.productsSub = this.service.fetchProducts().subscribe(
-          (items) => {
-            this.loadedProducts = items;
+        this.productsSub = this.service
+          .fetchProducts()
+          .valueChanges.subscribe(({ data, loading, error }) => {
+            if (data) {
+              this.loadedProducts = data.getAvailableProducts;
+              this.service.productsRetrieved.next(data.getAvailableProducts);
+              console.log(this.loadedProducts);
+              if (this.loadedProducts.length < 1) {
+                this.presentAlert(
+                  '<p style=color:white;>You have not added any products</p>',
+                  'Notice'
+                );
+              }
+            }
+            if (error) {
+              this.presentAlert(
+                '<p style=color:white;>' + error + '</p>',
+                'Error'
+              );
+            }
             loadingEl.dismiss();
-          },
-          (errorResponse) => {
-            alert('sorry there was an error retrieving the products');
-            console.log(errorResponse);
-            loadingEl.dismiss();
-          }
-        );
+          });
       });
   }
   ionViewWillEnter() {
@@ -75,5 +92,20 @@ export class AvailableProductsPage implements OnInit, OnDestroy {
     if (this.basketSub) {
       this.basketSub.unsubscribe();
     }
+  }
+
+  async presentAlert(alertMessage: string, head: string) {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: head,
+      message: new IonicSafeString(alertMessage),
+      translucent: true,
+      buttons: ['OK'],
+    });
+
+    await alert.present();
+
+    const { role } = await alert.onDidDismiss();
+    console.log('onDidDismiss resolved with role', role);
   }
 }

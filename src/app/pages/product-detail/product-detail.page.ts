@@ -1,9 +1,9 @@
 import { BoundText } from '@angular/compiler/src/render3/r3_ast';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
-import { Product } from '../../interfaces/product';
+import { ImagePath, Product } from '../../interfaces/product';
 import { ProductsService } from '../../services/products.service';
 import { ModalController } from '@ionic/angular';
 import { ModalComponent } from '../../components/modal/modal.component';
@@ -18,7 +18,16 @@ export class ProductDetailPage implements OnInit, OnDestroy {
   productQuantity;
   basketLength: number;
   modalBasket: BasketItem[] = [];
-  productDetail: Product;
+  productDetail: Product = {
+    category: '',
+    description: '',
+    price: 0,
+    title: '',
+  };
+  imagePath: ImagePath = {
+    url: '',
+    key: '',
+  };
   private productSub: Subscription;
   private basketSub: Subscription;
 
@@ -26,7 +35,8 @@ export class ProductDetailPage implements OnInit, OnDestroy {
     private service: ProductsService,
     private route: ActivatedRoute,
     private navCtrl: NavController,
-    public modalController: ModalController
+    public modalController: ModalController,
+    private router: Router
   ) {}
 
   async presentModal(basket: BasketItem[]) {
@@ -50,12 +60,29 @@ export class ProductDetailPage implements OnInit, OnDestroy {
       if (!paramMap.has('id')) {
         this.navCtrl.navigateBack('/available-products');
       }
-      const productId: number = parseInt(paramMap.get('id'), 10);
-      this.productSub = this.service
-        .getProduct(productId)
-        .subscribe((product) => {
-          this.productDetail = product;
-        });
+      const productId = paramMap.get('id');
+      const type = paramMap.get('type');
+      if (type === 'available-products') {
+        this.productSub = this.service
+          .getProduct(productId)
+          .subscribe((product) => {
+            if (Object.keys(product).length === 0) {
+              return this.navCtrl.navigateBack('/available-products');
+            }
+            this.productDetail = product;
+            this.transformImagePath();
+          });
+      } else if (type === 'my-products') {
+        this.productSub = this.service
+          .getMyProduct(productId)
+          .subscribe((product) => {
+            if (Object.keys(product).length === 0) {
+              return this.navCtrl.navigateBack('/my-products');
+            }
+            this.productDetail = product;
+            this.transformImagePath();
+          });
+      }
     });
   }
   ionViewWillEnter() {
@@ -147,5 +174,13 @@ export class ProductDetailPage implements OnInit, OnDestroy {
     if (this.basketSub) {
       this.basketSub.unsubscribe();
     }
+  }
+
+  private transformImagePath() {
+    const imgs = this.productDetail.images[0].split(',');
+    this.imagePath = {
+      url: imgs[1],
+      key: imgs[0],
+    };
   }
 }

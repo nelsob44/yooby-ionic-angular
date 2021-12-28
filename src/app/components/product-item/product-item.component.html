@@ -1,5 +1,5 @@
 <ion-card (click)="viewDetail(item.id)">
-  <img [src]="item.images" />
+  <img src="{{ imagePath.url }}" />
   <ion-card-header>
     <ion-card-subtitle>{{ item.category }}</ion-card-subtitle>
     <ion-item-divider>
@@ -10,9 +10,7 @@
         ><i><small>Seller: nelsob44</small></i></span
       >
     </ion-item-divider>
-    <ion-card-title>{{ item.title | truncateWords: 45:true }}</ion-card-title>
+    <ion-card-title>{{ item.title | truncateWords }}</ion-card-title>
   </ion-card-header>
-  <ion-card-content>{{
-    item.description | truncateWords: 90:true
-  }}</ion-card-content>
+  <ion-card-content>{{ item.description | truncateWords }}</ion-card-content>
 </ion-card>

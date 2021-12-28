@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Product } from '../../interfaces/product';
+import { ImagePath, Product } from '../../interfaces/product';
 import { Router } from '@angular/router';
 
 @Component({
@@ -9,11 +9,22 @@ import { Router } from '@angular/router';
 })
 export class ProductItemComponent implements OnInit {
   @Input() item: Product;
+  imagePath: ImagePath;
   constructor(private router: Router) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    const imgs = this.item.images[0].split(',');
+    this.imagePath = {
+      url: imgs[1],
+      key: imgs[0],
+    };
+  }
 
   viewDetail(id: number | string) {
-    this.router.navigate(['/product-detail', id]);
+    this.router.navigate([
+      '/product-detail',
+      id,
+      { type: 'available-products' },
+    ]);
   }
 }

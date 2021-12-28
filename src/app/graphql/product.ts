@@ -75,3 +75,26 @@ export const GET_MY_PRODUCTS = gql`
     }
   }
 `;
+
+export const GET_AVAILABLE_PRODUCTS = gql`
+  query getAvailableProducts($id: ID) {
+    getAvailableProducts(id: $id) {
+      id
+      category
+      description
+      images
+      price
+      title
+      minOrder
+      sellerLocation
+      sellerEmail
+      verifiedSeller
+      furtherDetails
+      availableQuantity
+      discount
+      reviews
+      promoEndDate
+      promoStartDate
+    }
+  }
+`;

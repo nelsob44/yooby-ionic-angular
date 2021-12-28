@@ -34,6 +34,7 @@ export class MyProductsPage implements OnInit, OnDestroy {
           .valueChanges.subscribe(({ data, loading, error }) => {
             if (data) {
               this.loadedProducts = data.getMyProducts;
+              this.service.myProducts.next(data.getMyProducts);
               console.log(this.loadedProducts);
               if (this.loadedProducts.length < 1) {
                 this.presentAlert(

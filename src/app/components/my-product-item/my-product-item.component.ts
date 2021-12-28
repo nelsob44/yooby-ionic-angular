@@ -22,6 +22,6 @@ export class MyProductItemComponent implements OnInit {
   }
 
   viewDetail(id: number | string) {
-    this.router.navigate(['/product-detail', id]);
+    this.router.navigate(['/product-detail', id, { type: 'my-products' }]);
   }
 }

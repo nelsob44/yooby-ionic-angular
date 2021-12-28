@@ -4,7 +4,11 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Apollo } from 'apollo-angular';
 import { map, take, catchError, mapTo, tap, switchMap } from 'rxjs/operators';
 import { Product } from '../interfaces/product';
-import { SAVE_PRODUCT, GET_MY_PRODUCTS } from '../graphql/product';
+import {
+  SAVE_PRODUCT,
+  GET_MY_PRODUCTS,
+  GET_AVAILABLE_PRODUCTS,
+} from '../graphql/product';
 import BasketItem from 'src/app/interfaces/basketItem';
 import { BehaviorSubject, of, Subscription } from 'rxjs';
 import { AuthService } from './auth.service';
@@ -14,7 +18,8 @@ import { AuthService } from './auth.service';
 })
 export class ProductsService {
   url = environment.baseUrl;
-  private productsRetrieved = new BehaviorSubject<Product[]>([]);
+  myProducts = new BehaviorSubject<Product[]>([]);
+  productsRetrieved = new BehaviorSubject<Product[]>([]);
   private shoppingBasket = new BehaviorSubject<BasketItem[]>([]);
   private basketItems = new BehaviorSubject<number>(0);
 
@@ -33,26 +38,15 @@ export class ProductsService {
     private http: HttpClient
   ) {}
 
-  fetchProducts() {
-    try {
-      return this.http.get<Product[]>(this.url).pipe(
-        map((data) => {
-          const products = [];
-          for (const key in data) {
-            if (data.hasOwnProperty(key)) {
-              products.push(data[key]);
-            }
-          }
-          this.productsRetrieved.next(products);
-          return products;
-        })
-      );
-    } catch (error) {
-      return error;
-    }
-  }
-  getProduct(id: number) {
+  getProduct(id: string | number) {
     return this.productsArray.pipe(
+      take(1),
+      map((products) => ({ ...products.find((p) => p.id === id) }))
+    );
+  }
+
+  getMyProduct(id: string) {
+    return this.myProducts.pipe(
       take(1),
       map((products) => ({ ...products.find((p) => p.id === id) }))
     );
@@ -93,7 +87,6 @@ export class ProductsService {
           newImg = img.key + ',' + img.url;
           imageArray.push(newImg);
         });
-        console.log(imageArray);
         return this.apollo
           .mutate({
             mutation: SAVE_PRODUCT,
@@ -158,5 +151,27 @@ export class ProductsService {
     return this.apollo.watchQuery<any>({
       query: GET_MY_PRODUCTS,
     });
+  }
+
+  fetchProducts() {
+    return this.apollo.watchQuery<any>({
+      query: GET_AVAILABLE_PRODUCTS,
+    });
+    // try {
+    //   return this.http.get<Product[]>(this.url).pipe(
+    //     map((data) => {
+    //       const products = [];
+    //       for (const key in data) {
+    //         if (data.hasOwnProperty(key)) {
+    //           products.push(data[key]);
+    //         }
+    //       }
+    //       this.productsRetrieved.next(products);
+    //       return products;
+    //     })
+    //   );
+    // } catch (error) {
+    //   return error;
+    // }
   }
 }

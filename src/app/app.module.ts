@@ -41,10 +41,8 @@ const createApollo: any = (httpLink: HttpLink) => {
       expirationTime: number;
     };
     if (parsedData === null) {
-      console.log('parsedData is ', null);
       return {};
     } else {
-      console.log('parsedData is not null', parsedData.accessToken);
       return {
         headers: {
           authorization: `Bearer ${parsedData.accessToken}`,
