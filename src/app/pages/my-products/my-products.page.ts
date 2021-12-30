@@ -15,6 +15,14 @@ import { Product } from '../../interfaces/product';
 })
 export class MyProductsPage implements OnInit, OnDestroy {
   loadedProducts: Product[];
+  itemsPerPage = 2;
+  totalItems = 0;
+  offset = 1;
+  hasNextPage = false;
+  hasPrevPage = false;
+  isLoading = false;
+  numberOfPages = 1;
+
   private myProductsSub: Subscription;
   constructor(
     private service: ProductsService,
@@ -23,35 +31,18 @@ export class MyProductsPage implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {}
-  ionViewWillEnter() {
-    this.loadingCtrl
-      .create({ keyboardClose: true, message: 'Retrieving products....' })
-      .then((loadingEl) => {
-        loadingEl.present();
+  nextPage() {
+    this.offset++;
+    this.retrieveData(this.offset, this.itemsPerPage);
+  }
 
-        this.myProductsSub = this.service
-          .fetchMyProducts()
-          .valueChanges.subscribe(({ data, loading, error }) => {
-            if (data) {
-              this.loadedProducts = data.getMyProducts;
-              this.service.myProducts.next(data.getMyProducts);
-              console.log(this.loadedProducts);
-              if (this.loadedProducts.length < 1) {
-                this.presentAlert(
-                  '<p style=color:white;>You have not added any products</p>',
-                  'Notice'
-                );
-              }
-            }
-            if (error) {
-              this.presentAlert(
-                '<p style=color:white;>' + error + '</p>',
-                'Error'
-              );
-            }
-            loadingEl.dismiss();
-          });
-      });
+  prevPage() {
+    this.offset--;
+    this.retrieveData(this.offset, this.itemsPerPage);
+  }
+
+  ionViewWillEnter() {
+    this.retrieveData(this.offset, this.itemsPerPage);
   }
 
   ngOnDestroy() {
@@ -72,5 +63,56 @@ export class MyProductsPage implements OnInit, OnDestroy {
 
     const { role } = await alert.onDidDismiss();
     console.log('onDidDismiss resolved with role', role);
+  }
+
+  private retrieveData(offsetValue: number, itemsPerPageValue: number) {
+    this.loadingCtrl
+      .create({ keyboardClose: true, message: 'Retrieving products....' })
+      .then((loadingEl) => {
+        loadingEl.present();
+
+        this.myProductsSub = this.service
+          .fetchMyProducts(offsetValue, itemsPerPageValue)
+          .valueChanges.subscribe(
+            (data) => {
+              if (data.data) {
+                this.loadedProducts = data.data.getMyProducts.product;
+                this.service.productsRetrieved.next(
+                  data.data.getMyProducts.product
+                );
+                this.totalItems = data.data.getMyProducts.totalItems;
+                this.numberOfPages = Math.ceil(
+                  this.totalItems / this.itemsPerPage
+                );
+                if (this.numberOfPages > this.offset) {
+                  this.hasNextPage = true;
+                } else {
+                  this.hasNextPage = false;
+                }
+                if (this.offset > 1) {
+                  this.hasPrevPage = true;
+                } else {
+                  this.hasPrevPage = false;
+                }
+                if (this.loadedProducts.length < 1) {
+                  this.presentAlert(
+                    '<p style=color:white;>You have not added any products</p>',
+                    'Notice'
+                  );
+                }
+              }
+              loadingEl.dismiss();
+            },
+            (error) => {
+              if (error) {
+                this.presentAlert(
+                  '<p style=color:white;>' + error + '</p>',
+                  'Error'
+                );
+              }
+              loadingEl.dismiss();
+            }
+          );
+      });
   }
 }

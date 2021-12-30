@@ -19,8 +19,16 @@ import { ProductsService } from '../../services/products.service';
 export class AvailableProductsPage implements OnInit, OnDestroy {
   basketLength: number;
   loadedProducts: Product[];
+  itemsPerPage = 1;
+  totalItems = 0;
+  offset = 1;
+  hasNextPage = false;
+  hasPrevPage = false;
+  isLoading = false;
+  numberOfPages = 1;
   private productsSub: Subscription;
   private basketSub: Subscription;
+
   constructor(
     private service: ProductsService,
     private loadingCtrl: LoadingController,
@@ -43,37 +51,21 @@ export class AvailableProductsPage implements OnInit, OnDestroy {
     }
   }
 
-  ngOnInit() {
-    this.loadingCtrl
-      .create({ keyboardClose: true, message: 'Retrieving products....' })
-      .then((loadingEl) => {
-        loadingEl.present();
+  ngOnInit() {}
 
-        this.productsSub = this.service
-          .fetchProducts()
-          .valueChanges.subscribe(({ data, loading, error }) => {
-            if (data) {
-              this.loadedProducts = data.getAvailableProducts;
-              this.service.productsRetrieved.next(data.getAvailableProducts);
-              console.log(this.loadedProducts);
-              if (this.loadedProducts.length < 1) {
-                this.presentAlert(
-                  '<p style=color:white;>You have not added any products</p>',
-                  'Notice'
-                );
-              }
-            }
-            if (error) {
-              this.presentAlert(
-                '<p style=color:white;>' + error + '</p>',
-                'Error'
-              );
-            }
-            loadingEl.dismiss();
-          });
-      });
+  nextPage() {
+    this.offset++;
+    this.retrieveData(this.offset, this.itemsPerPage);
   }
+
+  prevPage() {
+    this.offset--;
+    this.retrieveData(this.offset, this.itemsPerPage);
+  }
+
   ionViewWillEnter() {
+    this.retrieveData(this.offset, this.itemsPerPage);
+
     this.basketSub = this.service.getShoppingBasket().subscribe((items) => {
       this.basketLength = items.length;
     });
@@ -107,5 +99,56 @@ export class AvailableProductsPage implements OnInit, OnDestroy {
 
     const { role } = await alert.onDidDismiss();
     console.log('onDidDismiss resolved with role', role);
+  }
+
+  private retrieveData(offsetValue: number, itemsPerPageValue: number) {
+    this.loadingCtrl
+      .create({ keyboardClose: true, message: 'Retrieving products....' })
+      .then((loadingEl) => {
+        loadingEl.present();
+
+        this.productsSub = this.service
+          .fetchProducts(offsetValue, itemsPerPageValue)
+          .valueChanges.subscribe(
+            (data) => {
+              if (data.data) {
+                this.loadedProducts = data.data.getAvailableProducts.product;
+                this.service.productsRetrieved.next(
+                  data.data.getAvailableProducts.product
+                );
+                this.totalItems = data.data.getAvailableProducts.totalItems;
+                this.numberOfPages = Math.ceil(
+                  this.totalItems / this.itemsPerPage
+                );
+                if (this.numberOfPages > this.offset) {
+                  this.hasNextPage = true;
+                } else {
+                  this.hasNextPage = false;
+                }
+                if (this.offset > 1) {
+                  this.hasPrevPage = true;
+                } else {
+                  this.hasPrevPage = false;
+                }
+                if (this.loadedProducts.length < 1) {
+                  this.presentAlert(
+                    '<p style=color:white;>You have not added any products</p>',
+                    'Notice'
+                  );
+                }
+              }
+              loadingEl.dismiss();
+            },
+            (error) => {
+              if (error) {
+                this.presentAlert(
+                  '<p style=color:white;>' + error + '</p>',
+                  'Error'
+                );
+              }
+              loadingEl.dismiss();
+            }
+          );
+      });
   }
 }

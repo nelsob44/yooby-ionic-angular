@@ -54,47 +54,53 @@ export const SAVE_PRODUCT = gql`
 `;
 
 export const GET_MY_PRODUCTS = gql`
-  query getMyProducts($sellerEmail: String) {
-    getMyProducts(sellerEmail: $sellerEmail) {
-      id
-      category
-      description
-      images
-      price
-      title
-      minOrder
-      sellerLocation
-      sellerEmail
-      verifiedSeller
-      furtherDetails
-      availableQuantity
-      discount
-      reviews
-      promoEndDate
-      promoStartDate
+  query getMyProducts($offset: Int, $limit: Int) {
+    getMyProducts(myproductQuery: { offset: $offset, limit: $limit }) {
+      totalItems
+      product {
+        id
+        category
+        description
+        images
+        price
+        title
+        minOrder
+        sellerLocation
+        sellerEmail
+        verifiedSeller
+        furtherDetails
+        availableQuantity
+        discount
+        reviews
+        promoEndDate
+        promoStartDate
+      }
     }
   }
 `;
 
 export const GET_AVAILABLE_PRODUCTS = gql`
-  query getAvailableProducts($id: ID) {
-    getAvailableProducts(id: $id) {
-      id
-      category
-      description
-      images
-      price
-      title
-      minOrder
-      sellerLocation
-      sellerEmail
-      verifiedSeller
-      furtherDetails
-      availableQuantity
-      discount
-      reviews
-      promoEndDate
-      promoStartDate
+  query getAvailableProducts($offset: Int, $limit: Int) {
+    getAvailableProducts(pagination: { offset: $offset, limit: $limit }) {
+      totalItems
+      product {
+        id
+        category
+        description
+        images
+        price
+        title
+        minOrder
+        sellerLocation
+        sellerEmail
+        verifiedSeller
+        furtherDetails
+        availableQuantity
+        discount
+        reviews
+        promoEndDate
+        promoStartDate
+      }
     }
   }
 `;

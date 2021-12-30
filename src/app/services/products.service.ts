@@ -148,15 +148,23 @@ export class ProductsService {
     );
   }
 
-  fetchMyProducts() {
+  fetchMyProducts(offset: number, limit: number) {
     return this.apollo.watchQuery<any>({
       query: GET_MY_PRODUCTS,
+      variables: {
+        offset,
+        limit,
+      },
     });
   }
 
-  fetchProducts() {
+  fetchProducts(offset: number, limit: number) {
     return this.apollo.watchQuery<any>({
       query: GET_AVAILABLE_PRODUCTS,
+      variables: {
+        offset,
+        limit,
+      },
     });
   }
 

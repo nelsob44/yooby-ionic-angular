@@ -45,6 +45,15 @@ ion-title {
   color: aliceblue;
 }
 
+ion-chip {
+  --backdrop-opacity: 0.2;
+  --background: linear-gradient(
+    90deg,
+    rgb(13, 156, 125) 0%,
+    rgb(226, 166, 211) 100%
+  );
+}
+
 .my-custom-class {
   --backdrop-opacity: 0.2;
   --background: linear-gradient(
