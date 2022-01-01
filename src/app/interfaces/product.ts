@@ -5,6 +5,7 @@ export interface Product {
   price: number;
   title: string;
   minOrder?: number;
+  sellerCountry?: string;
   sellerLocation?: string;
   sellerEmail?: string;
   verifiedSeller?: boolean;

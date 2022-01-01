@@ -100,6 +100,10 @@ export class EditProductPage implements OnInit, OnDestroy {
                 updateOn: 'blur',
                 validators: [],
               }),
+              sellerCountry: new FormControl(product.sellerCountry, {
+                updateOn: 'blur',
+                validators: [Validators.minLength(2)],
+              }),
               sellerLocation: new FormControl(product.sellerLocation, {
                 updateOn: 'blur',
                 validators: [Validators.minLength(2)],
@@ -157,6 +161,10 @@ export class EditProductPage implements OnInit, OnDestroy {
               minOrder: new FormControl(product.minOrder, {
                 updateOn: 'blur',
                 validators: [],
+              }),
+              sellerCountry: new FormControl(product.sellerCountry, {
+                updateOn: 'blur',
+                validators: [Validators.minLength(2)],
               }),
               sellerLocation: new FormControl(product.sellerLocation, {
                 updateOn: 'blur',
@@ -221,6 +229,7 @@ export class EditProductPage implements OnInit, OnDestroy {
         this.form.value.title &&
         this.form.value.title.replace(/(<([^>]+)>)/gi, ''),
       minOrder: this.form.value.minOrder,
+      sellerCountry: this.form.value.sellerCountry.replace(/(<([^>]+)>)/gi, ''),
       sellerLocation:
         this.form.value.sellerLocation &&
         this.form.value.sellerLocation.replace(/(<([^>]+)>)/gi, ''),

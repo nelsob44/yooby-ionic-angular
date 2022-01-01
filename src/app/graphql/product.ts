@@ -7,6 +7,7 @@ export const SAVE_PRODUCT = gql`
     $price: Float!
     $title: String!
     $minOrder: Float
+    $sellerCountry: String
     $sellerLocation: String
     $sellerEmail: String
     $furtherDetails: String
@@ -23,6 +24,7 @@ export const SAVE_PRODUCT = gql`
         price: $price
         title: $title
         minOrder: $minOrder
+        sellerCountry: $sellerCountry
         sellerLocation: $sellerLocation
         sellerEmail: $sellerEmail
         furtherDetails: $furtherDetails
@@ -39,6 +41,7 @@ export const SAVE_PRODUCT = gql`
       price
       title
       minOrder
+      sellerCountry
       sellerLocation
       sellerEmail
       furtherDetails
@@ -65,6 +68,7 @@ export const GET_MY_PRODUCTS = gql`
         price
         title
         minOrder
+        sellerCountry
         sellerLocation
         sellerEmail
         verifiedSeller
@@ -91,6 +95,7 @@ export const GET_AVAILABLE_PRODUCTS = gql`
         price
         title
         minOrder
+        sellerCountry
         sellerLocation
         sellerEmail
         verifiedSeller
@@ -113,6 +118,7 @@ export const UPDATE_PRODUCT = gql`
     $price: Float
     $title: String
     $minOrder: Float
+    $sellerCountry: String
     $sellerLocation: String
     $sellerEmail: String
     $furtherDetails: String
@@ -130,6 +136,7 @@ export const UPDATE_PRODUCT = gql`
         price: $price
         title: $title
         minOrder: $minOrder
+        sellerCountry: $sellerCountry
         sellerLocation: $sellerLocation
         sellerEmail: $sellerEmail
         furtherDetails: $furtherDetails
@@ -146,6 +153,7 @@ export const UPDATE_PRODUCT = gql`
       price
       title
       minOrder
+      sellerCountry
       sellerLocation
       sellerEmail
       furtherDetails

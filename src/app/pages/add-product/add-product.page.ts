@@ -79,6 +79,10 @@ export class AddProductPage implements OnInit {
         updateOn: 'blur',
         validators: [],
       }),
+      sellerCountry: new FormControl(null, {
+        updateOn: 'blur',
+        validators: [Validators.minLength(2)],
+      }),
       sellerLocation: new FormControl(null, {
         updateOn: 'blur',
         validators: [Validators.minLength(2)],
@@ -141,6 +145,7 @@ export class AddProductPage implements OnInit {
         this.form.value.title &&
         this.form.value.title.replace(/(<([^>]+)>)/gi, ''),
       minOrder: this.form.value.minOrder,
+      sellerCountry: this.form.value.sellerCountry.replace(/(<([^>]+)>)/gi, ''),
       sellerLocation:
         this.form.value.sellerLocation &&
         this.form.value.sellerLocation.replace(/(<([^>]+)>)/gi, ''),
