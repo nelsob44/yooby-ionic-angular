@@ -1,0 +1,141 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/available-products"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Edit Product</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="form">
+    <div>
+      <ion-item>
+        <ion-label>Category</ion-label>
+        <ion-select formControlName="category" interface="popover">
+          <ion-select-option value="electronics" color="medium"
+            >Electronics</ion-select-option
+          >
+          <ion-select-option value="machinery" color="medium"
+            >Machinery</ion-select-option
+          >
+          <ion-select-option value="others" color="medium"
+            >Others</ion-select-option
+          >
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label>Name of product</ion-label>
+        <ion-input
+          class="form-elements"
+          formControlName="title"
+          clear-input
+          color="medium"
+        >
+        </ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Description</ion-label>
+        <ion-textarea rows="6" formControlName="description" color="medium">
+        </ion-textarea>
+      </ion-item>
+      <ion-item>
+        <ion-label>Price</ion-label>
+        <ion-input
+          type="number"
+          class="form-elements"
+          formControlName="price"
+          color="medium"
+        >
+        </ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Minimum Order</ion-label>
+        <ion-input
+          type="number"
+          class="form-elements"
+          formControlName="minOrder"
+          color="medium"
+        >
+        </ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Seller's location</ion-label>
+        <ion-input
+          class="form-elements"
+          formControlName="sellerLocation"
+          color="medium"
+        >
+        </ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Available Quantity</ion-label>
+        <ion-input
+          type="number"
+          class="form-elements"
+          formControlName="availableQuantity"
+          color="medium"
+        >
+        </ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Discount (%)</ion-label>
+        <ion-input
+          type="number"
+          class="form-elements"
+          formControlName="discount"
+          color="medium"
+        >
+        </ion-input>
+      </ion-item>
+      <ion-item>
+        <div class="grid-item">
+          <ion-label>Promo start date</ion-label>
+          <ion-datetime
+            formControlName="promoStartDate"
+            color="medium"
+            show-clear-button="true"
+          >
+          </ion-datetime>
+        </div>
+      </ion-item>
+      <ion-item>
+        <div class="grid-item">
+          <ion-label>Promo end date</ion-label>
+          <ion-datetime
+            formControlName="promoEndDate"
+            color="medium"
+            max="{{dateMax}}"
+            clear-input
+          >
+          </ion-datetime>
+        </div>
+      </ion-item>
+      <ion-item>
+        <ion-label>Other details</ion-label>
+        <ion-textarea
+          rows="6"
+          formControlName="furtherDetails"
+          color="medium"
+        ></ion-textarea>
+      </ion-item>
+      <ion-item>
+        <ion-label>Upload product pictures</ion-label>
+        <app-image-picker
+          (imagePick)="onImagePicked($event)"
+        ></app-image-picker>
+      </ion-item>
+    </div>
+    <div class="buttons">
+      <ion-button
+        *ngIf="isLogin"
+        class="sign-in-button"
+        shape="round"
+        color="tertiary"
+        slot="end"
+        (click)="onAddProduct()"
+        >Submit</ion-button
+      >
+    </div>
+  </form>
+</ion-content>

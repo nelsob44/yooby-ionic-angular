@@ -86,9 +86,11 @@ export class ProductDetailPage implements OnInit, OnDestroy {
             this.transformImagePath();
           });
       } else if (type === 'my-products') {
+        console.log({ productId });
         this.productSub = this.service
           .getMyProduct(productId)
           .subscribe((product) => {
+            console.log({ product });
             if (Object.keys(product).length === 0) {
               return this.navCtrl.navigateBack('/my-products');
             }

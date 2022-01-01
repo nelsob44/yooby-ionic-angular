@@ -17,25 +17,24 @@
         *ngFor="let item of loadedProducts"
       >
         <ion-item-sliding>
-          <app-my-product-item [item]="item"></app-my-product-item>
+          <app-my-product-item
+            [item]="item"
+            (productDelete)="onImageDelete($event)"
+          ></app-my-product-item>
         </ion-item-sliding>
       </ion-col>
-      <ion-row>
-        <ion-col size="9">
-          <ion-chip button="true" (click)="prevPage()" *ngIf="hasPrevPage">
-            <ion-label>Prev</ion-label>
-          </ion-chip>
-        </ion-col>
-        <ion-col size="3">
-          <ion-chip
-            class="buttonRight"
-            (click)="nextPage()"
-            *ngIf="hasNextPage"
-          >
-            <ion-label>Next</ion-label>
-          </ion-chip>
-        </ion-col>
-      </ion-row>
+    </ion-row>
+    <ion-row>
+      <ion-col size="9">
+        <ion-chip button="true" (click)="prevPage()" *ngIf="hasPrevPage">
+          <ion-label>Prev</ion-label>
+        </ion-chip>
+      </ion-col>
+      <ion-col size="3">
+        <ion-chip class="buttonRight" (click)="nextPage()" *ngIf="hasNextPage">
+          <ion-label>Next</ion-label>
+        </ion-chip>
+      </ion-col>
     </ion-row>
   </ion-grid>
 </ion-content>

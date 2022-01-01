@@ -25,8 +25,14 @@
           ></ion-col
         >
         <ion-button
+          aria-label="Edit product"
+          (click)="presentAlertConfirm(item.id, 'edit')"
+          ><ion-icon name="create-outline"></ion-icon>
+        </ion-button>
+        <ion-button
           aria-label="Delete product"
-          (click)="presentAlertConfirm(item.id)"
+          color="danger"
+          (click)="presentAlertConfirm(item.id, 'delete')"
           ><ion-icon name="trash-outline"></ion-icon>
         </ion-button>
       </ion-row>
@@ -61,10 +67,15 @@
         item.category
       }}</ion-card-subtitle></ion-col
     >
-
+    <ion-button
+      aria-label="Edit product"
+      (click)="presentAlertConfirm(item.id, 'edit')"
+      ><ion-icon name="create-outline"></ion-icon>
+    </ion-button>
     <ion-button
       aria-label="Delete product"
-      (click)="presentAlertConfirm(item.id)"
+      color="danger"
+      (click)="presentAlertConfirm(item.id, 'delete')"
       ><ion-icon name="trash-outline"></ion-icon>
     </ion-button>
   </ion-row>

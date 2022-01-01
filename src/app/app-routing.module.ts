@@ -64,6 +64,14 @@ const routes: Routes = [
       ),
     canLoad: [AuthGuard],
   },
+  {
+    path: 'edit-product/:id',
+    loadChildren: () =>
+      import('./pages/edit-product/edit-product.module').then(
+        (m) => m.EditProductPageModule
+      ),
+    canLoad: [AuthGuard],
+  },
 ];
 
 @NgModule({

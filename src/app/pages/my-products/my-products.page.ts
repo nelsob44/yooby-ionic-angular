@@ -15,7 +15,7 @@ import { Product } from '../../interfaces/product';
 })
 export class MyProductsPage implements OnInit, OnDestroy {
   loadedProducts: Product[];
-  itemsPerPage = 2;
+  itemsPerPage = 4;
   totalItems = 0;
   offset = 1;
   hasNextPage = false;
@@ -50,6 +50,47 @@ export class MyProductsPage implements OnInit, OnDestroy {
       this.myProductsSub.unsubscribe();
     }
   }
+
+  onImageDelete(event) {
+    console.log('event is ', event);
+    this.myProductsSub = this.service
+      .fetchMyProducts(1, 4)
+      .valueChanges.subscribe(
+        (data) => {
+          if (data.data) {
+            this.loadedProducts = data.data.getMyProducts.product;
+            this.service.myProducts.next(data.data.getMyProducts.product);
+            this.totalItems = data.data.getMyProducts.totalItems;
+            this.numberOfPages = Math.ceil(this.totalItems / this.itemsPerPage);
+            if (this.numberOfPages > this.offset) {
+              this.hasNextPage = true;
+            } else {
+              this.hasNextPage = false;
+            }
+            if (this.offset > 1) {
+              this.hasPrevPage = true;
+            } else {
+              this.hasPrevPage = false;
+            }
+            if (this.loadedProducts.length < 1) {
+              this.presentAlert(
+                '<p style=color:white;>You have not added any products</p>',
+                'Notice'
+              );
+            }
+          }
+        },
+        (error) => {
+          if (error) {
+            this.presentAlert(
+              '<p style=color:white;>' + error + '</p>',
+              'Error'
+            );
+          }
+        }
+      );
+  }
+
   async presentAlert(alertMessage: string, head: string) {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
@@ -77,9 +118,7 @@ export class MyProductsPage implements OnInit, OnDestroy {
             (data) => {
               if (data.data) {
                 this.loadedProducts = data.data.getMyProducts.product;
-                this.service.productsRetrieved.next(
-                  data.data.getMyProducts.product
-                );
+                this.service.myProducts.next(data.data.getMyProducts.product);
                 this.totalItems = data.data.getMyProducts.totalItems;
                 this.numberOfPages = Math.ceil(
                   this.totalItems / this.itemsPerPage

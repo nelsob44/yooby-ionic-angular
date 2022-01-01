@@ -1,4 +1,11 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { ImagePath, Product } from '../../interfaces/product';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -17,10 +24,16 @@ import {
 })
 export class ProductItemComponent implements OnInit, OnDestroy {
   @Input() item: Product;
+  @Output() productDelete = new EventEmitter<string>();
+
   imagePath: ImagePath;
   isAdmin = false;
   isLoading = false;
   userSub: Subscription;
+  editMessage =
+    '<p style=color:white;>Are you sure you wish to edit the product?</p>';
+  deleteMessage =
+    '<p style=color:white;>Are you sure you wish to delete the product?</p>';
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -58,13 +71,14 @@ export class ProductItemComponent implements OnInit, OnDestroy {
     }
   }
 
-  async presentAlertConfirm(id: string) {
+  async presentAlertConfirm(id: string, type: string) {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
       header: 'Confirm!',
-      message: new IonicSafeString(
-        '<p style=color:white;>Are you sure you wish to delete the product?</p>'
-      ),
+      message:
+        type === 'delete'
+          ? new IonicSafeString(this.deleteMessage)
+          : new IonicSafeString(this.editMessage),
       translucent: true,
       buttons: [
         {
@@ -74,15 +88,23 @@ export class ProductItemComponent implements OnInit, OnDestroy {
           handler: () => false,
         },
         {
-          text: 'Delete',
-          handler: () => {
-            this.deleteProductItem(id);
+          text: type === 'delete' ? 'Delete' : 'Edit',
+          handler: async () => {
+            if (type === 'delete') {
+              await this.deleteProductItem(id);
+            } else {
+              await this.editProductItem(id);
+            }
           },
         },
       ],
     });
 
     await alert.present();
+  }
+
+  editProductItem(id: string) {
+    this.router.navigate(['/edit-product', id, { type: 'available-products' }]);
   }
 
   deleteProductItem(id: string) {
@@ -94,19 +116,17 @@ export class ProductItemComponent implements OnInit, OnDestroy {
 
         this.productService.deleteProduct(id).subscribe(
           (resData) => {
-            console.log(resData.data);
             if (resData) {
               this.presentAlert(
                 '<p style=color:white;>' + resData.data.deleteProduct + '</p>',
                 'Success'
               );
-              this.router.navigate(['my-products']);
+              this.productDelete.emit('deleted');
             }
             this.isLoading = false;
             loadingEl.dismiss();
           },
           (errorResponse) => {
-            console.log('An error occurred');
             loadingEl.dismiss();
             this.presentAlert(
               '<p style=color:white;>' + errorResponse + '</p>',

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Product, ImagePath } from '../../interfaces/product';
 import { Router } from '@angular/router';
 import { ProductsService } from 'src/app/services/products.service';
@@ -15,8 +15,14 @@ import {
 })
 export class MyProductItemComponent implements OnInit {
   @Input() item: Product;
+  @Output() productDelete = new EventEmitter<string>();
+
   imagePath: ImagePath;
   isLoading = false;
+  editMessage =
+    '<p style=color:white;>Are you sure you wish to edit the product?</p>';
+  deleteMessage =
+    '<p style=color:white;>Are you sure you wish to delete the product?</p>';
 
   constructor(
     private router: Router,
@@ -37,13 +43,14 @@ export class MyProductItemComponent implements OnInit {
     this.router.navigate(['/product-detail', id, { type: 'my-products' }]);
   }
 
-  async presentAlertConfirm(id: string) {
+  async presentAlertConfirm(id: string, type: string) {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
       header: 'Confirm!',
-      message: new IonicSafeString(
-        '<p style=color:white;>Are you sure you wish to delete the product?</p>'
-      ),
+      message:
+        type === 'delete'
+          ? new IonicSafeString(this.deleteMessage)
+          : new IonicSafeString(this.editMessage),
       translucent: true,
       buttons: [
         {
@@ -53,9 +60,13 @@ export class MyProductItemComponent implements OnInit {
           handler: () => false,
         },
         {
-          text: 'Delete',
-          handler: () => {
-            this.deleteProductItem(id);
+          text: type === 'delete' ? 'Delete' : 'Edit',
+          handler: async () => {
+            if (type === 'delete') {
+              await this.deleteProductItem(id);
+            } else {
+              await this.editProductItem(id);
+            }
           },
         },
       ],
@@ -64,8 +75,12 @@ export class MyProductItemComponent implements OnInit {
     await alert.present();
   }
 
+  editProductItem(id: string) {
+    console.log('edit id ', id);
+    this.router.navigate(['/edit-product', id, { type: 'my-products' }]);
+  }
+
   deleteProductItem(id: string) {
-    console.log({ id });
     this.loadingCtrl
       .create({ keyboardClose: true, message: 'Deleting product....' })
       .then((loadingEl) => {
@@ -73,19 +88,17 @@ export class MyProductItemComponent implements OnInit {
 
         this.productService.deleteProduct(id).subscribe(
           (resData) => {
-            console.log(resData.data);
             if (resData) {
               this.presentAlert(
                 '<p style=color:white;>' + resData.data.deleteProduct + '</p>',
                 'Success'
               );
-              this.router.navigate(['my-products']);
+              this.productDelete.emit('deleted');
             }
             this.isLoading = false;
             loadingEl.dismiss();
           },
           (errorResponse) => {
-            console.log('An error occurred');
             loadingEl.dismiss();
             this.presentAlert(
               '<p style=color:white;>' + errorResponse + '</p>',

@@ -19,7 +19,7 @@ import { ProductsService } from '../../services/products.service';
 export class AvailableProductsPage implements OnInit, OnDestroy {
   basketLength: number;
   loadedProducts: Product[];
-  itemsPerPage = 1;
+  itemsPerPage = 4;
   totalItems = 0;
   offset = 1;
   hasNextPage = false;

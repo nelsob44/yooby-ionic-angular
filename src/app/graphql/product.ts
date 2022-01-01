@@ -105,6 +105,61 @@ export const GET_AVAILABLE_PRODUCTS = gql`
   }
 `;
 
+export const UPDATE_PRODUCT = gql`
+  mutation updateProduct(
+    $id: ID!
+    $category: String
+    $description: String
+    $price: Float
+    $title: String
+    $minOrder: Float
+    $sellerLocation: String
+    $sellerEmail: String
+    $furtherDetails: String
+    $availableQuantity: Int
+    $discount: Float
+    $promoStartDate: String
+    $promoEndDate: String
+    $images: [String]
+  ) {
+    updateProduct(
+      product: {
+        id: $id
+        category: $category
+        description: $description
+        price: $price
+        title: $title
+        minOrder: $minOrder
+        sellerLocation: $sellerLocation
+        sellerEmail: $sellerEmail
+        furtherDetails: $furtherDetails
+        availableQuantity: $availableQuantity
+        discount: $discount
+        promoStartDate: $promoStartDate
+        promoEndDate: $promoEndDate
+        images: $images
+      }
+    ) {
+      id
+      category
+      description
+      price
+      title
+      minOrder
+      sellerLocation
+      sellerEmail
+      furtherDetails
+      availableQuantity
+      discount
+      promoStartDate
+      promoEndDate
+      verifiedSeller
+      reviews
+      images
+    }
+  }
+`;
+
 export const DELETE_MY_PRODUCT = gql`
   mutation deleteProduct($id: ID) {
     deleteProduct(id: $id)

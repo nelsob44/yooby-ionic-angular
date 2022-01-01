@@ -9,6 +9,7 @@ import {
   GET_MY_PRODUCTS,
   GET_AVAILABLE_PRODUCTS,
   DELETE_MY_PRODUCT,
+  UPDATE_PRODUCT,
 } from '../graphql/product';
 import BasketItem from 'src/app/interfaces/basketItem';
 import { BehaviorSubject, of, Subscription } from 'rxjs';
@@ -19,10 +20,14 @@ import { AuthService } from './auth.service';
 })
 export class ProductsService {
   url = environment.baseUrl;
-  myProducts = new BehaviorSubject<Product[]>([]);
   productsRetrieved = new BehaviorSubject<Product[]>([]);
+  myProducts = new BehaviorSubject<Product[]>([]);
   private shoppingBasket = new BehaviorSubject<BasketItem[]>([]);
   private basketItems = new BehaviorSubject<number>(0);
+
+  get myProductsArray() {
+    return this.myProducts.asObservable();
+  }
 
   get productsArray() {
     return this.productsRetrieved.asObservable();
@@ -39,7 +44,7 @@ export class ProductsService {
     private http: HttpClient
   ) {}
 
-  getProduct(id: string | number) {
+  getProduct(id: string) {
     return this.productsArray.pipe(
       take(1),
       map((products) => ({ ...products.find((p) => p.id === id) }))
@@ -47,7 +52,7 @@ export class ProductsService {
   }
 
   getMyProduct(id: string) {
-    return this.myProducts.pipe(
+    return this.myProductsArray.pipe(
       take(1),
       map((products) => ({ ...products.find((p) => p.id === id) }))
     );
@@ -110,10 +115,56 @@ export class ProductsService {
                 query: GET_MY_PRODUCTS,
               },
             ],
+            fetchPolicy: 'network-only',
           })
           .pipe(
             tap((data) => {
-              console.log(data);
+              console.log('');
+              return data;
+            })
+          );
+      })
+    );
+  }
+
+  updateProduct(productData: any, filesToUpload: [File]) {
+    return this.uploadImage(filesToUpload).pipe(
+      take(1),
+      switchMap((paths) => {
+        const imageArray = [];
+        paths.imagePath.map((img) => {
+          let newImg = '';
+          newImg = img.key + ',' + img.url;
+          imageArray.push(newImg);
+        });
+        return this.apollo
+          .mutate({
+            mutation: UPDATE_PRODUCT,
+            variables: {
+              id: productData.id,
+              category: productData.category,
+              description: productData.description,
+              price: productData.price,
+              title: productData.title,
+              minOrder: productData.minOrder,
+              sellerLocation: productData.sellerLocation,
+              furtherDetails: productData.furtherDetails,
+              availableQuantity: productData.availableQuantity,
+              discount: productData.discount,
+              promoStartDate: productData.promoStartDate,
+              promoEndDate: productData.promoEndDate,
+              images: imageArray,
+            },
+            refetchQueries: [
+              {
+                query: GET_MY_PRODUCTS,
+              },
+            ],
+            fetchPolicy: 'network-only',
+          })
+          .pipe(
+            tap((data) => {
+              console.log('');
               return data;
             })
           );
@@ -133,14 +184,14 @@ export class ProductsService {
     return this.authService.token.pipe(
       take(1),
       switchMap((token) => {
-        console.log(token);
+        console.log('');
         return this.http
           .post<any>(URL, uploadData, {
             headers: { authorization: 'Bearer ' + token },
           })
           .pipe(
             map((data) => {
-              console.log(data);
+              console.log('');
               return data;
             })
           );
@@ -148,23 +199,25 @@ export class ProductsService {
     );
   }
 
-  fetchMyProducts(offset: number, limit: number) {
+  fetchMyProducts(offset: number = 1, limit: number = 3) {
     return this.apollo.watchQuery<any>({
       query: GET_MY_PRODUCTS,
       variables: {
         offset,
         limit,
       },
+      fetchPolicy: 'network-only',
     });
   }
 
-  fetchProducts(offset: number, limit: number) {
+  fetchProducts(offset: number = 1, limit: number = 3) {
     return this.apollo.watchQuery<any>({
       query: GET_AVAILABLE_PRODUCTS,
       variables: {
         offset,
         limit,
       },
+      fetchPolicy: 'network-only',
     });
   }
 
@@ -178,10 +231,8 @@ export class ProductsService {
         {
           query: GET_MY_PRODUCTS,
         },
-        {
-          query: GET_AVAILABLE_PRODUCTS,
-        },
       ],
+      fetchPolicy: 'network-only',
     });
   }
 }

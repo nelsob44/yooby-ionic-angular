@@ -130,12 +130,6 @@ export class AddProductPage implements OnInit {
   }
 
   onAddProduct() {
-    // this.presentAlert(
-    //   'We are still working on this functionality!',
-    //   'Work in progress'
-    // );
-    console.log(this.form.status);
-    console.log(this.form);
     if (this.form.status === 'INVALID') {
       return;
     }
@@ -175,6 +169,8 @@ export class AddProductPage implements OnInit {
             (resData) => {
               console.log(resData);
               if (resData) {
+                this.filesToUpload = [];
+                this.form.reset();
                 this.presentAlert(
                   '<p style=color:white;>Product was successfully added</p>',
                   'Success'
