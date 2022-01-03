@@ -3,7 +3,12 @@ import { Apollo } from 'apollo-angular';
 import { asapScheduler, BehaviorSubject, from, of, scheduled } from 'rxjs';
 import { catchError, map, mapTo, tap } from 'rxjs/operators';
 import { User, AuthResponseData } from '../interfaces/user';
-import { SAVE_USER, LOGIN_USER } from '../graphql/user';
+import {
+  SAVE_USER,
+  LOGIN_USER,
+  SEND_RESET_LINK,
+  CHANGE_PASSWORD,
+} from '../graphql/user';
 import { Storage } from '@capacitor/storage';
 import { Router } from '@angular/router';
 import {
@@ -200,6 +205,44 @@ export class AuthService {
       this.router.navigateByUrl('/auth');
     };
     removeName();
+  }
+
+  sendPasswordResetLink(email: string) {
+    console.log({ email });
+    return this.apollo
+      .mutate<any>({
+        mutation: SEND_RESET_LINK,
+        variables: {
+          email,
+        },
+        fetchPolicy: 'network-only',
+      })
+      .pipe(
+        tap((data) => {
+          console.log('');
+          return data;
+        })
+      );
+  }
+
+  changePassword(email: string, password: string, resetPasswordToken: string) {
+    console.log({ email });
+    return this.apollo
+      .mutate<any>({
+        mutation: CHANGE_PASSWORD,
+        variables: {
+          email,
+          password,
+          resetPasswordToken,
+        },
+        fetchPolicy: 'network-only',
+      })
+      .pipe(
+        tap((data) => {
+          console.log('');
+          return data;
+        })
+      );
   }
 
   private setUserData(data: any) {

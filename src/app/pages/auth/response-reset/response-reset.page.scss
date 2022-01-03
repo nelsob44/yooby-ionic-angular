@@ -1,0 +1,19 @@
+ion-label {
+  padding-left: 0.7rem;
+  font-size: x-small;
+}
+ion-item {
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+ion-card-subtitle,
+ion-card-title {
+  color: aliceblue;
+}
+
+ion-datetime {
+  height: auto;
+  width: auto;
+
+  max-width: 350px;
+}

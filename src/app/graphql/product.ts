@@ -15,6 +15,7 @@ export const SAVE_PRODUCT = gql`
     $discount: Float
     $promoStartDate: String
     $promoEndDate: String
+    $videoLink: String
     $images: [String]
   ) {
     addProduct(
@@ -32,6 +33,7 @@ export const SAVE_PRODUCT = gql`
         discount: $discount
         promoStartDate: $promoStartDate
         promoEndDate: $promoEndDate
+        videoLink: $videoLink
         images: $images
       }
     ) {
@@ -51,6 +53,7 @@ export const SAVE_PRODUCT = gql`
       promoEndDate
       verifiedSeller
       reviews
+      videoLink
       images
     }
   }
@@ -64,6 +67,7 @@ export const GET_MY_PRODUCTS = gql`
         id
         category
         description
+        videoLink
         images
         price
         title
@@ -91,6 +95,7 @@ export const GET_AVAILABLE_PRODUCTS = gql`
         id
         category
         description
+        videoLink
         images
         price
         title
@@ -126,6 +131,7 @@ export const UPDATE_PRODUCT = gql`
     $discount: Float
     $promoStartDate: String
     $promoEndDate: String
+    $videoLink: String
     $images: [String]
   ) {
     updateProduct(
@@ -144,6 +150,7 @@ export const UPDATE_PRODUCT = gql`
         discount: $discount
         promoStartDate: $promoStartDate
         promoEndDate: $promoEndDate
+        videoLink: $videoLink
         images: $images
       }
     ) {
@@ -163,6 +170,7 @@ export const UPDATE_PRODUCT = gql`
       promoEndDate
       verifiedSeller
       reviews
+      videoLink
       images
     }
   }

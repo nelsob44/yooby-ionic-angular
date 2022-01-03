@@ -8,6 +8,14 @@ const routes: Routes = [
     path: '',
     component: AuthPage,
   },
+  {
+    path: 'request-reset',
+    loadChildren: () => import('./request-reset/request-reset.module').then( m => m.RequestResetPageModule)
+  },
+  {
+    path: 'response-reset',
+    loadChildren: () => import('./response-reset/response-reset.module').then( m => m.ResponseResetPageModule)
+  },
 ];
 
 @NgModule({

@@ -63,6 +63,14 @@ export class AddProductPage implements OnInit {
         updateOn: 'blur',
         validators: [Validators.minLength(2)],
       }),
+      videoLink: new FormControl(null, {
+        updateOn: 'blur',
+        validators: [
+          Validators.pattern(
+            '(?:(?:(?:ht|f)tp)s?://)?[\\w_-]+(?:\\.[\\w_-]+)+([\\w.,@?^=%&:/~+#-]*[\\w@?^=%&/~+#-])?'
+          ),
+        ],
+      }),
       theImage: new FormControl(null, {
         updateOn: 'blur',
         validators: [],
@@ -137,6 +145,20 @@ export class AddProductPage implements OnInit {
     if (this.form.status === 'INVALID') {
       return;
     }
+    let youTubeVideoId = '';
+    if (
+      this.form.value.videoLink !== null &&
+      this.form.value.videoLink !== undefined &&
+      this.form.value.videoLink !== ''
+    ) {
+      const youTubeLink = this.form.value.videoLink
+        .replace(/(<([^>]+)>)/gi, '')
+        .split('=');
+
+      const youTubeIdString = youTubeLink[1].split('&');
+      youTubeVideoId = youTubeIdString[0];
+    }
+
     const productData = {
       category: this.form.value.category.replace(/(<([^>]+)>)/gi, ''),
       description: this.form.value.description.replace(/(<([^>]+)>)/gi, ''),
@@ -144,6 +166,7 @@ export class AddProductPage implements OnInit {
       title:
         this.form.value.title &&
         this.form.value.title.replace(/(<([^>]+)>)/gi, ''),
+      videoLink: youTubeVideoId,
       minOrder: this.form.value.minOrder,
       sellerCountry: this.form.value.sellerCountry.replace(/(<([^>]+)>)/gi, ''),
       sellerLocation:
@@ -161,13 +184,12 @@ export class AddProductPage implements OnInit {
         this.form.value.promoEndDate &&
         this.form.value.promoEndDate.toString().replace(/(<([^>]+)>)/gi, ''),
     };
-    console.log('Form values ', productData);
+
     this.isLoading = true;
     this.loadingCtrl
       .create({ keyboardClose: true, message: 'please wait...' })
       .then((loadingEl) => {
         loadingEl.present();
-        //let productObs: Observable<any>;
         this.productService
           .addProduct(productData, this.filesToUpload)
           .subscribe(

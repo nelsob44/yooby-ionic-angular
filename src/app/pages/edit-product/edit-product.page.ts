@@ -84,6 +84,14 @@ export class EditProductPage implements OnInit, OnDestroy {
                 updateOn: 'blur',
                 validators: [Validators.minLength(2)],
               }),
+              videoLink: new FormControl(null, {
+                updateOn: 'blur',
+                validators: [
+                  Validators.pattern(
+                    '(?:(?:(?:ht|f)tp)s?://)?[\\w_-]+(?:\\.[\\w_-]+)+([\\w.,@?^=%&:/~+#-]*[\\w@?^=%&/~+#-])?'
+                  ),
+                ],
+              }),
               theImage: new FormControl(null, {
                 updateOn: 'blur',
                 validators: [],
@@ -145,6 +153,14 @@ export class EditProductPage implements OnInit, OnDestroy {
               description: new FormControl(product.description, {
                 updateOn: 'blur',
                 validators: [Validators.minLength(2)],
+              }),
+              videoLink: new FormControl(null, {
+                updateOn: 'blur',
+                validators: [
+                  Validators.pattern(
+                    '(?:(?:(?:ht|f)tp)s?://)?[\\w_-]+(?:\\.[\\w_-]+)+([\\w.,@?^=%&:/~+#-]*[\\w@?^=%&/~+#-])?'
+                  ),
+                ],
               }),
               theImage: new FormControl(null, {
                 updateOn: 'blur',
@@ -220,6 +236,20 @@ export class EditProductPage implements OnInit, OnDestroy {
     if (this.form.status === 'INVALID') {
       return;
     }
+    let youTubeVideoId = '';
+    if (
+      this.form.value.videoLink !== null &&
+      this.form.value.videoLink !== undefined &&
+      this.form.value.videoLink !== ''
+    ) {
+      const youTubeLink = this.form.value.videoLink
+        .replace(/(<([^>]+)>)/gi, '')
+        .split('=');
+
+      const youTubeIdString = youTubeLink[1].split('&');
+      youTubeVideoId = youTubeIdString[0];
+    }
+
     const productData = {
       id: this.id.replace(/(<([^>]+)>)/gi, ''),
       category: this.form.value.category.replace(/(<([^>]+)>)/gi, ''),
@@ -228,6 +258,7 @@ export class EditProductPage implements OnInit, OnDestroy {
       title:
         this.form.value.title &&
         this.form.value.title.replace(/(<([^>]+)>)/gi, ''),
+      videoLink: youTubeVideoId,
       minOrder: this.form.value.minOrder,
       sellerCountry: this.form.value.sellerCountry.replace(/(<([^>]+)>)/gi, ''),
       sellerLocation:
@@ -245,7 +276,7 @@ export class EditProductPage implements OnInit, OnDestroy {
         this.form.value.promoEndDate &&
         this.form.value.promoEndDate.toString().replace(/(<([^>]+)>)/gi, ''),
     };
-    console.log('Form values ', productData);
+
     this.isLoading = true;
     this.loadingCtrl
       .create({ keyboardClose: true, message: 'please wait...' })

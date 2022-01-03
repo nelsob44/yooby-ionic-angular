@@ -32,7 +32,7 @@ const routes: Routes = [
       import('./pages/available-products/available-products.module').then(
         (m) => m.AvailableProductsPageModule
       ),
-    canLoad: [AuthGuard],
+    canActivate: [AuthGuard],
   },
   {
     path: 'chat',
@@ -46,7 +46,7 @@ const routes: Routes = [
       import('./pages/my-products/my-products.module').then(
         (m) => m.MyProductsPageModule
       ),
-    canLoad: [AuthGuard],
+    canActivate: [AuthGuard],
   },
   {
     path: 'product-detail/:id',
@@ -62,7 +62,7 @@ const routes: Routes = [
       import('./pages/add-product/add-product.module').then(
         (m) => m.AddProductPageModule
       ),
-    canLoad: [AuthGuard],
+    canActivate: [AuthGuard],
   },
   {
     path: 'edit-product/:id',
@@ -70,7 +70,7 @@ const routes: Routes = [
       import('./pages/edit-product/edit-product.module').then(
         (m) => m.EditProductPageModule
       ),
-    canLoad: [AuthGuard],
+    canActivate: [AuthGuard],
   },
 ];
 

@@ -109,6 +109,7 @@ export class ProductsService {
               discount: productData.discount,
               promoStartDate: productData.promoStartDate,
               promoEndDate: productData.promoEndDate,
+              videoLink: productData.videoLink,
               images: imageArray,
             },
             refetchQueries: [
@@ -155,6 +156,7 @@ export class ProductsService {
               discount: productData.discount,
               promoStartDate: productData.promoStartDate,
               promoEndDate: productData.promoEndDate,
+              videoLink: productData.videoLink,
               images: imageArray,
             },
             refetchQueries: [

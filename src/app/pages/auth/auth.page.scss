@@ -32,11 +32,16 @@ ion-label {
   font-size: x-small;
 }
 ion-card-subtitle,
-ion-card-title {
+ion-card-title,
+a {
   color: aliceblue;
 }
 
 ion-item {
   border-radius: 10px;
   margin-bottom: 10px;
+}
+
+a {
+  cursor: pointer;
 }

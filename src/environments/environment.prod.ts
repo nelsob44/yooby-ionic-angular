@@ -3,4 +3,5 @@ export const environment = {
   baseUrl: 'https://fakestoreapi.com/products',
   title: 'Malamino',
   httpEndPoint: 'https://malamino-backend.herokuapp.com',
+  localEndPoint: 'https://malamino.herokuapp.com',
 };

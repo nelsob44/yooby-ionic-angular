@@ -141,6 +141,10 @@ export class AuthPage implements OnInit {
     this.isLogin = !this.isLogin;
   }
 
+  forgotPassword() {
+    this.router.navigate(['/auth/request-reset']);
+  }
+
   async presentAlert(alertMessage: string, head: string) {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',

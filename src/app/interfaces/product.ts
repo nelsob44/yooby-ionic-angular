@@ -14,6 +14,7 @@ export interface Product {
   discount?: number;
   promoStartDate?: string;
   promoEndDate?: string;
+  videoLink?: string;
   images?: string;
 }
 

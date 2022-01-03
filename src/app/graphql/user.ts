@@ -41,3 +41,25 @@ export const LOGIN_USER = gql`
     }
   }
 `;
+
+export const SEND_RESET_LINK = gql`
+  mutation sendResetLink($email: String!) {
+    sendResetLink(email: $email)
+  }
+`;
+
+export const CHANGE_PASSWORD = gql`
+  mutation changePassword(
+    $email: String!
+    $password: String!
+    $resetPasswordToken: String!
+  ) {
+    changePassword(
+      user: {
+        email: $email
+        password: $password
+        resetPasswordToken: $resetPasswordToken
+      }
+    )
+  }
+`;
