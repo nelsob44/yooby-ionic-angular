@@ -11,6 +11,11 @@ export interface User {
   address: string;
   isVerified?: string;
   privilegeLevel?: string;
+  userDeviceType?: string;
+  userIpAddress?: string;
+  isOnline?: boolean;
+  extraUserData?: string;
+  lastLoginTime?: string;
 }
 
 export interface AuthResponseData {

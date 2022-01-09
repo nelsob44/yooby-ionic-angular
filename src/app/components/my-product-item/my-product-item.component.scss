@@ -9,12 +9,16 @@ ion-avatar {
 ion-card {
   padding: 0 0.5rem 0 0.5rem;
   img {
-    object-fit: cover;
+    //object-fit: cover;
     cursor: pointer;
   }
   .clickable {
     cursor: pointer;
   }
+}
+
+ion-card-title {
+  font: 1em sans-serif;
 }
 
 .seller {

@@ -1,13 +1,12 @@
 ion-toolbar {
   color: aliceblue;
 }
+.first-column {
+  margin-top: 1rem;
+}
 
-// ion-row {
-//   display: flex;
-//   flex-wrap: wrap;
-//   justify-content: space-evenly;
-// }
-// ion-col {
-//   // margin: 5px;
-//   flex-basis: 33%;
-// }
+@media (max-width: 768px) {
+  .first-column {
+    display: none;
+  }
+}

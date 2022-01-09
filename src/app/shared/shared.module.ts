@@ -5,6 +5,7 @@ import { ShoppingCartBadgeComponent } from '../components/shopping-cart-badge/sh
 import { ImagePickerComponent } from './image-picker/image-picker.component';
 import { TruncateWordsPipe } from './pipes/truncate-words.pipe';
 import { YoutubePlayerComponent } from './youtube-player/youtube-player.component';
+import { SideMenuComponent } from './side-menu/side-menu.component';
 
 @NgModule({
   declarations: [
@@ -12,6 +13,7 @@ import { YoutubePlayerComponent } from './youtube-player/youtube-player.componen
     ImagePickerComponent,
     TruncateWordsPipe,
     YoutubePlayerComponent,
+    SideMenuComponent,
   ],
   imports: [CommonModule, IonicModule],
   exports: [
@@ -19,6 +21,7 @@ import { YoutubePlayerComponent } from './youtube-player/youtube-player.componen
     ImagePickerComponent,
     TruncateWordsPipe,
     YoutubePlayerComponent,
+    SideMenuComponent,
   ],
 })
 export class SharedModule {}
