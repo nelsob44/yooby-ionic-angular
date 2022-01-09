@@ -1,13 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import { asapScheduler, BehaviorSubject, from, of, scheduled } from 'rxjs';
-import { catchError, map, mapTo, tap } from 'rxjs/operators';
+import { catchError, map, mapTo, switchMap, take, tap } from 'rxjs/operators';
 import { User, AuthResponseData } from '../interfaces/user';
+import { environment } from 'src/environments/environment';
 import {
   SAVE_USER,
   LOGIN_USER,
   SEND_RESET_LINK,
   CHANGE_PASSWORD,
+  VERIFY_USER,
+  GET_USER,
+  UPDATE_USER,
+  RE_VERIFY,
 } from '../graphql/user';
 import { Storage } from '@capacitor/storage';
 import { Router } from '@angular/router';
@@ -16,13 +21,19 @@ import {
   IonicSafeString,
   LoadingController,
 } from '@ionic/angular';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  userProfile = new BehaviorSubject<User>(null);
   private userData = new BehaviorSubject<AuthResponseData>(null);
   private activeLogoutTimer: any;
+
+  get myUserProfile() {
+    return this.userProfile.asObservable();
+  }
 
   get userAuthenticated() {
     return this.userData.asObservable().pipe(
@@ -96,10 +107,23 @@ export class AuthService {
     );
   }
 
+  get isVerified() {
+    return this.userData.asObservable().pipe(
+      map((user) => {
+        if (user) {
+          return user.isVerified;
+        } else {
+          return null;
+        }
+      })
+    );
+  }
+
   constructor(
     private loadingCtrl: LoadingController,
     private alertController: AlertController,
     private apollo: Apollo,
+    private http: HttpClient,
     private router: Router
   ) {}
 
@@ -119,6 +143,7 @@ export class AuthService {
           firstName: string;
           userId: string;
           privilege: string;
+          isVerified: boolean;
           expirationTime: number;
         };
         const currentTime = new Date().getTime();
@@ -132,6 +157,7 @@ export class AuthService {
           firstName: parsedData.firstName,
           userId: parsedData.userId,
           privilege: parsedData.privilege,
+          isVerified: parsedData.isVerified,
           expirationTime: parsedData.expirationTime,
         };
         return userData;
@@ -207,6 +233,107 @@ export class AuthService {
     removeName();
   }
 
+  // updateUser(userData: User) {
+  //   return this.apollo
+  //     .mutate({
+  //       mutation: UPDATE_USER,
+  //       variables: {
+  //         id: userData.id,
+  //         firstName: userData.firstName,
+  //         lastName: userData.lastName,
+  //         email: userData.email,
+  //         password: userData.password,
+  //         phoneNumber: userData.phoneNumber,
+  //         country: userData.country,
+  //         city: userData.city,
+  //         address: userData.address,
+  //       },
+  //       fetchPolicy: 'network-only',
+  //       refetchQueries: [
+  //         {
+  //           query: GET_USER,
+  //         },
+  //       ],
+  //     })
+  //     .pipe(
+  //       tap((data) => console.log(data)),
+  //       mapTo(true),
+  //       catchError((error) => {
+  //         console.log(error);
+  //         this.presentAlert('<p style=color:white;>' + error + '</p>', 'Error');
+  //         return of(false);
+  //       })
+  //     );
+  // }
+
+  updateUser(userData: any, filesToUpload: [File]) {
+    return this.uploadImage(filesToUpload).pipe(
+      take(1),
+      switchMap((paths) => {
+        const imageArray = [];
+        paths.imagePath.map((img) => {
+          let newImg = '';
+          newImg = img.key + ',' + img.url;
+          imageArray.push(newImg);
+        });
+        return this.apollo
+          .mutate({
+            mutation: UPDATE_USER,
+            variables: {
+              id: userData.id,
+              firstName: userData.firstName,
+              lastName: userData.lastName,
+              password: userData.password,
+              phoneNumber: userData.phoneNumber,
+              country: userData.country,
+              city: userData.city,
+              address: userData.address,
+              profilePic: imageArray,
+            },
+            fetchPolicy: 'network-only',
+            refetchQueries: [
+              {
+                query: GET_USER,
+              },
+            ],
+          })
+          .pipe(
+            tap((data) => {
+              console.log('');
+              return data;
+            })
+          );
+      })
+    );
+  }
+
+  uploadImage(filesToUpload: [File]) {
+    const URL = environment.httpEndPoint + '/images';
+    const uploadData = new FormData();
+    const filesLength = filesToUpload.length;
+    for (let i = 0; i < filesLength; i++) {
+      uploadData.append('files[]', filesToUpload[i]);
+    }
+    //uploadData.append('files', filesToUpload[0]);
+
+    return this.token.pipe(
+      take(1),
+      switchMap((token) => {
+        console.log('');
+        return this.http
+          .post<any>(URL, uploadData, {
+            headers: { authorization: 'Bearer ' + token },
+          })
+          .pipe(
+            map((data) => {
+              console.log('');
+              return data;
+            })
+          );
+      })
+    );
+  }
+
   sendPasswordResetLink(email: string) {
     console.log({ email });
     return this.apollo
@@ -225,6 +352,56 @@ export class AuthService {
       );
   }
 
+  verifyUser(userId: string) {
+    console.log('login hit');
+    return this.apollo
+      .mutate<any>({
+        mutation: VERIFY_USER,
+        variables: {
+          userId,
+        },
+      })
+      .pipe(
+        tap((data) => {
+          console.log('data hit', data);
+          this.presentAlert(
+            '<p style=color:white;>' + data.data.verifyUser + '</p>',
+            'Verified!'
+          );
+        }),
+        mapTo(true),
+        catchError((error) => {
+          this.presentAlert('<p style=color:white;>' + error + '</p>', 'Error');
+          return of(false);
+        })
+      );
+  }
+
+  resendVerification(userId: string) {
+    console.log('login hit');
+    return this.apollo
+      .mutate<any>({
+        mutation: RE_VERIFY,
+        variables: {
+          userId,
+        },
+      })
+      .pipe(
+        tap((data) => {
+          console.log('data hit', data);
+          this.presentAlert(
+            '<p style=color:white;>' + data.data.resendVerification + '</p>',
+            'Success!'
+          );
+        }),
+        mapTo(true),
+        catchError((error) => {
+          this.presentAlert('<p style=color:white;>' + error + '</p>', 'Error');
+          return of(false);
+        })
+      );
+  }
+
   changePassword(email: string, password: string, resetPasswordToken: string) {
     console.log({ email });
     return this.apollo
@@ -239,10 +416,29 @@ export class AuthService {
       })
       .pipe(
         tap((data) => {
-          console.log('');
-          return data;
+          console.log(data);
+          this.presentAlert(
+            '<p style=color:white;>' + data.data.changePassword + '</p>',
+            'Verified!'
+          );
+        }),
+        mapTo(true),
+        catchError((error) => {
+          console.log(error);
+          this.presentAlert('<p style=color:white;>' + error + '</p>', 'Error');
+          return of(false);
         })
       );
+  }
+
+  fetchUser(userId: string) {
+    return this.apollo.watchQuery<any>({
+      query: GET_USER,
+      variables: {
+        userId,
+      },
+      fetchPolicy: 'network-only',
+    });
   }
 
   private setUserData(data: any) {
@@ -253,6 +449,7 @@ export class AuthService {
       firstName: data.authenticateUser.firstName,
       userId: data.authenticateUser.userId,
       privilege: data.authenticateUser.privilege,
+      isVerified: data.authenticateUser.isVerified,
       expirationTime,
     };
     console.log('user ', user);

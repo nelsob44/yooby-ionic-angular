@@ -38,6 +38,10 @@
             <ion-icon name="bag-add-outline" slot="start"></ion-icon>
             <ion-label>Add Product</ion-label>
           </ion-item>
+          <ion-item lines="none" button (click)="menuClick('user-profile')">
+            <ion-icon name="person-circle-outline" slot="start"></ion-icon>
+            <ion-label>My Pofile</ion-label>
+          </ion-item>
           <ion-item lines="none" button (click)="menuClick('auth')">
             <ion-icon
               name="{{ isLoggedIn ? 'log-out-outline' : 'log-in-outline' }}"

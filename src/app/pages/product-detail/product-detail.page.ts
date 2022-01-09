@@ -1,5 +1,11 @@
 import { BoundText } from '@angular/compiler/src/render3/r3_ast';
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewEncapsulation,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import SwiperCore, { EffectCube, Pagination } from 'swiper';
@@ -19,7 +25,7 @@ SwiperCore.use([EffectCube, Pagination]);
   styleUrls: ['./product-detail.page.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class ProductDetailPage implements OnInit, OnDestroy {
+export class ProductDetailPage implements OnInit, OnDestroy, AfterViewInit {
   productQuantity;
   basketLength: number;
   modalBasket: BasketItem[] = [];
@@ -35,6 +41,7 @@ export class ProductDetailPage implements OnInit, OnDestroy {
   };
   imagesArray = [];
   imagesCarousel: ImagePath[] = [];
+  hasVideo = false;
   pagination = {
     clickable: true,
     renderBullet: (index, className) =>
@@ -67,7 +74,9 @@ export class ProductDetailPage implements OnInit, OnDestroy {
     }
   }
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  ngAfterViewInit() {
     this.route.paramMap.subscribe((paramMap) => {
       if (!paramMap.has('id')) {
         this.navCtrl.navigateBack('/available-products');
@@ -81,18 +90,22 @@ export class ProductDetailPage implements OnInit, OnDestroy {
             if (Object.keys(product).length === 0) {
               return this.navCtrl.navigateBack('/available-products');
             }
+            if (!!product.videoLink) {
+              this.hasVideo = true;
+            }
             this.productDetail = product;
             this.imagesArray = [product.images];
             this.transformImagePath();
           });
       } else if (type === 'my-products') {
-        console.log({ productId });
         this.productSub = this.service
           .getMyProduct(productId)
           .subscribe((product) => {
-            console.log({ product });
             if (Object.keys(product).length === 0) {
               return this.navCtrl.navigateBack('/my-products');
+            }
+            if (!!product.videoLink) {
+              this.hasVideo = true;
             }
             this.productDetail = product;
             this.imagesArray = [product.images];

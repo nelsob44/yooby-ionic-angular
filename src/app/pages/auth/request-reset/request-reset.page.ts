@@ -46,14 +46,16 @@ export class RequestResetPage implements OnInit {
                 '<p style=color:white;>' + resData.data.sendResetLink + '</p>',
                 'Success'
               );
-              //this.router.navigate(['my-products']);
+              this.router.navigate(['my-products']);
             }
             this.isLoading = false;
             loadingEl.dismiss();
           },
           (errorResponse) => {
-            console.log(errorResponse);
+            console.log(errorResponse.message.errors);
             loadingEl.dismiss();
+            console.log(errorResponse.message);
+            console.log(errorResponse.errors.message);
             this.presentAlert(
               '<p style=color:white;>Sorry there was an error. please try again later or contact Admin</p>',
               'Error'

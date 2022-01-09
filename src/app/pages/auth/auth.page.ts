@@ -47,7 +47,7 @@ export class AuthPage implements OnInit {
       }),
       country: new FormControl(null, {
         updateOn: 'blur',
-        validators: [Validators.minLength(3)],
+        validators: [Validators.minLength(2)],
       }),
       city: new FormControl(null, {
         updateOn: 'blur',
@@ -59,7 +59,7 @@ export class AuthPage implements OnInit {
       }),
       phoneNumber: new FormControl(null, {
         updateOn: 'blur',
-        validators: [Validators.minLength(2)],
+        validators: [Validators.minLength(9)],
       }),
       password: new FormControl(null, {
         updateOn: 'blur',
@@ -73,9 +73,6 @@ export class AuthPage implements OnInit {
   }
 
   onClickSubmit() {
-    console.log(this.isLogin);
-    console.log(this.form.status);
-    console.log(this.form.status);
     if (this.form.status === 'INVALID') {
       return;
     }
@@ -100,8 +97,17 @@ export class AuthPage implements OnInit {
       phoneNumber:
         this.form.get('phoneNumber').value &&
         this.form.get('phoneNumber').value.replace(/(<([^>]+)>)/gi, ''),
+      confirmPassword:
+        this.form.get('confirmPassword').value &&
+        this.form.get('confirmPassword').value.replace(/(<([^>]+)>)/gi, ''),
     };
-    console.log('Form values ', authData);
+    if (!this.isLogin && authData.password !== authData.confirmPassword) {
+      this.presentAlert(
+        '<p style=color:white;>Your passwords do not match.</p>',
+        'Success'
+      );
+      return;
+    }
     this.isLoading = true;
     this.loadingCtrl
       .create({ keyboardClose: true, message: 'please wait...' })
@@ -115,7 +121,6 @@ export class AuthPage implements OnInit {
         }
         authObs.subscribe(
           (resData) => {
-            console.log(resData);
             if (this.isLogin && resData) {
               this.router.navigate(['available-products']);
             }

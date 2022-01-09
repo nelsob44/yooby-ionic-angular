@@ -76,7 +76,7 @@
       </swiper>
     </ion-col>
   </ion-row>
-  <ion-row>
+  <ion-row *ngIf="hasVideo">
     <ion-col size="12">
       <app-youtube-player
         [videoId]="productDetail.videoLink"

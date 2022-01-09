@@ -16,6 +16,10 @@ const routes: Routes = [
     path: 'response-reset',
     loadChildren: () => import('./response-reset/response-reset.module').then( m => m.ResponseResetPageModule)
   },
+  {
+    path: 'verify-account',
+    loadChildren: () => import('./verify-account/verify-account.module').then( m => m.VerifyAccountPageModule)
+  },
 ];
 
 @NgModule({

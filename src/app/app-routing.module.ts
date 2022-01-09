@@ -72,6 +72,22 @@ const routes: Routes = [
       ),
     canActivate: [AuthGuard],
   },
+  {
+    path: 'user-profile',
+    loadChildren: () =>
+      import('./pages/user-profile/user-profile.module').then(
+        (m) => m.UserProfilePageModule
+      ),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'edit-user-profile/:userId',
+    loadChildren: () =>
+      import('./pages/edit-user-profile/edit-user-profile.module').then(
+        (m) => m.EditUserProfilePageModule
+      ),
+    canActivate: [AuthGuard],
+  },
 ];
 
 @NgModule({

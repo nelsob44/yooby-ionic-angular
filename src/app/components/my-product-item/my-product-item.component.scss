@@ -9,7 +9,7 @@ ion-avatar {
 ion-card {
   padding: 0 0.5rem 0 0.5rem;
   img {
-    object-fit: fill;
+    object-fit: cover;
     cursor: pointer;
   }
   .clickable {
@@ -22,7 +22,6 @@ ion-card {
 }
 ion-badge {
   max-height: 20px;
-  margin-top: 0.5rem;
 }
 
 @media (max-width: 600px) {
@@ -31,6 +30,14 @@ ion-badge {
   }
   .large-screen {
     display: none;
+  }
+
+  ion-text,
+  ion-card-subtitle {
+    font-size: 0.8rem;
+  }
+  ion-labell {
+    line-height: 0.1rem;
   }
 }
 
@@ -52,5 +59,9 @@ ion-badge {
       object-fit: contain;
     }
     overflow-y: auto;
+  }
+
+  ion-badge {
+    margin-top: 0.5rem;
   }
 }

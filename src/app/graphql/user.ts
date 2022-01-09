@@ -30,6 +30,38 @@ export const SAVE_USER = gql`
   }
 `;
 
+export const UPDATE_USER = gql`
+  mutation updateUser(
+    $id: ID!
+    $firstName: String
+    $lastName: String
+    $password: String
+    $phoneNumber: String
+    $country: String
+    $city: String
+    $address: String
+    $profilePic: [String]
+  ) {
+    updateUser(
+      id: $id
+      user: {
+        firstName: $firstName
+        lastName: $lastName
+        profilePic: $profilePic
+        password: $password
+        phoneNumber: $phoneNumber
+        country: $country
+        city: $city
+        address: $address
+      }
+    ) {
+      id
+      email
+      firstName
+    }
+  }
+`;
+
 export const LOGIN_USER = gql`
   mutation authenticateUser($email: String!, $password: String!) {
     authenticateUser(user: { email: $email, password: $password }) {
@@ -38,6 +70,7 @@ export const LOGIN_USER = gql`
       firstName
       userId
       privilege
+      isVerified
     }
   }
 `;
@@ -45,6 +78,18 @@ export const LOGIN_USER = gql`
 export const SEND_RESET_LINK = gql`
   mutation sendResetLink($email: String!) {
     sendResetLink(email: $email)
+  }
+`;
+
+export const VERIFY_USER = gql`
+  mutation verifyUser($userId: ID!) {
+    verifyUser(userId: $userId)
+  }
+`;
+
+export const RE_VERIFY = gql`
+  mutation resendVerification($userId: ID!) {
+    resendVerification(userId: $userId)
   }
 `;
 
@@ -61,5 +106,23 @@ export const CHANGE_PASSWORD = gql`
         resetPasswordToken: $resetPasswordToken
       }
     )
+  }
+`;
+
+export const GET_USER = gql`
+  query getUser($userId: ID!) {
+    getUser(userId: $userId) {
+      id
+      email
+      firstName
+      lastName
+      phoneNumber
+      country
+      city
+      address
+      isVerified
+      privilegeLevel
+      profilePic
+    }
   }
 `;

@@ -1,0 +1,78 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/available-products"></ion-back-button>
+    </ion-buttons>
+    <ion-title>My Profile</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list lines="none">
+    <ion-list-header> User Profile </ion-list-header>
+    <ion-list-header *ngIf="!imagePath.url"
+      ><small
+        >Click on Edit Profile to add new Profile pic</small
+      ></ion-list-header
+    >
+    <ion-list-header *ngIf="!userInfo.isVerified"
+      ><a (click)="resendVerification(userInfo.id)"
+        ><small>Click here to Re-send account verification Email</small></a
+      ></ion-list-header
+    >
+    <ion-item>
+      <ion-button
+        slot="start"
+        aria-label="Edit product"
+        (click)="presentAlertConfirm(userInfo.id)"
+        ><ion-icon name="create-outline"></ion-icon>Edit profile
+      </ion-button>
+      <ion-avatar slot="end">
+        <img
+          src="{{imagePath.url || 'https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y'}}"
+        />
+      </ion-avatar>
+    </ion-item>
+
+    <ion-item>
+      <ion-label><ion-card-subtitle>Name</ion-card-subtitle></ion-label>
+      <ion-card-title
+        >{{ userInfo.firstName + ' ' + userInfo.lastName }}</ion-card-title
+      >
+    </ion-item>
+    <ion-item>
+      <ion-label><ion-card-subtitle>Email</ion-card-subtitle></ion-label>
+      <ion-text>{{ userInfo.email }}</ion-text>
+    </ion-item>
+    <ion-item>
+      <ion-label><ion-card-subtitle>Phone Number</ion-card-subtitle></ion-label>
+      <ion-text>{{ userInfo.phoneNumber }}</ion-text>
+    </ion-item>
+    <ion-item>
+      <ion-label><ion-card-subtitle>Country</ion-card-subtitle></ion-label>
+      <ion-text>{{ userInfo.country }}</ion-text>
+    </ion-item>
+    <ion-item>
+      <ion-label><ion-card-subtitle>City</ion-card-subtitle></ion-label>
+      <ion-text>{{ userInfo.city }}</ion-text>
+    </ion-item>
+    <ion-item>
+      <ion-label><ion-card-subtitle>Address</ion-card-subtitle></ion-label>
+      <ion-text>{{ userInfo.address }}</ion-text>
+    </ion-item>
+    <ion-item>
+      <ion-label
+        ><ion-card-subtitle>Verified User</ion-card-subtitle></ion-label
+      >
+      <ion-text>{{ userInfo.isVerified ? 'Yes' : 'No' }}</ion-text>
+    </ion-item>
+    <ion-item>
+      <ion-label><ion-card-subtitle>User Status</ion-card-subtitle></ion-label>
+      <ion-text
+        >{{ userInfo.privilegeLevel === 'admin' ? 'Administrator' :
+        userInfo.privilegeLevel === 'customer' ? 'Seller' : 'Consumer'
+        }}</ion-text
+      >
+    </ion-item>
+  </ion-list>
+</ion-content>

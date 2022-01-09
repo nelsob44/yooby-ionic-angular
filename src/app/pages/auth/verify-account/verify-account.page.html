@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/available-products"></ion-back-button>
+    </ion-buttons>
+    <ion-title>verify-account</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row align-items-start *ngIf="isVerified">
+    <ion-col size-lg="8" offset-lg="2" size-md="8" offset-md="2">
+      <ion-card>
+        <ion-card-title> Your email has now been verified. </ion-card-title>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+
+  <ion-row align-items-start *ngIf="!isVerified">
+    <ion-col size-lg="8" offset-lg="2" size-md="8" offset-md="2">
+      <ion-card>
+        <ion-card-title> Sorry, your email was not verified </ion-card-title>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+</ion-content>

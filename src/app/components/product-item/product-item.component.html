@@ -6,9 +6,9 @@
     <ion-label>
       <ion-row>
         <ion-col
-          ><h2 (click)="viewDetail(item.id)" class="clickable">
+          ><ion-card-subtitle (click)="viewDetail(item.id)" class="clickable">
             <b>{{ item.title }}</b>
-          </h2></ion-col
+          </ion-card-subtitle></ion-col
         >
         <ion-col
           ><span
@@ -19,22 +19,24 @@
         >
       </ion-row>
       <ion-row>
-        <ion-col
+        <ion-col size="12"
           ><ion-text class="clickable"
             >Category: {{ item.category }}</ion-text
           ></ion-col
         >
-        <ion-button
-          aria-label="Edit product"
-          (click)="presentAlertConfirm(item.id, 'edit')"
-          ><ion-icon name="create-outline"></ion-icon>
-        </ion-button>
-        <ion-button
-          aria-label="Delete product"
-          color="danger"
-          (click)="presentAlertConfirm(item.id, 'delete')"
-          ><ion-icon name="trash-outline"></ion-icon>
-        </ion-button>
+        <ion-col size="12">
+          <ion-button
+            aria-label="Edit product"
+            (click)="presentAlertConfirm(item.id, 'edit')"
+            ><ion-icon name="create-outline"></ion-icon>
+          </ion-button>
+          <ion-button
+            aria-label="Delete product"
+            color="danger"
+            (click)="presentAlertConfirm(item.id, 'delete')"
+            ><ion-icon name="trash-outline"></ion-icon>
+          </ion-button>
+        </ion-col>
       </ion-row>
       <ion-row>
         <ion-col
@@ -48,9 +50,9 @@
       </ion-row>
       <ion-row>
         <ion-col
-          ><p (click)="viewDetail(item.id)" class="clickable">
+          ><small (click)="viewDetail(item.id)" class="clickable">
             {{ item.description }}
-          </p></ion-col
+          </small></ion-col
         >
       </ion-row>
     </ion-label>

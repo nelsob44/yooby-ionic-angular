@@ -60,32 +60,19 @@ export class ResponseResetPage implements OnInit {
       .create({ keyboardClose: true, message: 'please wait...' })
       .then((loadingEl) => {
         loadingEl.present();
-        //let productObs: Observable<any>;
         this.authService
           .changePassword(email, password, resetPasswordToken)
           .subscribe(
             (resData) => {
-              console.log(resData);
               if (resData) {
                 form.reset();
-                this.presentAlert(
-                  '<p style=color:white;>' +
-                    resData.data.changePassword +
-                    '</p>',
-                  'Success'
-                );
-                //this.router.navigate(['my-products']);
+                this.router.navigateByUrl('/auth');
               }
               this.isLoading = false;
               loadingEl.dismiss();
             },
             (errorResponse) => {
-              console.log(errorResponse);
               loadingEl.dismiss();
-              this.presentAlert(
-                '<p style=color:white;>Sorry there was an error. please try again later or contact Admin</p>',
-                'Error'
-              );
               this.isLoading = false;
             }
           );
