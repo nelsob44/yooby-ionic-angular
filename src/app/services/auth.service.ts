@@ -452,8 +452,6 @@ export class AuthService {
       isVerified: data.authenticateUser.isVerified,
       expirationTime,
     };
-    console.log('user ', user);
-    console.log('expirationTime ', expirationTime);
     this.userData.next(user);
     this.autoLogout(expirationTime);
     const setName = async () => {

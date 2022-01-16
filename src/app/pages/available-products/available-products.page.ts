@@ -10,6 +10,7 @@ import BasketItem from '../../interfaces/basketItem';
 import { Product } from '../../interfaces/product';
 import { ModalComponent } from '../../components/modal/modal.component';
 import { ProductsService } from '../../services/products.service';
+import { Storage } from '@capacitor/storage';
 
 @Component({
   selector: 'app-available-products',
@@ -51,7 +52,23 @@ export class AvailableProductsPage implements OnInit, OnDestroy {
     }
   }
 
-  ngOnInit() {}
+  async ngOnInit() {
+    const { value } = await Storage.get({ key: 'paymentCheckErrors' });
+    const parsedData = JSON.parse(value);
+    console.log(parsedData);
+    if (parsedData === null) {
+      return {};
+    } else {
+      let display = '';
+      const htmlData = parsedData.map((el, index) => {
+        display += index + 1 + ') ' + el + '<br/><br/>';
+      });
+      this.presentAlert(
+        '<p style=color:white;>' + `${display}` + '</p>',
+        'Attention!'
+      );
+    }
+  }
 
   nextPage() {
     this.offset++;

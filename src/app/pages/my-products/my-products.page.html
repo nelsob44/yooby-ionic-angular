@@ -4,6 +4,12 @@
       <ion-menu-button autoHide="false"></ion-menu-button>
     </ion-buttons>
     <ion-title>My products</ion-title>
+    <ion-title slot="end"
+      ><app-shopping-cart-badge
+        [numberOfItems]="basketLength"
+        (openCartModal)="onCartModalOpen($event)"
+      ></app-shopping-cart-badge
+    ></ion-title>
   </ion-toolbar>
 </ion-header>
 

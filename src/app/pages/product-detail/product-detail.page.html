@@ -42,13 +42,27 @@
               [value]="productQuantity"
               (keyup)="updateQuantity(box.value, null)"
             ></ion-input>
-            <ion-button size="small" (click)="updateQuantity(box.value, 'add')">
+            <ion-button
+              size="small"
+              (click)="updateQuantity(box.value, 'add')"
+              disabled="{{ exhaustedQuantity }}"
+            >
               +
             </ion-button>
           </ion-card-content>
+          <ion-list-header
+            ><small
+              >Currently Availabe Quantity:
+              {{productDetail.availableQuantity}}</small
+            ></ion-list-header
+          >
           <ion-card-content> {{productDetail.description}} </ion-card-content>
           <ion-card-content>
-            <ion-button expand="block" (click)="addToBasket()">
+            <ion-button
+              expand="block"
+              (click)="addToBasket()"
+              disabled="{{ doNotAdd }}"
+            >
               Add to Basket
             </ion-button>
           </ion-card-content>

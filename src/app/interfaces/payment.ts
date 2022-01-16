@@ -1,8 +1,9 @@
 export default interface Product {
-  id: number;
+  id?: number;
   amount: number;
   purpose: string;
-  time: Date;
+  transactionReference: string;
   paymentFrom: string;
   paymentTo: string;
+  createdAt?: string;
 }

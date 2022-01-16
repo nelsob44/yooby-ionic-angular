@@ -8,9 +8,10 @@ import { InMemoryCache, ApolloLink } from '@apollo/client/core';
 import { setContext } from '@apollo/client/link/context';
 import { Storage } from '@capacitor/storage';
 import { Camera } from '@awesome-cordova-plugins/camera/ngx';
-
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { IonicStorageModule } from '@ionic/storage-angular';
+import { Angular4PaystackModule } from 'angular4-paystack';
+import { environment } from 'src/environments/environment';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -76,6 +77,7 @@ const createApollo: any = (httpLink: HttpLink) => {
     HttpClientModule,
     IonicModule.forRoot(),
     IonicStorageModule.forRoot(),
+    Angular4PaystackModule.forRoot(environment.pstackPKTest),
     AppRoutingModule,
   ],
   providers: [

@@ -47,6 +47,8 @@ export class ProductDetailPage implements OnInit, OnDestroy, AfterViewInit {
     renderBullet: (index, className) =>
       '<span class="' + className + '">' + (index + 1) + '</span>',
   };
+  exhaustedQuantity = false;
+  doNotAdd = false;
 
   private productSub: Subscription;
   private basketSub: Subscription;
@@ -87,6 +89,7 @@ export class ProductDetailPage implements OnInit, OnDestroy, AfterViewInit {
         this.productSub = this.service
           .getProduct(productId)
           .subscribe((product) => {
+            console.log(product);
             if (Object.keys(product).length === 0) {
               return this.navCtrl.navigateBack('/available-products');
             }
@@ -96,6 +99,7 @@ export class ProductDetailPage implements OnInit, OnDestroy, AfterViewInit {
             this.productDetail = product;
             this.imagesArray = [product.images];
             this.transformImagePath();
+            console.log(this.productDetail);
           });
       } else if (type === 'my-products') {
         this.productSub = this.service

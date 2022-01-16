@@ -3,10 +3,14 @@ import {
   AlertController,
   IonicSafeString,
   LoadingController,
+  ModalController,
 } from '@ionic/angular';
 import { Subscription } from 'rxjs';
+import { Storage } from '@capacitor/storage';
 import { ProductsService } from '../../services/products.service';
 import { Product } from '../../interfaces/product';
+import { ModalComponent } from '../../components/modal/modal.component';
+import BasketItem from '../../interfaces/basketItem';
 
 @Component({
   selector: 'app-my-products',
@@ -14,6 +18,7 @@ import { Product } from '../../interfaces/product';
   styleUrls: ['./my-products.page.scss'],
 })
 export class MyProductsPage implements OnInit, OnDestroy {
+  basketLength: number;
   loadedProducts: Product[];
   itemsPerPage = 4;
   totalItems = 0;
@@ -24,13 +29,46 @@ export class MyProductsPage implements OnInit, OnDestroy {
   numberOfPages = 1;
 
   private myProductsSub: Subscription;
+  private basketSub: Subscription;
   constructor(
     private service: ProductsService,
     private loadingCtrl: LoadingController,
+    public modalController: ModalController,
     private alertController: AlertController
   ) {}
 
-  ngOnInit() {}
+  async presentModal(basket: BasketItem[]) {
+    const modal = await this.modalController.create({
+      component: ModalComponent,
+      cssClass: 'my-custom-class',
+      swipeToClose: true,
+      componentProps: { basket },
+      backdropDismiss: false,
+    });
+    await modal.present();
+    const { data } = await modal.onWillDismiss();
+    if (data) {
+      this.ionViewWillEnter();
+    }
+  }
+
+  async ngOnInit() {
+    const { value } = await Storage.get({ key: 'paymentCheckErrors' });
+    const parsedData = JSON.parse(value);
+    console.log(parsedData);
+    if (parsedData === null) {
+      return {};
+    } else {
+      let display = '';
+      const htmlData = parsedData.map((el, index) => {
+        display += index + 1 + ') ' + el + '<br/><br/>';
+      });
+      this.presentAlert(
+        '<p style=color:white;>' + `${display}` + '</p>',
+        'Attention!'
+      );
+    }
+  }
   nextPage() {
     this.offset++;
     this.retrieveData(this.offset, this.itemsPerPage);
@@ -43,11 +81,23 @@ export class MyProductsPage implements OnInit, OnDestroy {
 
   ionViewWillEnter() {
     this.retrieveData(this.offset, this.itemsPerPage);
+    this.basketSub = this.service.getShoppingBasket().subscribe((items) => {
+      this.basketLength = items.length;
+    });
+  }
+
+  onCartModalOpen($event): Subscription {
+    return this.service.getShoppingBasket().subscribe((basket) => {
+      this.presentModal(basket);
+    });
   }
 
   ngOnDestroy() {
     if (this.myProductsSub) {
       this.myProductsSub.unsubscribe();
+    }
+    if (this.basketSub) {
+      this.basketSub.unsubscribe();
     }
   }
 

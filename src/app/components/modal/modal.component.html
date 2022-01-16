@@ -19,6 +19,16 @@
     <ion-card-title class="total"
       ><i>Total: £{{ totalCost }}</i></ion-card-title
     >
-    <ion-button expand="block" color="primary">Pay Now</ion-button>
+    <ion-button
+      angular4-paystack
+      [paystackOptions]="options"
+      (paymentInit)="checkEligibility()"
+      (onClose)="paymentCancel()"
+      (callback)="paymentDone($event)"
+      expand="block"
+      color="primary"
+      disabled="{{ noItems }}"
+      >Pay Now</ion-button
+    >
   </ion-list>
 </ion-content>
