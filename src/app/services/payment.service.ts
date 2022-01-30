@@ -7,6 +7,10 @@ import {
   SAVE_PAYMENT,
   COMPLETE_PAYMENT,
   PAYMENT_ELIGIBILITY,
+  TOP_UP_CREDIT,
+  COMPLETE_TRANSACTION,
+  GET_ACCOUNT_BALANCE,
+  TRANSFER_CREDIT,
   GET_MY_PAYMENTS,
 } from '../graphql/payment';
 
@@ -32,6 +36,27 @@ export class PaymentService {
         //     query: GET_MY_PAYMENTS,
         //   },
         // ],
+        fetchPolicy: 'network-only',
+      })
+      .pipe(
+        tap((data) => {
+          console.log('');
+          return data;
+        })
+      );
+  }
+
+  initializeAccountCrediting(paymentData: any) {
+    return this.apollo
+      .mutate<any>({
+        mutation: TOP_UP_CREDIT,
+        variables: {
+          amount: paymentData.amount,
+          transactionType: paymentData.transactionType,
+          transactionReference: paymentData.transactionReference,
+          paymentFrom: paymentData.paymentFrom,
+          paymentTo: paymentData.paymentTo,
+        },
         fetchPolicy: 'network-only',
       })
       .pipe(
@@ -89,5 +114,58 @@ export class PaymentService {
           return data;
         })
       );
+  }
+
+  makeCreditTransfer(transferValue: number, recipientEmail: string) {
+    return this.apollo
+      .mutate<any>({
+        mutation: TRANSFER_CREDIT,
+        variables: {
+          transferValue,
+          recipientEmail,
+        },
+        refetchQueries: [
+          {
+            query: GET_ACCOUNT_BALANCE,
+          },
+        ],
+        fetchPolicy: 'network-only',
+      })
+      .pipe(
+        tap((data) => {
+          console.log('');
+          return data;
+        })
+      );
+  }
+
+  completingCreditTransaction(paymentData: any) {
+    return this.apollo
+      .mutate<any>({
+        mutation: COMPLETE_TRANSACTION,
+        variables: {
+          id: paymentData.id,
+          transactionReference: paymentData.transactionReference,
+        },
+        refetchQueries: [
+          {
+            query: GET_ACCOUNT_BALANCE,
+          },
+        ],
+        fetchPolicy: 'network-only',
+      })
+      .pipe(
+        tap((data) => {
+          console.log('');
+          return data;
+        })
+      );
+  }
+
+  fetchMyAccountBalance() {
+    return this.apollo.watchQuery<any>({
+      query: GET_ACCOUNT_BALANCE,
+      fetchPolicy: 'network-only',
+    });
   }
 }

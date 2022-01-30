@@ -88,6 +88,14 @@ const routes: Routes = [
       ),
     canActivate: [AuthGuard],
   },
+  {
+    path: 'credit-my-account',
+    loadChildren: () =>
+      import('./pages/credit-my-account/credit-my-account.module').then(
+        (m) => m.CreditMyAccountPageModule
+      ),
+    canActivate: [AuthGuard],
+  },
 ];
 
 @NgModule({

@@ -13,6 +13,7 @@ import {
   GET_USER,
   UPDATE_USER,
   RE_VERIFY,
+  GET_TRANSFER_RECIPIENTS,
 } from '../graphql/user';
 import { Storage } from '@capacitor/storage';
 import { Router } from '@angular/router';
@@ -185,6 +186,9 @@ export class AuthService {
           country: userData.country,
           city: userData.city,
           address: userData.address,
+          bankName: userData.bankName,
+          bankAccountNumber: userData.bankAccountNumber,
+          bankSortCode: userData.bankSortCode,
         },
       })
       .pipe(
@@ -436,6 +440,16 @@ export class AuthService {
       query: GET_USER,
       variables: {
         userId,
+      },
+      fetchPolicy: 'network-only',
+    });
+  }
+
+  fetchRecipients(recipientEmail: string) {
+    return this.apollo.watchQuery<any>({
+      query: GET_TRANSFER_RECIPIENTS,
+      variables: {
+        recipientEmail,
       },
       fetchPolicy: 'network-only',
     });

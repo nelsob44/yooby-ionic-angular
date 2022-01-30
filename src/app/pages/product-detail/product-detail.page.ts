@@ -48,6 +48,7 @@ export class ProductDetailPage implements OnInit, OnDestroy, AfterViewInit {
       '<span class="' + className + '">' + (index + 1) + '</span>',
   };
   exhaustedQuantity = false;
+  disableAddButton = true;
   doNotAdd = false;
 
   private productSub: Subscription;
@@ -137,6 +138,9 @@ export class ProductDetailPage implements OnInit, OnDestroy, AfterViewInit {
         this.productQuantity = 1;
       } else {
         this.productQuantity++;
+      }
+      if (this.productQuantity > 0) {
+        this.disableAddButton = false;
       }
     } else if (updateStatus === 'reduce') {
       if (this.productQuantity === 1) {

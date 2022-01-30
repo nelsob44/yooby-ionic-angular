@@ -57,6 +57,18 @@ export class AuthPage implements OnInit {
         updateOn: 'blur',
         validators: [Validators.minLength(2)],
       }),
+      bankName: new FormControl(null, {
+        updateOn: 'blur',
+        validators: [Validators.minLength(2)],
+      }),
+      bankAccountNumber: new FormControl(null, {
+        updateOn: 'blur',
+        validators: [Validators.maxLength(10)],
+      }),
+      bankSortCode: new FormControl(null, {
+        updateOn: 'blur',
+        validators: [],
+      }),
       phoneNumber: new FormControl(null, {
         updateOn: 'blur',
         validators: [Validators.minLength(9)],
@@ -94,6 +106,15 @@ export class AuthPage implements OnInit {
       address:
         this.form.get('address').value &&
         this.form.get('address').value.replace(/(<([^>]+)>)/gi, ''),
+      bankAccountNumber:
+        this.form.get('bankAccountNumber').value &&
+        this.form.get('bankAccountNumber').value,
+      bankName:
+        this.form.get('bankName').value &&
+        this.form.get('bankName').value.replace(/(<([^>]+)>)/gi, ''),
+      bankSortCode:
+        this.form.get('bankSortCode').value &&
+        this.form.get('bankSortCode').value,
       phoneNumber:
         this.form.get('phoneNumber').value &&
         this.form.get('phoneNumber').value.replace(/(<([^>]+)>)/gi, ''),
@@ -127,8 +148,8 @@ export class AuthPage implements OnInit {
             if (!this.isLogin && resData) {
               this.isLogin = true;
               this.presentAlert(
-                '<p style=color:white;>Sign up successful. Please log in now</p>',
-                'Success'
+                '<p style=color:white;>Sign up successful. A verification email has been sent to you. Please verify your account</p>',
+                'Success!'
               );
             }
             this.isLoading = false;

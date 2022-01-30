@@ -10,6 +10,9 @@ export const SAVE_USER = gql`
     $country: String
     $city: String
     $address: String
+    $bankName: String
+    $bankAccountNumber: Int
+    $bankSortCode: Int
   ) {
     createUser(
       user: {
@@ -21,6 +24,9 @@ export const SAVE_USER = gql`
         country: $country
         city: $city
         address: $address
+        bankName: $bankName
+        bankAccountNumber: $bankAccountNumber
+        bankSortCode: $bankSortCode
       }
     ) {
       id
@@ -123,6 +129,16 @@ export const GET_USER = gql`
       isVerified
       privilegeLevel
       profilePic
+    }
+  }
+`;
+
+export const GET_TRANSFER_RECIPIENTS = gql`
+  query getRecipients($recipientEmail: String!) {
+    getRecipients(recipientEmail: $recipientEmail) {
+      id
+      userName
+      userEmail
     }
   }
 `;

@@ -7,7 +7,7 @@
       <ion-row>
         <ion-col
           ><ion-card-subtitle (click)="viewDetail(item.id)" class="clickable">
-            <b>{{ item.title }}</b>
+            <b>{{ item.title | truncateWords }}</b>
           </ion-card-subtitle></ion-col
         >
         <ion-col
@@ -51,7 +51,7 @@
       <ion-row>
         <ion-col
           ><small (click)="viewDetail(item.id)" class="clickable">
-            {{ item.description }}
+            {{ item.description | truncateWords }}
           </small></ion-col
         >
       </ion-row>
@@ -111,9 +111,12 @@
 
   <ion-row>
     <ion-col>
-      <ion-card-subtitle (click)="viewDetail(item.id)" class="clickable">{{
-        item.description | truncateWords
-      }}</ion-card-subtitle>
+      <ion-card-subtitle (click)="viewDetail(item.id)" class="clickable"
+        >{{ item.description | truncateWords }}
+        <small *ngIf="item.description.length > 50"
+          ><a>see more</a></small
+        ></ion-card-subtitle
+      >
     </ion-col>
   </ion-row>
 </ion-card>

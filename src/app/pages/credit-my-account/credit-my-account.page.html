@@ -1,0 +1,89 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/available-products"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Account Credit</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-item>
+      <ion-label
+        ><ion-card-subtitle>Account Credit</ion-card-subtitle></ion-label
+      >
+      <ion-text color="success">{{ myAccount.currentBalance }} Naira</ion-text>
+    </ion-item>
+    <ion-item>
+      <ion-label><ion-card-subtitle>Account Name</ion-card-subtitle></ion-label>
+      <ion-text>{{ myAccount.userName }}</ion-text>
+    </ion-item>
+    <ion-item>
+      <ion-label><ion-card-subtitle>Account Type</ion-card-subtitle></ion-label>
+      <ion-text>{{ myAccount.accountType }}</ion-text>
+    </ion-item>
+    <ion-item>
+      <ion-label
+        ><ion-card-subtitle>Last Credit From</ion-card-subtitle></ion-label
+      >
+      <ion-text>{{ myAccount.lastCreditFrom }}</ion-text>
+    </ion-item>
+    <ion-item>
+      <ion-label
+        ><ion-card-subtitle>Last Payment to</ion-card-subtitle></ion-label
+      >
+      <ion-text>{{ myAccount.lastPaymentTo }}</ion-text>
+    </ion-item>
+    <ion-item>
+      <ion-label
+        ><ion-card-subtitle
+          >Last Transaction Amount</ion-card-subtitle
+        ></ion-label
+      >
+      <ion-text color="success"
+        >{{ myAccount.lastTransactionAmount }} Naira</ion-text
+      >
+    </ion-item>
+    <ion-item>
+      <ion-label
+        ><ion-card-subtitle>Last Transaction Date</ion-card-subtitle></ion-label
+      >
+      <ion-text>{{ myAccount.updatedAt | date:'medium' }}</ion-text>
+    </ion-item>
+    <ion-item>
+      <br /><br />
+      Enter an amount in Naira to pay into your platform account.
+    </ion-item>
+    <ion-item>
+      <ion-label
+        ><ion-input
+          placeholder="Enter Amount here..."
+          type="number"
+          min="100"
+          [(ngModel)]="boxValue"
+          (keyup)="updateAmount()"
+        ></ion-input
+      ></ion-label>
+    </ion-item>
+
+    <ion-card-content>
+      The Top Up Credit button will only be enabled when you have entered a
+      minimum of N2,000.
+      <ion-button
+        angular4-paystack
+        [paystackOptions]="options"
+        (paymentInit)="paymentInit()"
+        (onClose)="paymentCancel()"
+        (callback)="paymentDone($event)"
+        expand="block"
+        color="primary"
+        disabled="{{amountEmpty}}"
+        >Top Up Credit</ion-button
+      >
+    </ion-card-content>
+    <ion-item>
+      <ion-button (click)="onTransferCredit()">Transfer Credit</ion-button>
+    </ion-item>
+  </ion-card>
+</ion-content>

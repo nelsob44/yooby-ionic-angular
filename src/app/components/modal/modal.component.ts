@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import {
   AlertController,
   IonicSafeString,
@@ -14,6 +14,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { PaymentService } from 'src/app/services/payment.service';
 import { ProductsService } from 'src/app/services/products.service';
 import BasketItem from '../../interfaces/basketItem';
+import { Recipient } from '../../interfaces/user';
 
 @Component({
   selector: 'app-modal',
@@ -22,6 +23,7 @@ import BasketItem from '../../interfaces/basketItem';
 })
 export class ModalComponent implements OnInit {
   @Input() basket: BasketItem[];
+  @Input() isCreditTransfer = false;
   sendBasketLength: number;
   totalCost: number;
   reference = '';
@@ -35,6 +37,13 @@ export class ModalComponent implements OnInit {
   purpose = '';
   loggedInUser;
   paymentId;
+  searchList = [];
+  searchResult = null;
+  chosenRecipient: Recipient;
+  proceedWithTransfer = false;
+  transferValue;
+  amountEmpty = true;
+
   private userSub: Subscription;
   constructor(
     private navCtrl: NavController,
@@ -66,6 +75,76 @@ export class ModalComponent implements OnInit {
 
   paymentCancel() {
     console.log('payment failed');
+  }
+
+  updateSearch(recipientEmail: string) {
+    console.log('recipient is ', recipientEmail);
+    this.authService.fetchRecipients(recipientEmail).valueChanges.subscribe(
+      (data) => {
+        if (data.data) {
+          console.log(data.data);
+          this.searchList = data.data.getRecipients;
+        }
+      },
+      (error) => {
+        if (error) {
+          this.presentAlert('<p style=color:white;>' + error + '</p>', 'Error');
+        }
+      }
+    );
+  }
+
+  updateAmount(amount: number | string) {
+    this.transferValue = amount;
+    if (this.transferValue >= 2000) {
+      this.amountEmpty = false;
+    } else {
+      this.amountEmpty = true;
+    }
+  }
+
+  onSendCredit() {
+    const numericTransferValue = parseInt(this.transferValue, 10);
+    this.loadingCtrl
+      .create({ keyboardClose: true, message: 'Transferring credit....' })
+      .then((loadingEl) => {
+        loadingEl.present();
+
+        this.paymentService
+          .makeCreditTransfer(
+            numericTransferValue,
+            this.chosenRecipient.userEmail
+          )
+          .subscribe(
+            (data) => {
+              if (data.data.transferCredit) {
+                console.log(data.data);
+                this.dismiss();
+              }
+              loadingEl.dismiss();
+            },
+            (error) => {
+              if (error) {
+                this.presentAlert(
+                  '<p style=color:white;>' + error + '</p>',
+                  'Error'
+                );
+              }
+              loadingEl.dismiss();
+            }
+          );
+      });
+  }
+
+  chooseRecipient(recipient: Recipient) {
+    console.log({ recipient });
+    this.searchResult = recipient.userEmail;
+    this.chosenRecipient = recipient;
+    this.proceedWithTransfer = true;
+    setTimeout(() => {
+      this.searchList = [];
+    }, 1100);
+    console.log('search is ', this.searchResult);
   }
 
   async checkEligibility() {
@@ -140,11 +219,6 @@ export class ModalComponent implements OnInit {
         this.paymentService.initializePayment(paymentData).subscribe(
           (resData) => {
             if (resData) {
-              this.presentAlert(
-                '<p style=color:white;>Payment was successfully initialized</p>',
-                'Success'
-              );
-              console.log(resData);
               this.paymentId = resData.data.makePayment.id;
             }
             loadingEl.dismiss();
@@ -171,18 +245,17 @@ export class ModalComponent implements OnInit {
       .then((loadingEl) => {
         loadingEl.present();
         this.paymentService.completingPayment(paymentData).subscribe(
-          (resData) => {
+          async (resData) => {
             if (resData.data.completePayment.isCompleteTransaction) {
-              this.presentAlert(
-                '<p style=color:white;>Payment was successfully completed</p>',
-                'Success'
-              );
-              console.log(resData);
               localStorage.removeItem('naijaMartBasket');
-              localStorage.removeItem('paymentCheckErrors');
+              const removeErrorMessages = async () => {
+                await Storage.remove({ key: 'paymentCheckErrors' });
+              };
+              removeErrorMessages();
             }
             loadingEl.dismiss();
             this.closeModal();
+            location.reload();
           },
           (errorResponse) => {
             console.log('An error occurred');
@@ -197,16 +270,16 @@ export class ModalComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('basket is ', this.basket);
+    console.log('credit transfer is ', this.isCreditTransfer);
     this.calculateTotalCost();
     this.reference = `ref-${Math.ceil(Math.random() * 10e13)}`;
     this.purpose = JSON.stringify(this.basket);
     this.authService.email.subscribe((eml) => {
       this.loggedInUser = eml;
+      this.options.email = eml;
     });
   }
   calculateTotalCost() {
-    console.log('length is ', this.basket.length);
     if (this.basket && this.basket.length > 0) {
       this.totalCost = parseFloat(
         this.basket
@@ -225,6 +298,12 @@ export class ModalComponent implements OnInit {
     this.modalController.dismiss({
       dismissed: true,
       sendBasketLength: this.sendBasketLength,
+    });
+  }
+
+  dismiss() {
+    this.modalController.dismiss({
+      dismissed: true,
     });
   }
   onDeleteItem(id: number | string) {

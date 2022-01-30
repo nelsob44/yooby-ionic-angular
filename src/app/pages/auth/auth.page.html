@@ -439,6 +439,85 @@
             >
             </ion-input>
           </ion-item>
+          <ion-item *ngIf="!isLogin">
+            <ion-label>Your Bank</ion-label>
+            <ion-select
+              formControlName="bankName"
+              interface="popover"
+              clear-input
+            >
+              <ion-select-option selected>Choose</ion-select-option>
+              <ion-select-option value="access">Access Bank</ion-select-option>
+              <ion-select-option value="citibank">Citibank</ion-select-option>
+              <ion-select-option value="diamond"
+                >Diamond Bank</ion-select-option
+              >
+              <ion-select-option value="ecobank">Ecobank</ion-select-option>
+              <ion-select-option value="fidelity"
+                >Fidelity Bank</ion-select-option
+              >
+              <ion-select-option value="firstbank"
+                >First Bank</ion-select-option
+              >
+              <ion-select-option value="fcmb"
+                >First City Monument Bank (FCMB)</ion-select-option
+              >
+              <ion-select-option value="gtb"
+                >Guaranty Trust Bank (GTB)</ion-select-option
+              >
+              <ion-select-option value="heritage"
+                >Heritage Bank</ion-select-option
+              >
+              <ion-select-option value="keystone"
+                >Keystone Bank</ion-select-option
+              >
+              <ion-select-option value="polaris"
+                >Polaris Bank</ion-select-option
+              >
+              <ion-select-option value="providus"
+                >Providus Bank</ion-select-option
+              >
+              <ion-select-option value="stanbic"
+                >Stanbic IBTC Bank</ion-select-option
+              >
+              <ion-select-option value="standard"
+                >Standard Chartered Bank</ion-select-option
+              >
+              <ion-select-option value="sterling"
+                >Sterling Bank</ion-select-option
+              >
+              <ion-select-option value="suntrust"
+                >Suntrust Bank</ion-select-option
+              >
+              <ion-select-option value="union">Union Bank</ion-select-option>
+              <ion-select-option value="uba"
+                >United Bank for Africa (UBA)</ion-select-option
+              >
+              <ion-select-option value="unity">Unity Bank</ion-select-option>
+              <ion-select-option value="wema">Wema Bank</ion-select-option>
+              <ion-select-option value="zenith">Zenith Bank</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item *ngIf="!isLogin">
+            <ion-icon name="card-outline"></ion-icon>
+            <ion-label>Bank Account</ion-label>
+            <ion-input
+              type="number"
+              maxlength="10"
+              formControlName="bankAccountNumber"
+              clear-input
+            ></ion-input>
+          </ion-item>
+          <ion-item *ngIf="!isLogin">
+            <ion-icon name="lock-closed-outline"></ion-icon>
+            <ion-label>Sort Code</ion-label>
+            <ion-input
+              type="number"
+              maxlength="10"
+              formControlName="bankSortCode"
+              clear-input
+            ></ion-input>
+          </ion-item>
           <ion-item>
             <ion-icon name="lock-closed-outline"></ion-icon>
             <ion-label>Password</ion-label>

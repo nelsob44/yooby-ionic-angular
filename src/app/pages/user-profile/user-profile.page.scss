@@ -9,3 +9,9 @@ ion-content {
 a {
   cursor: pointer;
 }
+
+@media (max-width: 600px) {
+  ion-text {
+    font: 0.8em "Nunito";
+  }
+}

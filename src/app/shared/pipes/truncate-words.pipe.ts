@@ -4,7 +4,7 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'truncateWords',
 })
 export class TruncateWordsPipe implements PipeTransform {
-  transform(value: string, limit = 130, completeWords = false) {
+  transform(value: string, limit = 50, completeWords = false) {
     let newValue = '';
     const ellipsis = '...';
     if (completeWords) {
