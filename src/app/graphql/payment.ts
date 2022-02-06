@@ -19,7 +19,6 @@ export const SAVE_PAYMENT = gql`
     ) {
       id
       amount
-      purpose
       transactionReference
       paymentFrom
       paymentTo

@@ -23,6 +23,7 @@ import {
   LoadingController,
 } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
+import { browser } from 'protractor';
 
 @Injectable({
   providedIn: 'root',
@@ -232,6 +233,9 @@ export class AuthService {
     this.userData.next(null);
     const removeName = async () => {
       await Storage.remove({ key: 'authDataMalamino' });
+      document.cookie =
+        'refreshTokenMalamino' +
+        '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
       this.router.navigateByUrl('/auth');
     };
     removeName();
