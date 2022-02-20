@@ -93,6 +93,23 @@
   </ion-item>
   <ion-item
     *ngIf="isLoggedIn"
+    button
+    (click)="menuClick('my-orders')"
+    lines="full"
+  >
+    <ion-icon
+      name="card-outline"
+      style="color: rgba(9, 9, 121, 1)"
+      slot="start"
+    ></ion-icon>
+    <ion-label
+      ><ion-card-subtitle style="color: rgba(9, 9, 121, 1); font-size: 0.8em"
+        >My Orders</ion-card-subtitle
+      ></ion-label
+    >
+  </ion-item>
+  <ion-item
+    *ngIf="isLoggedIn"
     lines="none"
     button
     (click)="menuClick('user-profile')"

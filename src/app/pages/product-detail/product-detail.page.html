@@ -98,4 +98,10 @@
       ></app-youtube-player>
     </ion-col>
   </ion-row>
+  <ion-row *ngIf="productDetail.furtherDetails">
+    <ion-col>
+      <ion-card-title>More details</ion-card-title>
+      <ion-card-content> {{productDetail.furtherDetails}} </ion-card-content>
+    </ion-col>
+  </ion-row>
 </ion-content>

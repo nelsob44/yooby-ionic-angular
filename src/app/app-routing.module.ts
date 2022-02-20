@@ -96,6 +96,22 @@ const routes: Routes = [
       ),
     canActivate: [AuthGuard],
   },
+  {
+    path: 'my-payments',
+    loadChildren: () =>
+      import('./pages/my-payments/my-payments.module').then(
+        (m) => m.MyPaymentsPageModule
+      ),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'my-orders',
+    loadChildren: () =>
+      import('./pages/my-orders/my-orders.module').then(
+        (m) => m.MyOrdersPageModule
+      ),
+    canActivate: [AuthGuard],
+  },
 ];
 
 @NgModule({

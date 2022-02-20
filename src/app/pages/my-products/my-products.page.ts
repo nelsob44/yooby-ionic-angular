@@ -11,6 +11,7 @@ import { ProductsService } from '../../services/products.service';
 import { Product } from '../../interfaces/product';
 import { ModalComponent } from '../../components/modal/modal.component';
 import BasketItem from '../../interfaces/basketItem';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-my-products',
@@ -20,7 +21,7 @@ import BasketItem from '../../interfaces/basketItem';
 export class MyProductsPage implements OnInit, OnDestroy {
   basketLength: number;
   loadedProducts: Product[];
-  itemsPerPage = 4;
+  itemsPerPage = environment.itemsPerPage;
   totalItems = 0;
   offset = 1;
   hasNextPage = false;

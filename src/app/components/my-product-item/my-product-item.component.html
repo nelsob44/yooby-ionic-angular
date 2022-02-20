@@ -1,29 +1,50 @@
 <ion-card class="small-screen">
-  <ion-item>
-    <ion-avatar slot="start" (click)="viewDetail(item.id)">
-      <img src="{{ imagePath.url }}" />
-    </ion-avatar>
-    <ion-label>
+  <ion-row>
+    <ion-col size="4">
       <ion-row>
-        <ion-col
-          ><ion-card-subtitle (click)="viewDetail(item.id)" class="clickable">
-            <b>{{ item.title | truncateWords }}</b>
-          </ion-card-subtitle></ion-col
+        <ion-label>
+          <ion-avatar slot="start" (click)="viewDetail(item.id)">
+            <img class="effect1" src="{{ imagePath.url }}" />
+          </ion-avatar>
+        </ion-label>
+      </ion-row>
+
+      <ion-row>
+        <small (click)="viewDetail(item.id)" class="clickable bottom">
+          {{ item.description | truncateWords }}
+        </small>
+      </ion-row>
+    </ion-col>
+    <ion-col size="8">
+      <ion-row>
+        <ion-card-subtitle (click)="viewDetail(item.id)" class="clickable">
+          <b>{{ item.title }}</b>
+        </ion-card-subtitle>
+      </ion-row>
+      <ion-row class="item-margins">
+        <ion-text class="clickable">Category: {{ item.category }}</ion-text>
+      </ion-row>
+      <ion-row class="item-margins">
+        <ion-card-subtitle color="success"
+          >{{ item.price }} Naira</ion-card-subtitle
         >
-        <ion-col
-          ><span
-            ><i
-              ><small class="seller">Seller: {{ item.sellerEmail }}</small></i
-            ></span
-          ></ion-col
+      </ion-row>
+      <ion-row class="item-margins">
+        <span
+          ><i
+            ><small class="seller"
+              >Seller ID: {{ item.sellerId || item.sellerEmail }}</small
+            ></i
+          ></span
         >
       </ion-row>
       <ion-row>
-        <ion-col size="12"
-          ><ion-text class="clickable"
-            >Category: {{ item.category }}</ion-text
-          ></ion-col
+        <ion-badge color="danger" *ngIf="item.availableQuantity < 10"
+          ><small>Low stock!</small></ion-badge
         >
+      </ion-row>
+      <ion-row>
+        <ion-col size="12"></ion-col>
         <ion-col size="12">
           <ion-button
             aria-label="Edit product"
@@ -38,37 +59,19 @@
           </ion-button>
         </ion-col>
       </ion-row>
-      <ion-row>
-        <ion-col
-          ><ion-card-subtitle color="success"
-            >£{{ item.price }}</ion-card-subtitle
-          ></ion-col
-        >
-        <ion-badge color="danger" *ngIf="item.availableQuantity < 10"
-          ><small>Low stock!</small></ion-badge
-        >
-      </ion-row>
-      <ion-row>
-        <ion-col
-          ><small (click)="viewDetail(item.id)" class="clickable">
-            {{ item.description | truncateWords }}
-          </small></ion-col
-        >
-      </ion-row>
-    </ion-label>
-  </ion-item>
+    </ion-col>
+  </ion-row>
 </ion-card>
 
 <ion-card class="large-screen">
   <ion-row>
-    <img src="{{ imagePath.url }}" (click)="viewDetail(item.id)" />
+    <img
+      class="effect1"
+      src="{{ imagePath.url }}"
+      (click)="viewDetail(item.id)"
+    />
   </ion-row>
   <ion-row>
-    <ion-col
-      ><ion-card-subtitle class="clickable">{{
-        item.category
-      }}</ion-card-subtitle></ion-col
-    >
     <ion-button
       aria-label="Edit product"
       (click)="presentAlertConfirm(item.id, 'edit')"
@@ -81,42 +84,55 @@
       ><ion-icon name="trash-outline"></ion-icon>
     </ion-button>
   </ion-row>
-  <ion-row>
-    <ion-col
-      ><ion-card-title (click)="viewDetail(item.id)" class="clickable">{{
-        item.title | truncateWords
-      }}</ion-card-title></ion-col
+  <ion-row class="edit-bottom">
+    <ion-card-subtitle class="clickable"
+      >Category: {{ item.category }}</ion-card-subtitle
     >
-    <ion-badge aria-label="Price" color="success">£{{ item.price }} </ion-badge>
   </ion-row>
-  <ion-row>
-    <ion-col>
-      <ion-card-subtitle
-        >Available in stock:
-        <ion-badge
-          color="{{ item.availableQuantity < 10 ? 'danger' : 'success' }}"
-          class="badge"
-          >{{ item.availableQuantity }}</ion-badge
-        ></ion-card-subtitle
-      >
+  <ion-row class="spacing">
+    <ion-card-title (click)="viewDetail(item.id)" class="clickable">{{
+      item.title | truncateWords
+    }}</ion-card-title>
+  </ion-row>
+  <ion-row class="spacing">
+    <ion-card-title aria-label="Price" color="success"
+      >{{ item.price }} Naira</ion-card-title
+    >
+  </ion-row>
+  <ion-row class="spacing">
+    <ion-col size="10">
+      <ion-card-subtitle>Available in stock: </ion-card-subtitle>
     </ion-col>
 
-    <ion-badge
-      aria-label="Low stock"
-      color="danger"
-      *ngIf="item.availableQuantity < 10"
+    <ion-col size="2">
+      <ion-card-subtitle
+        color="{{ item.availableQuantity < 10 ? 'danger' : 'success' }}"
+        class="badge"
+        >{{ item.availableQuantity }}</ion-card-subtitle
+      >
+    </ion-col>
+  </ion-row>
+  <ion-row class="item-margins spacing">
+    <span
+      ><i
+        ><small class="seller"
+          >Seller ID: {{ item.sellerId || item.sellerEmail }}</small
+        ></i
+      ></span
+    >
+  </ion-row>
+  <ion-row *ngIf="item.availableQuantity < 10" class="badge-spacing">
+    <ion-badge aria-label="Low stock" color="danger"
       ><small>Low stock!</small>
     </ion-badge>
   </ion-row>
 
-  <ion-row>
-    <ion-col>
-      <ion-card-subtitle (click)="viewDetail(item.id)" class="clickable"
-        >{{ item.description | truncateWords }}
-        <small *ngIf="item.description.length > 50"
-          ><a>see more</a></small
-        ></ion-card-subtitle
-      >
-    </ion-col>
+  <ion-row class="spacing">
+    <ion-card-subtitle (click)="viewDetail(item.id)" class="clickable"
+      >{{ item.description | truncateWords }}
+      <small *ngIf="item.description.length > 50"
+        ><a>see more</a></small
+      ></ion-card-subtitle
+    >
   </ion-row>
 </ion-card>

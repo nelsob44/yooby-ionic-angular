@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -7,7 +7,7 @@ import {
   LoadingController,
   ToastController,
 } from '@ionic/angular';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { ProductsService } from 'src/app/services/products.service';
 
@@ -37,12 +37,14 @@ const base64toBlob = (base64Data, contentType) => {
   templateUrl: './add-product.page.html',
   styleUrls: ['./add-product.page.scss'],
 })
-export class AddProductPage implements OnInit {
+export class AddProductPage implements OnInit, OnDestroy {
   form: FormGroup;
+  isVerified = false;
   isLogin = true;
   isLoading = false;
   dateMax;
   filesToUpload: any = [];
+  userSub: Subscription;
   constructor(
     private authService: AuthService,
     private productService: ProductsService,
@@ -54,6 +56,17 @@ export class AddProductPage implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.userSub = this.authService.isVerified.subscribe((verified) => {
+      if (verified) {
+        this.isVerified = true;
+      } else {
+        this.presentAlert(
+          '<p style=color:white;>You must verify your account to be able to add your goods</p>',
+          'Attention!'
+        );
+      }
+      console.log('login', this.isLogin, 'verified', this.isVerified);
+    });
     this.form = new FormGroup({
       category: new FormControl(null, {
         updateOn: 'blur',
@@ -168,7 +181,9 @@ export class AddProductPage implements OnInit {
         this.form.value.title.replace(/(<([^>]+)>)/gi, ''),
       videoLink: youTubeVideoId,
       minOrder: this.form.value.minOrder,
-      sellerCountry: this.form.value.sellerCountry.replace(/(<([^>]+)>)/gi, ''),
+      sellerCountry:
+        this.form.value.sellerCountry &&
+        this.form.value.sellerCountry.replace(/(<([^>]+)>)/gi, ''),
       sellerLocation:
         this.form.value.sellerLocation &&
         this.form.value.sellerLocation.replace(/(<([^>]+)>)/gi, ''),
@@ -232,5 +247,11 @@ export class AddProductPage implements OnInit {
 
     const { role } = await alert.onDidDismiss();
     console.log('onDidDismiss resolved with role', role);
+  }
+
+  ngOnDestroy() {
+    if (this.userSub) {
+      this.userSub.unsubscribe();
+    }
   }
 }

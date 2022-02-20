@@ -260,7 +260,9 @@ export class EditProductPage implements OnInit, OnDestroy {
         this.form.value.title.replace(/(<([^>]+)>)/gi, ''),
       videoLink: youTubeVideoId,
       minOrder: this.form.value.minOrder,
-      sellerCountry: this.form.value.sellerCountry.replace(/(<([^>]+)>)/gi, ''),
+      sellerCountry:
+        this.form.value.sellerCountry &&
+        this.form.value.sellerCountry.replace(/(<([^>]+)>)/gi, ''),
       sellerLocation:
         this.form.value.sellerLocation &&
         this.form.value.sellerLocation.replace(/(<([^>]+)>)/gi, ''),

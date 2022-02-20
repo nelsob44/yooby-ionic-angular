@@ -1,0 +1,23 @@
+.buyer-background {
+  --background: linear-gradient(
+    90deg,
+    rgb(218, 160, 37) 0%,
+    rgb(197, 179, 16) 100%
+  );
+}
+
+.seller-background {
+  --background: linear-gradient(
+    90deg,
+    rgb(71, 236, 98) 0%,
+    rgb(85, 214, 106) 100%
+  );
+}
+
+.normal-background {
+  --background: linear-gradient(
+    90deg,
+    rgb(113, 156, 13) 0%,
+    rgb(163, 179, 20) 100%
+  );
+}

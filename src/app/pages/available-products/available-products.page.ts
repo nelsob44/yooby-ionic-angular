@@ -11,6 +11,7 @@ import { Product } from '../../interfaces/product';
 import { ModalComponent } from '../../components/modal/modal.component';
 import { ProductsService } from '../../services/products.service';
 import { Storage } from '@capacitor/storage';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-available-products',
@@ -20,7 +21,7 @@ import { Storage } from '@capacitor/storage';
 export class AvailableProductsPage implements OnInit, OnDestroy {
   basketLength: number;
   loadedProducts: Product[];
-  itemsPerPage = 4;
+  itemsPerPage = environment.itemsPerPage;
   totalItems = 0;
   offset = 1;
   hasNextPage = false;

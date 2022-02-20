@@ -1,13 +1,13 @@
 ion-avatar {
   --border-radius: 5px;
-  max-height: 100px;
-  max-width: 100px;
-  height: 5rem;
-  width: 5rem;
+  //max-height: 100px;
+  //max-width: 100px;
+  //height: 5rem;
+  width: 100%;
 }
 
 ion-card {
-  padding: 0 0.5rem 0 0.5rem;
+  padding: 0.5rem;
   img {
     //object-fit: cover;
     cursor: pointer;
@@ -26,6 +26,29 @@ ion-card-title {
 }
 ion-badge {
   max-height: 20px;
+}
+
+.effect1 {
+  -webkit-box-shadow: 0 10px 6px -6px #777;
+  -moz-box-shadow: 0 10px 6px -6px #777;
+  box-shadow: 0 10px 6px -6px #777;
+}
+
+.bottom {
+  margin-top: 2rem;
+}
+.edit-bottom {
+  margin-top: 0.8rem;
+}
+.item-margins {
+  margin-top: 0.2rem;
+}
+
+.spacing {
+  margin-top: 0.3rem;
+}
+.badge-spacing {
+  margin-top: -0.5rem;
 }
 
 @media (max-width: 600px) {
@@ -50,14 +73,14 @@ ion-badge {
     display: block;
     img {
       object-fit: fill;
-      height: 150px;
+      height: 10rem;
     }
   }
   .small-screen {
     display: none;
   }
   ion-card {
-    height: 25rem;
+    height: 26rem;
     img {
       width: inherit;
       object-fit: contain;

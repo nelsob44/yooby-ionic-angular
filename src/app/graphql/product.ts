@@ -75,6 +75,7 @@ export const GET_MY_PRODUCTS = gql`
         sellerCountry
         sellerLocation
         sellerEmail
+        sellerId
         verifiedSeller
         furtherDetails
         availableQuantity
@@ -103,6 +104,7 @@ export const GET_AVAILABLE_PRODUCTS = gql`
         sellerCountry
         sellerLocation
         sellerEmail
+        sellerId
         verifiedSeller
         furtherDetails
         availableQuantity

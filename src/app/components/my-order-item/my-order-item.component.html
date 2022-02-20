@@ -1,0 +1,123 @@
+<ion-card class="normal-background">
+  <ion-list>
+    <ion-item
+      [ngClass]="{
+        'buyer-background': isBuyer,
+        'seller-background': isSeller
+      }"
+    >
+      <ion-label class="ion-text-wrap"
+        ><ion-text>Order Reference</ion-text></ion-label
+      >
+      <ion-text class="ion-text-wrap">{{ item.id }}</ion-text>
+    </ion-item>
+    <ion-item>
+      <ion-label class="ion-text-wrap"
+        ><ion-card-subtitle>Product</ion-card-subtitle></ion-label
+      >
+      <ion-text class="ion-text-wrap">{{ item.itemName }}</ion-text>
+    </ion-item>
+    <ion-item>
+      <ion-label class="ion-text-wrap"
+        ><ion-card-subtitle>Unit Price</ion-card-subtitle></ion-label
+      >
+      <ion-text color="success" class="ion-text-wrap"
+        >{{ item.unitPrice }} Naira</ion-text
+      >
+    </ion-item>
+    <ion-item>
+      <ion-label class="ion-text-wrap"
+        ><ion-card-subtitle>Quantity</ion-card-subtitle></ion-label
+      >
+      <ion-text class="ion-text-wrap">{{ item.itemQuantity }}</ion-text>
+    </ion-item>
+    <ion-item>
+      <ion-label class="ion-text-wrap"
+        ><ion-card-subtitle>Amount Paid</ion-card-subtitle></ion-label
+      >
+      <ion-text color="success" class="ion-text-wrap"
+        >{{ item.amount }} Naira</ion-text
+      >
+    </ion-item>
+    <ion-item *ngIf="isSeller || isAdmin">
+      <ion-label class="ion-text-wrap"
+        ><ion-card-subtitle
+          >Amount after Commission</ion-card-subtitle
+        ></ion-label
+      >
+      <ion-text color="success" class="ion-text-wrap"
+        >{{ item.finalAmount || 0 }} Naira</ion-text
+      >
+    </ion-item>
+    <ion-item>
+      <ion-label class="ion-text-wrap"
+        ><ion-card-subtitle>Transaction Ref</ion-card-subtitle></ion-label
+      >
+      <ion-text class="ion-text-wrap">{{ item.transactionReference }}</ion-text>
+    </ion-item>
+    <ion-item>
+      <ion-label class="ion-text-wrap"
+        ><ion-card-subtitle>Date of Order</ion-card-subtitle></ion-label
+      >
+      <ion-text class="ion-text-wrap">{{
+        item.createdAt | date: "medium"
+      }}</ion-text>
+    </ion-item>
+    <ion-item>
+      <ion-label class="ion-text-wrap"
+        ><ion-card-subtitle>Buyer</ion-card-subtitle></ion-label
+      >
+      <ion-text class="ion-text-wrap">{{ item.buyerName }}</ion-text>
+    </ion-item>
+    <ion-item>
+      <ion-label class="ion-text-wrap"
+        ><ion-card-subtitle>Seller</ion-card-subtitle></ion-label
+      >
+      <ion-text class="ion-text-wrap">{{ item.sellerName }}</ion-text>
+    </ion-item>
+    <ion-item>
+      <ion-label class="ion-text-wrap"
+        ><ion-card-subtitle>Payment status</ion-card-subtitle></ion-label
+      >
+      <ion-text class="ion-text-wrap">{{
+        item.isPaidFor === true ? "Completed" : "Unpaid"
+      }}</ion-text>
+    </ion-item>
+    <ion-item>
+      <ion-label class="ion-text-wrap"
+        ><ion-card-subtitle>Dispatch status</ion-card-subtitle></ion-label
+      >
+      <ion-text class="ion-text-wrap">{{
+        item.isDispatched === true ? "Dispatched" : "Awaiting dispatch"
+      }}</ion-text>
+    </ion-item>
+    <ion-item>
+      <ion-label class="ion-text-wrap"
+        ><ion-card-subtitle>Transaction status</ion-card-subtitle></ion-label
+      >
+      <ion-text class="ion-text-wrap">{{
+        item.isCompleteTransaction === true ? "Completed" : "Still in progress"
+      }}</ion-text>
+    </ion-item>
+    <ion-item *ngIf="isAdmin">
+      <ion-label class="ion-text-wrap"
+        ><ion-card-subtitle>Shipping Details</ion-card-subtitle></ion-label
+      >
+      <ion-text class="ion-text-wrap">{{ item.shippingDetails }}</ion-text>
+    </ion-item>
+    <ion-item *ngIf="isBuyer && !item.isCompleteTransaction">
+      <ion-button expand="block" color="warning" (click)="releaseFunds()">
+        Release funds to seller
+      </ion-button>
+    </ion-item>
+    <ion-item *ngIf="isSeller">
+      <ion-button
+        expand="block"
+        color="success"
+        (click)="notifyBuyerDispatch()"
+      >
+        Notify buyer of dispatch
+      </ion-button>
+    </ion-item>
+  </ion-list>
+</ion-card>

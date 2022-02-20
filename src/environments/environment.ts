@@ -9,6 +9,7 @@ export const environment = {
   httpEndPoint: 'http://localhost:4000',
   localEndPoint: 'http://localhost:8100',
   pstackPKTest: 'pk_test_86d8ebd37566d78a793cbd092bfe0e5deeb0b015',
+  itemsPerPage: 6,
 };
 
 /*

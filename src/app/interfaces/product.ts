@@ -8,6 +8,7 @@ export interface Product {
   sellerCountry?: string;
   sellerLocation?: string;
   sellerEmail?: string;
+  sellerId?: string;
   verifiedSeller?: boolean;
   furtherDetails?: string;
   availableQuantity?: number;
