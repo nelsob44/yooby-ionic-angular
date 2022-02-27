@@ -116,7 +116,7 @@ export const CHANGE_PASSWORD = gql`
 `;
 
 export const GET_USER = gql`
-  query getUser($userId: ID!) {
+  query getUser($userId: String!) {
     getUser(userId: $userId) {
       id
       email

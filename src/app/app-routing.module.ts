@@ -5,7 +5,7 @@ import { AuthGuard } from './auth.guard';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: 'available-products',
     pathMatch: 'full',
   },
   {
@@ -19,6 +19,7 @@ const routes: Routes = [
       import('./pages/dashboard/dashboard.module').then(
         (m) => m.DashboardPageModule
       ),
+    canActivate: [AuthGuard],
   },
   {
     path: 'photos',
@@ -32,7 +33,6 @@ const routes: Routes = [
       import('./pages/available-products/available-products.module').then(
         (m) => m.AvailableProductsPageModule
       ),
-    canActivate: [AuthGuard],
   },
   {
     path: 'chat',

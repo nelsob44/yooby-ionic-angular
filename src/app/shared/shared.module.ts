@@ -6,6 +6,7 @@ import { ImagePickerComponent } from './image-picker/image-picker.component';
 import { TruncateWordsPipe } from './pipes/truncate-words.pipe';
 import { YoutubePlayerComponent } from './youtube-player/youtube-player.component';
 import { SideMenuComponent } from './side-menu/side-menu.component';
+import { MyOrderItemComponent } from '../components/my-order-item/my-order-item.component';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { SideMenuComponent } from './side-menu/side-menu.component';
     TruncateWordsPipe,
     YoutubePlayerComponent,
     SideMenuComponent,
+    MyOrderItemComponent,
   ],
   imports: [CommonModule, IonicModule],
   exports: [
@@ -22,6 +24,7 @@ import { SideMenuComponent } from './side-menu/side-menu.component';
     TruncateWordsPipe,
     YoutubePlayerComponent,
     SideMenuComponent,
+    MyOrderItemComponent,
   ],
 })
 export class SharedModule {}

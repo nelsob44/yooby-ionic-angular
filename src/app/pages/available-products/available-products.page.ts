@@ -56,7 +56,6 @@ export class AvailableProductsPage implements OnInit, OnDestroy {
   async ngOnInit() {
     const { value } = await Storage.get({ key: 'paymentCheckErrors' });
     const parsedData = JSON.parse(value);
-    console.log(parsedData);
     if (parsedData === null) {
       return {};
     } else {

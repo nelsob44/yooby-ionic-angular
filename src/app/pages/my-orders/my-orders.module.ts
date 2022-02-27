@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { MyOrdersPageRoutingModule } from './my-orders-routing.module';
-import { MyOrderItemComponent } from '../../components/my-order-item/my-order-item.component';
+// import { MyOrderItemComponent } from '../../components/my-order-item/my-order-item.component';
 import { SharedModule } from '../../shared/shared.module';
 import { MyOrdersPage } from './my-orders.page';
 
@@ -17,6 +17,6 @@ import { MyOrdersPage } from './my-orders.page';
     MyOrdersPageRoutingModule,
     SharedModule,
   ],
-  declarations: [MyOrdersPage, MyOrderItemComponent],
+  declarations: [MyOrdersPage],
 })
 export class MyOrdersPageModule {}

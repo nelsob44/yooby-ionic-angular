@@ -3,10 +3,213 @@
     <ion-buttons slot="start">
       <ion-menu-button autoHide="false"></ion-menu-button>
     </ion-buttons>
-    <ion-title>dashboard</ion-title>
+    <ion-title>Dashboard</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <h1>This is dashboard</h1>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="3" class="first-column">
+        <app-side-menu></app-side-menu>
+      </ion-col>
+      <ion-col size-sm="12" size-md="8" size-lg="8">
+        <ion-row>
+          <ion-col size="12">
+            <ion-item>
+              <ion-card-subtitle>
+                <small
+                  >Commission Rate was last edited by {{lastUpdatedBy}} at
+                  {{updatedAt | date: "medium"}}</small
+                >
+              </ion-card-subtitle>
+            </ion-item>
+          </ion-col>
+          <ion-col size="12">
+            <ion-item>
+              <ion-label
+                >Regular Transaction Commission: {{regularCommissionValue}}
+                %</ion-label
+              >
+            </ion-item>
+          </ion-col>
+          <ion-col size="12">
+            <ion-button
+              class="button-sizing"
+              expand="block"
+              color="primary"
+              (click)="updateRegularCommission()"
+            >
+              Update Regular Transaction Commission
+            </ion-button>
+          </ion-col>
+          <ion-col size="12">
+            <ion-item>
+              <ion-range
+                min="0"
+                max="100"
+                [pin]="true"
+                color="secondary"
+                snaps="true"
+                ticks="true"
+                [(ngModel)]="regularCommissionValue"
+              >
+                <ion-label slot="start">0%</ion-label>
+                <ion-label slot="end">100%</ion-label>
+              </ion-range>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12">
+            <ion-item>
+              <ion-label
+                >Premium Transaction Commission: {{premiumCommissionValue}}
+                %</ion-label
+              >
+            </ion-item>
+          </ion-col>
+          <ion-col size="12">
+            <ion-button
+              class="button-sizing"
+              expand="block"
+              color="primary"
+              (click)="updatePremiumCommission()"
+            >
+              Update Premium Transaction Commission
+            </ion-button>
+          </ion-col>
+          <ion-col size="12">
+            <ion-item>
+              <ion-range
+                min="0"
+                max="100"
+                [pin]="true"
+                color="secondary"
+                snaps="true"
+                ticks="true"
+                [(ngModel)]="premiumCommissionValue"
+              >
+                <ion-label slot="start">0%</ion-label>
+                <ion-label slot="end">100%</ion-label>
+              </ion-range>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12">
+            <ion-item>
+              <ion-searchbar
+                [(ngModel)]="searchInput"
+                (ionChange)="isSearching()"
+                placeholder="Enter Order ID to search"
+                showCancelButton="focus"
+              ></ion-searchbar>
+            </ion-item>
+            <ion-button
+              *ngIf="showSearchButton"
+              class="button-sizing"
+              expand="block"
+              color="primary"
+              (click)="searchOrder()"
+            >
+              Search for Order
+            </ion-button>
+          </ion-col>
+          <ion-col size="12" *ngIf="showOrderDetails">
+            <app-my-order-item [item]="orderItem"></app-my-order-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-item>
+              <ion-searchbar
+                [(ngModel)]="userSearchInput"
+                (ionChange)="isSearchingUser()"
+                placeholder="Enter User ID or email to search"
+                showCancelButton="focus"
+              ></ion-searchbar>
+            </ion-item>
+            <ion-button
+              *ngIf="showUserSearchButton"
+              class="button-sizing"
+              expand="block"
+              color="primary"
+              (click)="searchUser()"
+            >
+              Search for User
+            </ion-button>
+          </ion-col>
+          <ion-col size="12" *ngIf="showUserDetails">
+            <ion-item>
+              <ion-label><ion-card-subtitle>Name</ion-card-subtitle></ion-label>
+              <ion-text
+                >{{ userInfo.firstName + ' ' + userInfo.lastName }}</ion-text
+              >
+            </ion-item>
+            <ion-item>
+              <ion-label
+                ><ion-card-subtitle>Email</ion-card-subtitle></ion-label
+              >
+              <ion-text>{{ userInfo.email }}</ion-text>
+            </ion-item>
+            <ion-item>
+              <ion-label
+                ><ion-card-subtitle>Phone Number</ion-card-subtitle></ion-label
+              >
+              <ion-text>{{ userInfo.phoneNumber }}</ion-text>
+            </ion-item>
+            <ion-item>
+              <ion-label
+                ><ion-card-subtitle>Country</ion-card-subtitle></ion-label
+              >
+              <ion-text>{{ userInfo.country }}</ion-text>
+            </ion-item>
+            <ion-item>
+              <ion-label><ion-card-subtitle>City</ion-card-subtitle></ion-label>
+              <ion-text>{{ userInfo.city }}</ion-text>
+            </ion-item>
+            <ion-item>
+              <ion-label
+                ><ion-card-subtitle>Address</ion-card-subtitle></ion-label
+              >
+              <ion-text>{{ userInfo.address }}</ion-text>
+            </ion-item>
+            <ion-item>
+              <ion-label
+                ><ion-card-subtitle>Verified User</ion-card-subtitle></ion-label
+              >
+              <ion-text>{{ userInfo.isVerified ? 'Yes' : 'No' }}</ion-text>
+            </ion-item>
+            <ion-item>
+              <ion-label
+                ><ion-card-subtitle>User Status</ion-card-subtitle></ion-label
+              >
+              <ion-text
+                >{{ userInfo.privilegeLevel === 'admin' ? 'Administrator' :
+                userInfo.privilegeLevel === 'customer' ? 'Seller' : 'Consumer'
+                }}</ion-text
+              >
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <!-- <ion-row>
+          <ion-col size="9">
+            <ion-chip button="true" (click)="prevPage()" *ngIf="hasPrevPage">
+              <ion-label>Prev</ion-label>
+            </ion-chip>
+          </ion-col>
+          <ion-col size="3">
+            <ion-chip
+              class="buttonRight"
+              (click)="nextPage()"
+              *ngIf="hasNextPage"
+            >
+              <ion-label>Next</ion-label>
+            </ion-chip>
+          </ion-col>
+        </ion-row> -->
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

@@ -1,0 +1,15 @@
+ion-toolbar {
+  color: aliceblue;
+}
+.first-column {
+  margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .first-column {
+    display: none;
+  }
+  .button-sizing {
+    font-size: 0.7rem;
+  }
+}
