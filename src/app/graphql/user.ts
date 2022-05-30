@@ -10,9 +10,8 @@ export const SAVE_USER = gql`
     $country: String
     $city: String
     $address: String
-    $bankName: String
+    $bankCode: String
     $bankAccountNumber: Int
-    $bankSortCode: Int
   ) {
     createUser(
       user: {
@@ -24,9 +23,8 @@ export const SAVE_USER = gql`
         country: $country
         city: $city
         address: $address
-        bankName: $bankName
+        bankCode: $bankCode
         bankAccountNumber: $bankAccountNumber
-        bankSortCode: $bankSortCode
       }
     ) {
       id
@@ -139,6 +137,17 @@ export const GET_TRANSFER_RECIPIENTS = gql`
       id
       userName
       userEmail
+    }
+  }
+`;
+
+export const GET_AVAILABLE_BANKS = gql`
+  query getBanksList($country: String) {
+    getBanksList(country: $country) {
+      id
+      name
+      slug
+      code
     }
   }
 `;

@@ -12,6 +12,8 @@ import {
   GET_ACCOUNT_BALANCE,
   TRANSFER_CREDIT,
   GET_MY_PAYMENTS,
+  WITHDRAW_TO_BANK_SINGLE,
+  WITHDRAW_TO_BANK_BULK,
 } from '../graphql/payment';
 
 @Injectable({
@@ -56,6 +58,40 @@ export class PaymentService {
           transactionReference: paymentData.transactionReference,
           paymentFrom: paymentData.paymentFrom,
           paymentTo: paymentData.paymentTo,
+        },
+        fetchPolicy: 'network-only',
+      })
+      .pipe(
+        tap((data) => {
+          console.log('');
+          return data;
+        })
+      );
+  }
+
+  withdrawToBank(amount: number) {
+    return this.apollo
+      .mutate<any>({
+        mutation: WITHDRAW_TO_BANK_SINGLE,
+        variables: {
+          amount,
+        },
+        fetchPolicy: 'network-only',
+      })
+      .pipe(
+        tap((data) => {
+          console.log('');
+          return data;
+        })
+      );
+  }
+
+  withdrawToBankBulk(message: string) {
+    return this.apollo
+      .mutate<any>({
+        mutation: WITHDRAW_TO_BANK_BULK,
+        variables: {
+          message,
         },
         fetchPolicy: 'network-only',
       })

@@ -16,9 +16,8 @@ export interface User {
   isOnline?: boolean;
   extraUserData?: string;
   lastLoginTime?: string;
-  bankName?: string;
+  bankCode?: string;
   bankAccountNumber?: number;
-  bankSortCode?: number;
 }
 
 export interface AuthResponseData {

@@ -1,7 +1,10 @@
 <ion-menu contentId="main-content" type="overlay">
   <ion-header>
     <ion-toolbar translucent>
-      <ion-title>Malamino</ion-title>
+      <ion-img
+        class="malamino-logo"
+        src="../../../assets/images/malamino_815_174.jpg"
+      ></ion-img>
     </ion-toolbar>
   </ion-header>
   <ion-content>
@@ -11,7 +14,6 @@
           <i>hi {{ firstName }}</i>
         </p>
       </div>
-      <div class="black-circle"></div>
       <div class="menu-items">
         <ion-menu-toggle>
           <ion-item lines="none" button (click)="menuClick('dashboard')">
@@ -72,8 +74,6 @@
       <ion-buttons slot="start">
         <ion-menu-button></ion-menu-button>
       </ion-buttons>
-
-      <ion-title class="yoobic-title">Malamino</ion-title>
     </ion-toolbar>
   </ion-header>
   <ion-content class="ion-padding"> </ion-content>

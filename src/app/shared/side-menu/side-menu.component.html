@@ -1,5 +1,10 @@
 <ion-list>
-  <ion-item lines="full" button (click)="menuClick('dashboard')">
+  <ion-item
+    *ngIf="isAdmin"
+    lines="full"
+    button
+    (click)="menuClick('dashboard')"
+  >
     <ion-icon
       name="apps-outline"
       style="color: rgba(9, 9, 121, 1)"

@@ -88,7 +88,38 @@ export class MyOrderItemComponent implements OnInit {
   }
 
   notifyBuyerDispatch() {
-    console.log('I have dispatched');
+    const notificationData = {
+      orderId: this.item.id,
+      transactionReference: this.item.transactionReference,
+      buyerName: this.item.buyerName,
+      buyerEmail: this.item.buyerEmail,
+      itemName: this.item.itemName,
+      itemQuantity: this.item.itemQuantity,
+      sellerName: this.item.sellerName,
+    };
+    this.loadingCtrl
+      .create({
+        keyboardClose: true,
+        message: 'Please wait...',
+      })
+      .then((loadingEl) => {
+        loadingEl.present();
+        this.orderService.sendBuyerNotification(notificationData).subscribe(
+          (resData) => {
+            console.log(resData);
+            // if (resData) {
+            //   this.isVerified = true;
+            // }
+
+            // this.isLoading = false;
+            loadingEl.dismiss();
+          },
+          (errorResponse) => {
+            console.log(errorResponse);
+            loadingEl.dismiss();
+          }
+        );
+      });
   }
 
   async presentAlert(alertMessage: string, head: string) {

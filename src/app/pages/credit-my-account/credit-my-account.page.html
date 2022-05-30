@@ -15,6 +15,11 @@
       >
       <ion-text color="success">{{ myAccount.currentBalance }} Naira</ion-text>
     </ion-item>
+    <ion-item *ngIf="myAccount.currentBalance > 0">
+      <ion-button (click)="presentAlertConfirm('withdraw')"
+        >Withdraw to Bank</ion-button
+      >
+    </ion-item>
     <ion-item>
       <ion-label><ion-card-subtitle>Account Name</ion-card-subtitle></ion-label>
       <ion-text>{{ myAccount.userName }}</ion-text>
@@ -83,7 +88,9 @@
       >
     </ion-card-content>
     <ion-item>
-      <ion-button (click)="onTransferCredit()">Transfer Credit</ion-button>
+      <ion-button (click)="presentAlertConfirm('transfer')"
+        >Transfer Credit</ion-button
+      >
     </ion-item>
   </ion-card>
 </ion-content>

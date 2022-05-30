@@ -10,6 +10,7 @@ import { ImagePath } from 'src/app/interfaces/product';
 import { AuthService } from 'src/app/services/auth.service';
 
 import { OrdersService } from 'src/app/services/orders.service';
+import { PaymentService } from 'src/app/services/payment.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -30,10 +31,16 @@ export class DashboardPage implements OnInit, AfterViewInit, OnDestroy {
   showOrderDetails = false;
   showUserDetails = false;
 
+  bulkPayoutMessage =
+    '<p style=color:white;>Are you sure you wish to continue the bulk payout?</p>';
+  otherMessage =
+    '<p style=color:white;>Are you sure you wish to make this operation?</p>';
+
   private commisionsSub: Subscription;
   private orderSub: Subscription;
   constructor(
     private authService: AuthService,
+    private paymentService: PaymentService,
     private orderService: OrdersService,
     private loadingCtrl: LoadingController,
     private alertController: AlertController,
@@ -184,6 +191,34 @@ export class DashboardPage implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
+  initiateBulkPayout() {
+    this.loadingCtrl
+      .create({ keyboardClose: true, message: 'please wait...' })
+      .then((loadingEl) => {
+        loadingEl.present();
+        this.paymentService.withdrawToBankBulk('Admin action').subscribe(
+          (resData) => {
+            if (resData) {
+              this.presentAlert(
+                '<p style=color:white;>Withdrawal requests were successfully submitted</p>',
+                'Success'
+              );
+              console.log(resData);
+            }
+            loadingEl.dismiss();
+          },
+          (errorResponse) => {
+            console.log('An error occurred');
+            loadingEl.dismiss();
+            this.presentAlert(
+              '<p style=color:white;>' + errorResponse + '</p>',
+              'Error'
+            );
+          }
+        );
+      });
+  }
+
   ngOnDestroy() {
     if (this.commisionsSub) {
       this.commisionsSub.unsubscribe();
@@ -206,6 +241,38 @@ export class DashboardPage implements OnInit, AfterViewInit, OnDestroy {
 
     const { role } = await alert.onDidDismiss();
     console.log('onDidDismiss resolved with role', role);
+  }
+
+  async presentAlertConfirm(type: string) {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Confirm!',
+      message:
+        type === 'bulkPayout'
+          ? new IonicSafeString(this.bulkPayoutMessage)
+          : new IonicSafeString(this.otherMessage),
+      translucent: true,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'alert-secondary',
+          handler: () => false,
+        },
+        {
+          text: type === 'bulkPayout' ? 'Continue' : 'Other',
+          handler: async () => {
+            if (type === 'bulkPayout') {
+              await this.initiateBulkPayout();
+            } else {
+              return false;
+            }
+          },
+        },
+      ],
+    });
+
+    await alert.present();
   }
 
   private retrieveData() {

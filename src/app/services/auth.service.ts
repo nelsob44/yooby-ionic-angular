@@ -14,6 +14,7 @@ import {
   UPDATE_USER,
   RE_VERIFY,
   GET_TRANSFER_RECIPIENTS,
+  GET_AVAILABLE_BANKS,
 } from '../graphql/user';
 import { Storage } from '@capacitor/storage';
 import { Router } from '@angular/router';
@@ -121,6 +122,21 @@ export class AuthService {
     );
   }
 
+  get userIsAdmin() {
+    return this.userData.asObservable().pipe(
+      map((user) => {
+        let val = false;
+        if (user) {
+          if (user.privilege === 'admin') {
+            val = true;
+            return val;
+          }
+          return val;
+        }
+      })
+    );
+  }
+
   constructor(
     private loadingCtrl: LoadingController,
     private alertController: AlertController,
@@ -187,9 +203,8 @@ export class AuthService {
           country: userData.country,
           city: userData.city,
           address: userData.address,
-          bankName: userData.bankName,
+          bankCode: userData.bankCode,
           bankAccountNumber: userData.bankAccountNumber,
-          bankSortCode: userData.bankSortCode,
         },
       })
       .pipe(
@@ -454,6 +469,16 @@ export class AuthService {
       query: GET_TRANSFER_RECIPIENTS,
       variables: {
         recipientEmail,
+      },
+      fetchPolicy: 'network-only',
+    });
+  }
+
+  fetchBanks(country: string) {
+    return this.apollo.watchQuery<any>({
+      query: GET_AVAILABLE_BANKS,
+      variables: {
+        country,
       },
       fetchPolicy: 'network-only',
     });

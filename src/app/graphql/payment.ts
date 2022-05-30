@@ -99,6 +99,18 @@ export const COMPLETE_TRANSACTION = gql`
   }
 `;
 
+export const WITHDRAW_TO_BANK_SINGLE = gql`
+  mutation withdrawToBankSingle($amount: Int!) {
+    withdrawToBankSingle(amount: $amount)
+  }
+`;
+
+export const WITHDRAW_TO_BANK_BULK = gql`
+  mutation withdrawToBankBulk($message: String) {
+    withdrawToBankSingle(message: $message)
+  }
+`;
+
 export const GET_MY_PAYMENTS = gql`
   query getMyPayments($offset: Int, $limit: Int) {
     getMyPayments(mypaymentsQuery: { offset: $offset, limit: $limit }) {

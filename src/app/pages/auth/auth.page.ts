@@ -10,7 +10,7 @@ import {
 } from '@ionic/angular';
 import { AuthService } from '../../services/auth.service';
 import { environment } from '../../../environments/environment';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-auth',
@@ -22,6 +22,8 @@ export class AuthPage implements OnInit {
   isLogin = true;
   isLoading = false;
   title = environment.title;
+  listOfBanks = [];
+  private banksSub: Subscription;
   constructor(
     private authService: AuthService,
     private activatedRoute: ActivatedRoute,
@@ -30,6 +32,12 @@ export class AuthPage implements OnInit {
     private alertController: AlertController,
     private toastController: ToastController
   ) {}
+
+  handleKeyUp(e) {
+    if (e.keyCode === 13) {
+      this.onClickSubmit();
+    }
+  }
 
   ngOnInit() {
     this.form = new FormGroup({
@@ -57,17 +65,13 @@ export class AuthPage implements OnInit {
         updateOn: 'blur',
         validators: [Validators.minLength(2)],
       }),
-      bankName: new FormControl(null, {
+      bankCode: new FormControl(null, {
         updateOn: 'blur',
         validators: [Validators.minLength(2)],
       }),
       bankAccountNumber: new FormControl(null, {
         updateOn: 'blur',
         validators: [Validators.maxLength(10)],
-      }),
-      bankSortCode: new FormControl(null, {
-        updateOn: 'blur',
-        validators: [],
       }),
       phoneNumber: new FormControl(null, {
         updateOn: 'blur',
@@ -85,6 +89,7 @@ export class AuthPage implements OnInit {
   }
 
   onClickSubmit() {
+    console.log('form state ', this.form);
     if (this.form.status === 'INVALID') {
       return;
     }
@@ -109,12 +114,9 @@ export class AuthPage implements OnInit {
       bankAccountNumber:
         this.form.get('bankAccountNumber').value &&
         this.form.get('bankAccountNumber').value,
-      bankName:
-        this.form.get('bankName').value &&
-        this.form.get('bankName').value.replace(/(<([^>]+)>)/gi, ''),
-      bankSortCode:
-        this.form.get('bankSortCode').value &&
-        this.form.get('bankSortCode').value,
+      bankCode:
+        this.form.get('bankCode').value &&
+        this.form.get('bankCode').value.replace(/(<([^>]+)>)/gi, ''),
       phoneNumber:
         this.form.get('phoneNumber').value &&
         this.form.get('phoneNumber').value.replace(/(<([^>]+)>)/gi, ''),
@@ -165,6 +167,43 @@ export class AuthPage implements OnInit {
 
   toggleLogin() {
     this.isLogin = !this.isLogin;
+    if (!this.isLogin) {
+      this.loadingCtrl
+        .create({
+          keyboardClose: true,
+          message: 'Retrieving list of banks....',
+        })
+        .then((loadingEl) => {
+          loadingEl.present();
+
+          this.banksSub = this.authService
+            .fetchBanks('nigeria')
+            .valueChanges.subscribe(
+              (data) => {
+                if (data.data) {
+                  console.log(data.data);
+                  this.listOfBanks = data.data.getBanksList;
+                  if (this.listOfBanks.length < 1) {
+                    this.presentAlert(
+                      '<p style=color:white;>Sorry, we are unable to retrieve banks list, please come back to register later.</p>',
+                      'Notice'
+                    );
+                  }
+                }
+                loadingEl.dismiss();
+              },
+              (error) => {
+                if (error) {
+                  this.presentAlert(
+                    '<p style=color:white;>' + error + '</p>',
+                    'Error'
+                  );
+                }
+                loadingEl.dismiss();
+              }
+            );
+        });
+    }
   }
 
   forgotPassword() {

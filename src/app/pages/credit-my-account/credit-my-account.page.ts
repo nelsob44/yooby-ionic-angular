@@ -38,6 +38,10 @@ export class CreditMyAccountPage implements OnInit, AfterViewInit {
     updatedAt: '',
   };
   boxValue;
+  withdrawMessage =
+    '<p style=color:white;>Are you sure you wish to withdraw your funds?</p>';
+  transferMessage =
+    '<p style=color:white;>Are you sure you wish to make this transfer?</p>';
 
   constructor(
     private navCtrl: NavController,
@@ -61,6 +65,38 @@ export class CreditMyAccountPage implements OnInit, AfterViewInit {
     if (data) {
       //this.ionViewWillEnter();
     }
+  }
+
+  async presentAlertConfirm(type: string) {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Confirm!',
+      message:
+        type === 'withdraw'
+          ? new IonicSafeString(this.withdrawMessage)
+          : new IonicSafeString(this.transferMessage),
+      translucent: true,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'alert-secondary',
+          handler: () => false,
+        },
+        {
+          text: type === 'withdraw' ? 'Withdraw' : 'Transfer',
+          handler: async () => {
+            if (type === 'withdraw') {
+              await this.withdrawToBank();
+            } else {
+              await this.onTransferCredit();
+            }
+          },
+        },
+      ],
+    });
+
+    await alert.present();
   }
 
   onTransferCredit() {
@@ -195,6 +231,36 @@ export class CreditMyAccountPage implements OnInit, AfterViewInit {
     } else {
       this.amountEmpty = true;
     }
+  }
+
+  withdrawToBank() {
+    this.loadingCtrl
+      .create({ keyboardClose: true, message: 'please wait...' })
+      .then((loadingEl) => {
+        loadingEl.present();
+        this.paymentService
+          .withdrawToBank(this.myAccount.currentBalance)
+          .subscribe(
+            (resData) => {
+              if (resData) {
+                this.presentAlert(
+                  '<p style=color:white;>Withdrawal request was successfully submitted</p>',
+                  'Success'
+                );
+                console.log(resData);
+              }
+              loadingEl.dismiss();
+            },
+            (errorResponse) => {
+              console.log('An error occurred');
+              loadingEl.dismiss();
+              this.presentAlert(
+                '<p style=color:white;>' + errorResponse + '</p>',
+                'Error'
+              );
+            }
+          );
+      });
   }
 
   async presentAlert(alertMessage: string, head: string) {

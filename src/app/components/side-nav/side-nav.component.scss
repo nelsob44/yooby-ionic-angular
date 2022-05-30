@@ -3,7 +3,8 @@ ion-menu ion-content {
 }
 
 .black-circle {
-  background: black;
+  //background: black;
+  background: url("../../../assets/images/malamino_815_174.jpg");
   margin-left: calc(50% - 50px);
   height: 100px;
   width: 100px;
@@ -20,4 +21,7 @@ ion-menu ion-content {
 .yoobic-title,
 .username {
   margin-left: 4rem;
+}
+.malamino-logo {
+  //margin: 1rem;
 }

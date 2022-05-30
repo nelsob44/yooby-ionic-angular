@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './auth.guard';
+import { AdminGuard } from './admin.guard';
 
 const routes: Routes = [
   {
@@ -19,7 +20,7 @@ const routes: Routes = [
       import('./pages/dashboard/dashboard.module').then(
         (m) => m.DashboardPageModule
       ),
-    canActivate: [AuthGuard],
+    canActivate: [AdminGuard],
   },
   {
     path: 'photos',
