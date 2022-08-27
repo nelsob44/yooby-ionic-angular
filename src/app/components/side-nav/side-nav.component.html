@@ -11,18 +11,22 @@
     <ion-list>
       <div class="username" *ngIf="firstName">
         <p>
-          <i>hi {{ firstName }}</i>
+          <i
+            ><ion-card-subtitle>hi {{ firstName }}</ion-card-subtitle></i
+          >
         </p>
       </div>
       <div class="menu-items">
         <ion-menu-toggle>
           <ion-item lines="none" button (click)="menuClick('dashboard')">
             <ion-icon name="apps-outline" slot="start"></ion-icon>
-            <ion-label>Dashboard</ion-label>
+            <ion-label
+              ><ion-card-subtitle>Dashboard</ion-card-subtitle></ion-label
+            >
           </ion-item>
           <ion-item lines="none" button (click)="menuClick('photos')">
             <ion-icon name="image-outline" slot="start"></ion-icon>
-            <ion-label>Photos</ion-label>
+            <ion-label><ion-card-subtitle>Photos</ion-card-subtitle></ion-label>
           </ion-item>
           <ion-item
             lines="none"
@@ -30,15 +34,23 @@
             (click)="menuClick('available-products')"
           >
             <ion-icon name="briefcase-outline" slot="start"></ion-icon>
-            <ion-label>Available Products</ion-label>
+            <ion-label
+              ><ion-card-subtitle
+                >Available Products</ion-card-subtitle
+              ></ion-label
+            >
           </ion-item>
           <ion-item lines="none" button (click)="menuClick('my-products')">
             <ion-icon name="bicycle-outline" slot="start"></ion-icon>
-            <ion-label>My Products</ion-label>
+            <ion-label
+              ><ion-card-subtitle>My Products</ion-card-subtitle></ion-label
+            >
           </ion-item>
           <ion-item lines="none" button (click)="menuClick('add-product')">
             <ion-icon name="bag-add-outline" slot="start"></ion-icon>
-            <ion-label>Add Product</ion-label>
+            <ion-label
+              ><ion-card-subtitle>Add Product</ion-card-subtitle></ion-label
+            >
           </ion-item>
           <ion-item
             lines="none"
@@ -46,22 +58,32 @@
             (click)="menuClick('credit-my-account')"
           >
             <ion-icon name="wallet-outline" slot="start"></ion-icon>
-            <ion-label>Account Credit</ion-label>
+            <ion-label
+              ><ion-card-subtitle>Account Credit</ion-card-subtitle></ion-label
+            >
           </ion-item>
           <ion-item lines="none" button (click)="menuClick('user-profile')">
             <ion-icon name="person-circle-outline" slot="start"></ion-icon>
-            <ion-label>My Pofile</ion-label>
+            <ion-label
+              ><ion-card-subtitle>My Pofile</ion-card-subtitle></ion-label
+            >
           </ion-item>
           <ion-item lines="none" button (click)="menuClick('my-orders')">
             <ion-icon name="card-outline" slot="start"></ion-icon>
-            <ion-label>My Orders</ion-label>
+            <ion-label
+              ><ion-card-subtitle>My Orders</ion-card-subtitle></ion-label
+            >
           </ion-item>
           <ion-item lines="none" button (click)="menuClick('auth')">
             <ion-icon
               name="{{ isLoggedIn ? 'log-out-outline' : 'log-in-outline' }}"
               slot="start"
             ></ion-icon>
-            <ion-label>{{ isLoggedIn ? "Log Out" : "Sign in" }}</ion-label>
+            <ion-label
+              ><ion-card-subtitle>{{
+                isLoggedIn ? "Log Out" : "Sign in"
+              }}</ion-card-subtitle></ion-label
+            >
           </ion-item>
         </ion-menu-toggle>
       </div>

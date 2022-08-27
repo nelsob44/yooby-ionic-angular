@@ -6,9 +6,9 @@
           ? (basketItem.title | slice: 0:75) + "..."
           : basketItem.title
       }}</ion-card-subtitle>
-      <p class="success">Unit Price: £{{ basketItem.unitCost }}</p>
+      <p class="success">Unit Price: {{ basketItem.unitCost }} Naira</p>
       <p>Quantity: {{ basketItem.quantity }}</p>
-      <p>Sub-total: £{{ basketItem.subTotal }}</p>
+      <p>Sub-total: {{ basketItem.subTotal }} Naira</p>
       <p>
         <ion-button
           aria-label="Remove entire item from cart"

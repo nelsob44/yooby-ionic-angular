@@ -26,7 +26,7 @@
 @import "~@ionic/angular/css/flex-utils.css";
 @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap");
 ion-content {
-  --background: linear-gradient(180deg, #ff5e00 0%, #fcfcfcfa 100%);
+  --background: linear-gradient(180deg, #e9986a 0%, #fcfcfcfa 100%);
   // --background: linear-gradient(
   //   90deg,
   //   rgb(94, 135, 221) 0%,
@@ -35,7 +35,7 @@ ion-content {
   font-family: sans-serif, Arial, Helvetica;
 }
 ion-toolbar {
-  --background: linear-gradient(90deg, #ff5e00 0%, #ff5e0069 100%);
+  --background: linear-gradient(90deg, #44413f 0%, #6c615b69 100%);
   // --background: linear-gradient(
   //   90deg,
   //   rgb(94, 135, 221) 0%,
@@ -72,9 +72,9 @@ ion-chip {
   }
   ion-button {
     max-width: fit-content;
-    font-size: 0.5rem;
+    font-size: 1rem;
   }
   ion-label {
-    font-size: 0.2rem;
+    font-size: 1rem;
   }
 }

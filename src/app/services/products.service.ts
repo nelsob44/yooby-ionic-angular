@@ -233,7 +233,7 @@ export class ProductsService {
       },
       refetchQueries: [
         {
-          query: GET_MY_PRODUCTS,
+          query: GET_AVAILABLE_PRODUCTS,
         },
       ],
       fetchPolicy: 'network-only',

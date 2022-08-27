@@ -179,7 +179,7 @@ export const UPDATE_PRODUCT = gql`
 `;
 
 export const DELETE_MY_PRODUCT = gql`
-  mutation deleteProduct($id: ID) {
+  mutation deleteProduct($id: ID!) {
     deleteProduct(id: $id)
   }
 `;

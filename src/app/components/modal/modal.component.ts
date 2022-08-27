@@ -30,7 +30,7 @@ export class ModalComponent implements OnInit {
   title = 'Ready to pay';
   options: PaystackOptions = {
     amount: 0,
-    email: 'user@email.com',
+    email: null,
     ref: `${Math.ceil(Math.random() * 10e10)}`,
   };
   noItems = false;
@@ -212,9 +212,11 @@ export class ModalComponent implements OnInit {
       paymentFrom: this.loggedInUser,
       paymentTo: 'platform User',
     };
+    console.log('got here 1');
     this.loadingCtrl
       .create({ keyboardClose: true, message: 'please wait...' })
       .then((loadingEl) => {
+        console.log('got here 2');
         loadingEl.present();
         this.paymentService.initializePayment(paymentData).subscribe(
           (resData) => {
