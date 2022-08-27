@@ -1,6 +1,10 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>{{title}}</ion-title>
+  <ion-toolbar translucent>
+    <ion-img
+      class="malamino-logo"
+      src="../../../assets/images/malamino_815_174.jpg"
+      alt="{{title}}"
+    ></ion-img>
   </ion-toolbar>
 </ion-header>
 
@@ -441,6 +445,15 @@
           </ion-item>
           <ion-item *ngIf="!isLogin">
             <ion-label>Your Bank</ion-label>
+            <ion-input
+              type="text"
+              maxlength="100"
+              formControlName="bankCode"
+              clear-input
+            ></ion-input>
+          </ion-item>
+          <!-- <ion-item *ngIf="!isLogin">
+            <ion-label>Your Bank</ion-label>
             <ion-select
               formControlName="bankCode"
               interface="popover"
@@ -452,7 +465,7 @@
                 >{{bank.name}}</ion-select-option
               >
             </ion-select>
-          </ion-item>
+          </ion-item> -->
           <ion-item *ngIf="!isLogin">
             <ion-icon name="card-outline"></ion-icon>
             <ion-label>Bank Account</ion-label>
@@ -490,12 +503,10 @@
           >
         </div>
         <div class="sign-in-with">
-          <ion-card-subtitle>Sign in with</ion-card-subtitle>
+          <ion-card-subtitle></ion-card-subtitle>
         </div>
         <div class="facebook-icon">
-          <ion-card-title
-            ><ion-icon name="logo-facebook"></ion-icon
-          ></ion-card-title>
+          <ion-card-title></ion-card-title>
         </div>
         <div class="buttons">
           <ion-button

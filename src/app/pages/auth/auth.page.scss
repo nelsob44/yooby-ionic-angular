@@ -1,5 +1,6 @@
 .black-circle {
-  background: rgb(241, 236, 236);
+  background: url("../../../assets/images/malamino_logo_short.jpg");
+  background-size: 100%;
   margin-left: calc(50% - 50px);
   height: 100px;
   width: 100px;
@@ -35,13 +36,13 @@ ion-card-subtitle,
 ion-card-title,
 a {
   color: aliceblue;
+  cursor: pointer;
 }
 
 ion-item {
-  border-radius: 10px;
   margin-bottom: 10px;
 }
 
-a {
-  cursor: pointer;
+.malamino-logo {
+  width: 6rem;
 }

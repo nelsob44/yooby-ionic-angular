@@ -34,7 +34,9 @@ export class AuthPage implements OnInit {
   ) {}
 
   handleKeyUp(e) {
+    console.log({ e });
     if (e.keyCode === 13) {
+      console.log('should submit', e);
       this.onClickSubmit();
     }
   }

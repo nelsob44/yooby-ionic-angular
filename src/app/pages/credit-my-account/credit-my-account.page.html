@@ -15,7 +15,9 @@
       >
       <ion-text color="success">{{ myAccount.currentBalance }} Naira</ion-text>
     </ion-item>
-    <ion-item *ngIf="myAccount.currentBalance > 0">
+    <ion-item
+      *ngIf="myAccount.currentBalance && (myAccount.currentBalance > 0)"
+    >
       <ion-button (click)="presentAlertConfirm('withdraw')"
         >Withdraw to Bank</ion-button
       >

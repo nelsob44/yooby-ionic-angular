@@ -22,7 +22,7 @@ export class CreditMyAccountPage implements OnInit, AfterViewInit {
   title = 'Ready to pay';
   options: PaystackOptions = {
     amount: 100,
-    email: 'user@email.com',
+    email: null,
     ref: `${Math.ceil(Math.random() * 10e10)}`,
   };
   purpose = '';
@@ -136,7 +136,7 @@ export class CreditMyAccountPage implements OnInit, AfterViewInit {
           (data) => {
             if (data.data) {
               console.log(data.data);
-              this.myAccount = data.data.getAccountBalance;
+              this.myAccount = data.data.getAccountBalance ?? this.myAccount;
             }
             loadingEl.dismiss();
           },
